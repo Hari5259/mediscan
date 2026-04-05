@@ -68,8 +68,6 @@ export default function Signup() {
               <li>Verified healthcare professionals</li>
               <li>Easy scheduling</li>
             </ul>
-
-            <img src="/hero.svg" alt="Healthcare illustration" className="mt-4 rounded-lg shadow-sm w-full object-cover" />
           </div>
         </div>
 

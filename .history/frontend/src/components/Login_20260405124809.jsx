@@ -42,8 +42,6 @@ export default function Login() {
               <li>End-to-end encryption</li>
               <li>24/7 clinical support</li>
             </ul>
-
-            <img src="/hero.svg" alt="Healthcare illustration" className="mt-4 rounded-lg shadow-sm w-full object-cover" />
           </div>
         </div>
 
