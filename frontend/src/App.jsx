@@ -7,6 +7,7 @@ import Privacy from './components/Privacy';
 import Dashboard from './components/Dashboard';
 import './App.css';
 
+// Main app component with routing configuration
 function App() {
   return (
     <BrowserRouter>
