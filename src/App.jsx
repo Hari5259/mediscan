@@ -7,6 +7,8 @@ import Privacy from './components/Privacy';
 import Dashboard from './components/Dashboard';
 import Doctors from './components/Doctors';
 import DoctorProfile from './components/DoctorProfile';
+import DoctorLogin from './components/DoctorLogin';
+import DoctorDashboard from './components/DoctorDashboard';
 import './App.css';
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctor/:id" element={<DoctorProfile />} />
+        <Route path="/doctor-login" element={<DoctorLogin />} />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
