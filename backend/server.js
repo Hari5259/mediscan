@@ -5,6 +5,9 @@ import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+// Route imports
+import authRoutes from './src/routes/auth.js';
+
 // Load environment variables
 dotenv.config();
 
@@ -23,32 +26,45 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Static files for uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Health Check
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'MediScan API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // MongoDB Connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/medigit');
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/medigit';
+    await mongoose.connect(mongoURI);
     console.log('✓ MongoDB connected');
   } catch (error) {
     console.error('✗ MongoDB connection error:', error.message);
-    process.exit(1);
+    // Continue even if MongoDB fails to allow basic server health check
+    // In production, we might want to exit
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
 };
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error(err.stack);
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal Server Error',
-  });
-});
-
-// Routes (placeholder - will be implemented in Phase 1)
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    success: true, 
-    message: 'Server is running',
-    timestamp: new Date().toISOString(),
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
 
@@ -57,10 +73,13 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`\n✓ Server running on http://localhost:${PORT}`);
+      console.log(`\n🚀 MediScan Backend running on http://localhost:${PORT}`);
       console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log('\nAPI Endpoints:');
-      console.log('  GET  /api/health - Health check\n');
+      console.log(`  GET   /api/health`);
+      console.log(`  POST  /api/auth/register`);
+      console.log(`  POST  /api/auth/login`);
+      console.log(`  POST  /api/auth/refresh-token\n`);
     });
   } catch (error) {
     console.error('✗ Failed to start server:', error.message);

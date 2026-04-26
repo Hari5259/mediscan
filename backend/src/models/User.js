@@ -93,12 +93,15 @@ userSchema.pre('save', function (next) {
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (enteredPassword) {
+  if (!this.password) return false;
   return await bcryptjs.compare(enteredPassword, this.password);
 };
 
 // Method to get user without sensitive data
 userSchema.methods.toJSON = function () {
-  const { password, __v, ...user } = this.toObject();
+  const user = this.toObject();
+  delete user.password;
+  delete user.__v;
   return user;
 };
 

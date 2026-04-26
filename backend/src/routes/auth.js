@@ -1,9 +1,11 @@
 import express from 'express';
 import Joi from 'joi';
-import User from '../models/User.model.js';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 import { generateToken, generateRefreshToken } from '../middleware/auth.js';
 
 const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_jwt_key_change_this_in_production';
 
 // Validation schemas
 const registerSchema = Joi.object({
