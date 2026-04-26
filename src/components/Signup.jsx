@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Eye, EyeOff } from 'lucide-react';
+import { Heart, Mail, Lock, User, Phone, Activity, ArrowRight, UserPlus, Stethoscope } from 'lucide-react';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -12,136 +12,78 @@ export default function Signup() {
     password: '',
     confirmPassword: '',
     userType: 'patient', // 'patient' or 'doctor'
+    specialization: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    setError('');
-  };
-
-  const validateForm = () => {
-    if (!formData.firstName.trim() || !formData.lastName.trim()) {
-      setError('First and last name are required');
-      return false;
-    }
-
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError('Please enter a valid email address');
-      return false;
-    }
-
-    if (!formData.phone.match(/^\+?[\d\s()-]{10,}$/)) {
-      setError('Please enter a valid phone number');
-      return false;
-    }
-
-    if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      return false;
-    }
-
-    if (!agreeToTerms) {
-      setError('You must agree to the terms and conditions');
-      return false;
-    }
-
-    return true;
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setLoading(true);
-    // Simulate API call - in real app, send to backend
+
+    // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      // Store data temporarily (in production, use secure storage)
-      sessionStorage.setItem('pendingVerification', JSON.stringify({
-        email: formData.email,
-        phone: formData.phone,
-        userType: formData.userType
-      }));
       navigate('/verify');
-    }, 1000);
+    }, 1500);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Heart className="w-12 h-12 text-blue-600" fill="currentColor" />
+    <div className="min-h-screen gradient-bg flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-100/50 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+      <div className="w-full max-w-2xl">
+        {/* Logo Section */}
+        <div className="text-center mb-10 group cursor-pointer" onClick={() => navigate('/login')}>
+          <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+            <Heart className="w-8 h-8 text-blue-600" fill="#2563eb" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">MediCare</h1>
-          <p className="text-gray-600 mt-2">Create Your Account</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+            Medi<span className="text-blue-600">Scan</span>
+          </h1>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Get Started</h2>
+        {/* Main Card */}
+        <div className="glass-card rounded-[2.5rem] p-8 sm:p-12">
+          <div className="mb-10 text-center sm:text-left">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
+            <p className="text-slate-500 font-medium">Join MediScan and take control of your health</p>
+          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
+          {/* User Type Switcher */}
+          <div className="flex p-1 bg-slate-100 rounded-2xl mb-10">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, userType: 'patient' })}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                formData.userType === 'patient' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <User size={18} />
+              <span>Patient</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, userType: 'doctor' })}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                formData.userType === 'doctor' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Stethoscope size={18} />
+              <span>Doctor</span>
+            </button>
+          </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* User Type Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Register as:
-              </label>
-              <div className="flex gap-4">
-                <label className="flex items-center cursor-pointer flex-1">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="patient"
-                    checked={formData.userType === 'patient'}
-                    onChange={handleChange}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span className="ml-3 text-gray-700">Patient</span>
-                </label>
-                <label className="flex items-center cursor-pointer flex-1">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="doctor"
-                    checked={formData.userType === 'doctor'}
-                    onChange={handleChange}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span className="ml-3 text-gray-700">Doctor</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Name Fields */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">First Name</label>
                 <input
                   type="text"
                   name="firstName"
@@ -152,10 +94,8 @@ export default function Signup() {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">Last Name</label>
                 <input
                   type="text"
                   name="lastName"
@@ -168,159 +108,138 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="you@example.com"
-                className="input-field"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                We'll send a verification code to your email
-              </p>
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="+1 (555) 123-4567"
-                className="input-field"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                We'll send an OTP to verify your phone
-              </p>
-            </div>
-
-            {/* Password */}
-            <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="input-field pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">Email Address</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Mail size={18} />
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="john@example.com"
+                    className="input-field pl-11"
+                    required
+                  />
+                </div>
               </div>
-              <p className="text-xs text-gray-500 mt-1">
-                At least 8 characters
-              </p>
-            </div>
-
-            {/* Confirm Password */}
-            <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="input-field pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
-                >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">Phone Number</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Phone size={18} />
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+1 (555) 000-0000"
+                    className="input-field pl-11"
+                    required
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Terms Agreement */}
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="agree"
-                checked={agreeToTerms}
-                onChange={(e) => setAgreeToTerms(e.target.checked)}
-                className="w-4 h-4 mt-1 text-blue-600 cursor-pointer"
-              />
-              <label htmlFor="agree" className="text-sm text-gray-700 cursor-pointer">
-                I agree to the{' '}
-                <button
-                  type="button"
-                  onClick={() => navigate('/terms')}
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  Terms & Conditions
-                </button>
-                {' '}and{' '}
-                <button
-                  type="button"
-                  onClick={() => navigate('/privacy')}
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  Privacy Policy
-                </button>
-              </label>
+            {formData.userType === 'doctor' && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                <label className="text-sm font-bold text-slate-700 ml-1">Specialization</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Stethoscope size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    name="specialization"
+                    value={formData.specialization}
+                    onChange={handleChange}
+                    placeholder="e.g. Cardiologist"
+                    className="input-field pl-11"
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">Password</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    className="input-field pl-11"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700 ml-1">Confirm Password</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <Activity size={18} />
+                  </div>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    className="input-field pl-11"
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Submit Button */}
+            <div className="flex items-start gap-3 px-1 py-2">
+              <input type="checkbox" className="mt-1 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300" required />
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                I agree to the <a href="/terms" className="text-blue-600 font-bold hover:underline">Terms of Service</a> and <a href="/privacy" className="text-blue-600 font-bold hover:underline">Privacy Policy</a>
+              </p>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full disabled:opacity-50 mt-6"
+              className="btn-primary w-full flex items-center justify-center gap-2 group h-[56px] text-lg mt-2"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? (
+                <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  <UserPlus size={20} />
+                  <span>Create Account</span>
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform ml-auto" />
+                </>
+              )}
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="divider">
-            <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-white px-2 text-gray-500 text-sm">
-              or
-            </span>
+          {/* Footer Link */}
+          <div className="mt-10 text-center">
+            <p className="text-slate-500 font-medium">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="text-blue-600 font-bold hover:underline underline-offset-4"
+              >
+                Sign In
+              </button>
+            </p>
           </div>
-
-          {/* Login Link */}
-          <p className="text-center text-gray-600">
-            Already have an account?{' '}
-            <button
-              onClick={() => navigate('/login')}
-              className="text-blue-600 font-medium hover:text-blue-700"
-            >
-              Sign in here
-            </button>
-          </p>
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-gray-600 text-sm mt-8">
-          Your health information is secure and encrypted
-        </p>
       </div>
     </div>
   );
