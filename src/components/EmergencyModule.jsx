@@ -11,32 +11,32 @@ export default function EmergencyModule() {
 
   const emergencyContacts = [
     { 
-      name: 'General Emergency', 
-      number: '911', 
+      name: 'Integrated Emergency', 
+      number: '112', 
       icon: ShieldAlert, 
-      color: 'bg-rose-500', 
-      desc: 'For immediate life-threatening emergencies.' 
+      color: 'bg-rose-600', 
+      desc: 'All-in-one emergency helpline (India).' 
+    },
+    { 
+      name: 'Police Support', 
+      number: '100', 
+      icon: ShieldAlert, 
+      color: 'bg-blue-600', 
+      desc: 'Immediate police assistance.' 
     },
     { 
       name: 'Ambulance Service', 
       number: '102', 
       icon: Ambulance, 
-      color: 'bg-orange-500', 
-      desc: 'Rapid medical transport and first aid.' 
+      color: 'bg-emerald-600', 
+      desc: 'Medical emergency and ambulance.' 
     },
     { 
-      name: 'Poison Control', 
-      number: '1-800-222-1222', 
+      name: 'Fire Department', 
+      number: '101', 
       icon: AlertTriangle, 
-      color: 'bg-amber-500', 
-      desc: 'Immediate help for toxic exposure.' 
-    },
-    { 
-      name: 'Mental Health Support', 
-      number: '988', 
-      icon: LifeBuoy, 
-      color: 'bg-blue-500', 
-      desc: '24/7 crisis and suicide prevention.' 
+      color: 'bg-orange-600', 
+      desc: 'Fire and rescue services.' 
     }
   ];
 
