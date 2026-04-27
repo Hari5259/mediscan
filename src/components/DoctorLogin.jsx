@@ -144,27 +144,33 @@ export default function DoctorLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
-      {/* Navigation */}
-      <nav className="bg-white shadow-md">
-        <div className="max-w-md mx-auto px-6 py-4 flex items-center gap-2">
-          <Heart className="w-8 h-8 text-blue-600" fill="currentColor" />
-          <h1 className="text-2xl font-bold text-gray-900">MediCare</h1>
-        </div>
-      </nav>
+    <div className="min-h-screen gradient-bg flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-100/50 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-      {/* Main Content */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+      <div className="w-full max-w-lg">
+        {/* Logo Section */}
+        <div className="text-center mb-10 group cursor-pointer" onClick={() => navigate('/login')}>
+          <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+            <Heart className="w-10 h-10 text-blue-600 animate-pulse" fill="#2563eb" />
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-2">
+            Medi<span className="text-blue-600">Scan</span>
+          </h1>
+        </div>
+
+        {/* Main Card */}
+        <div className="glass-card rounded-[2.5rem] p-10 sm:p-12">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Doctor Login</h2>
-            <p className="text-gray-600">Secure doctor portal with ID verification</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Doctor Login</h2>
+            <p className="text-slate-500 font-medium">Secure doctor portal with ID verification</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Doctor ID Field */}
             <div>
-              <label htmlFor="doctorId" className="block text-gray-700 font-semibold mb-2">
+              <label htmlFor="doctorId" className="block text-sm font-bold text-slate-700 ml-1 mb-2">
                 Doctor ID
               </label>
               <input
@@ -174,10 +180,10 @@ export default function DoctorLogin() {
                 placeholder="DOC123456"
                 value={formData.doctorId}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition ${
+                className={`input-field ${
                   errors.doctorId
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-blue-500'
+                    : ''
                 }`}
               />
               {errors.doctorId && (
@@ -186,12 +192,12 @@ export default function DoctorLogin() {
                   {errors.doctorId}
                 </div>
               )}
-              <p className="text-gray-500 text-xs mt-1">Format: DOC followed by 6 digits</p>
+              <p className="text-slate-400 text-xs mt-1 ml-1">Format: DOC followed by 6 digits</p>
             </div>
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+              <label htmlFor="email" className="block text-sm font-bold text-slate-700 ml-1 mb-2">
                 Email
               </label>
               <input
@@ -201,10 +207,10 @@ export default function DoctorLogin() {
                 placeholder="doctor@hospital.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition ${
+                className={`input-field ${
                   errors.email
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-blue-500'
+                    : ''
                 }`}
               />
               {errors.email && (
@@ -217,7 +223,7 @@ export default function DoctorLogin() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
+              <label htmlFor="password" className="block text-sm font-bold text-slate-700 ml-1 mb-2">
                 Password
               </label>
               <input
@@ -227,10 +233,10 @@ export default function DoctorLogin() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition ${
+                className={`input-field ${
                   errors.password
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-blue-500'
+                    : ''
                 }`}
               />
               {errors.password && (
@@ -243,11 +249,11 @@ export default function DoctorLogin() {
 
             {/* ID Proof Upload */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block text-sm font-bold text-slate-700 ml-1 mb-2">
                 📄 Upload ID Proof
               </label>
-              <p className="text-gray-600 text-sm mb-3">
-                Please upload a clear copy of your government-issued medical license or ID (JPG, PNG, or PDF)
+              <p className="text-slate-500 text-sm mb-3 ml-1">
+                Government-issued medical license or ID (JPG, PNG, or PDF)
               </p>
 
               <div className="relative">
@@ -261,30 +267,30 @@ export default function DoctorLogin() {
                 />
                 <label
                   htmlFor="idProof"
-                  className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer transition ${
+                  className={`flex items-center justify-center gap-2 border-2 border-dashed rounded-2xl p-6 cursor-pointer transition ${
                     errors.idProofFile
-                      ? 'border-red-500 bg-red-50 hover:bg-red-100'
-                      : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                      ? 'border-red-500 bg-red-50/50 hover:bg-red-100/50'
+                      : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/50 dark:border-slate-700 dark:bg-slate-800/50'
                   }`}
                 >
                   <Upload size={24} className={errors.idProofFile ? 'text-red-500' : 'text-blue-600'} />
                   <div className="text-center">
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-slate-900 dark:text-white">
                       {formData.idProofFile ? formData.idProofFile.name : 'Click to upload'}
                     </p>
-                    <p className="text-gray-600 text-sm">Max size: 5MB</p>
+                    <p className="text-slate-400 text-xs">Max size: 5MB</p>
                   </div>
                 </label>
               </div>
 
               {/* Image Preview */}
               {idProofPreview && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                <div className="mt-4 animate-in fade-in zoom-in duration-300">
+                  <p className="text-xs font-bold text-slate-500 mb-2 ml-1">Preview:</p>
                   <img
                     src={idProofPreview}
                     alt="ID Proof Preview"
-                    className="w-full h-48 object-cover rounded-lg border border-gray-300"
+                    className="w-full h-48 object-cover rounded-2xl border border-slate-200 dark:border-slate-700"
                   />
                 </div>
               )}
@@ -301,12 +307,12 @@ export default function DoctorLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="btn-primary w-full h-[56px] text-lg flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Verifying ID...
+                  <span>Verifying...</span>
                 </>
               ) : (
                 'Login & Verify'
@@ -315,20 +321,20 @@ export default function DoctorLogin() {
           </form>
 
           {/* Footer Links */}
-          <div className="mt-8 pt-6 border-t flex items-center justify-center gap-2 text-gray-600 text-sm">
+          <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-slate-500 font-medium">
             <p>Not a doctor?</p>
             <button
               onClick={() => navigate('/login')}
-              className="text-blue-600 font-semibold hover:text-blue-700"
+              className="text-blue-600 font-bold hover:underline underline-offset-4"
             >
               Patient Login
             </button>
           </div>
 
           {/* Security Notice */}
-          <div className="mt-6 bg-blue-50 rounded-lg p-4">
-            <p className="text-xs text-gray-600">
-              🔒 <span className="font-semibold">Security Notice:</span> Your ID proof will be securely verified and stored in compliance with medical regulations.
+          <div className="mt-6 bg-blue-50/50 dark:bg-blue-900/20 rounded-2xl p-4">
+            <p className="text-xs text-blue-600 dark:text-blue-400 leading-relaxed font-medium">
+              🔒 <span className="font-bold">Security Notice:</span> Your ID proof will be securely verified and stored in compliance with medical regulations.
             </p>
           </div>
         </div>
