@@ -10,6 +10,7 @@ import DoctorProfile from './components/DoctorProfile';
 import DoctorLogin from './components/DoctorLogin';
 import DoctorDashboard from './components/DoctorDashboard';
 import BMICalculator from './components/BMICalculator';
+import EmergencyModule from './components/EmergencyModule';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/doctor-login" element={<DoctorLogin />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/bmi-calculator" element={<BMICalculator />} />
+        <Route path="/emergency" element={<EmergencyModule />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />

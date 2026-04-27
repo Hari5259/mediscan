@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Heart, LogOut, Stethoscope, ClipboardList, 
   BrainCircuit, Calendar, Pill, BarChart3, 
-  Settings, User, Bell, ChevronRight, Activity, Scale
+  Settings, User, Bell, ChevronRight, Activity, Scale, ShieldAlert
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -133,8 +133,23 @@ export default function Dashboard() {
         {/* Right Column - Navigation & Tips */}
         <aside className="lg:col-span-4 space-y-8">
           <div className="card p-8 space-y-4">
-            <h3 className="text-xl font-bold text-slate-900 mb-6">Quick Portal</h3>
-            <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 group transition-all" onClick={() => navigate('/doctors')}>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Quick Portal</h3>
+            <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-rose-600 shadow-lg shadow-rose-200 dark:shadow-rose-900/20 group transition-all"
+              onClick={() => navigate('/emergency')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 text-white rounded-xl group-hover:scale-110 transition-transform">
+                  <ShieldAlert size={20} />
+                </div>
+                <span className="font-bold text-white uppercase tracking-wider">Emergency Contact</span>
+              </div>
+              <ChevronRight size={18} className="text-white/70 group-hover:translate-x-1 transition-all" />
+            </button>
+            <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-blue-200 hover:bg-blue-50/30 group transition-all"
+              onClick={() => navigate('/doctors')}
+            >
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-blue-100 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Stethoscope size={20} />
