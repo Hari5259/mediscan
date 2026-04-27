@@ -8,6 +8,27 @@ import {
 
 export default function EmergencyModule() {
   const navigate = useNavigate();
+  const [location, setLocation] = useState({ lat: null, lng: null, address: 'Fetching location...', error: null });
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude.toFixed(4),
+            lng: position.coords.longitude.toFixed(4),
+            address: 'Approx. Location Detected',
+            error: null
+          });
+        },
+        (error) => {
+          setLocation(prev => ({ ...prev, error: 'Permission denied', address: 'Location hidden' }));
+        }
+      );
+    } else {
+      setLocation(prev => ({ ...prev, error: 'Not supported', address: 'Not available' }));
+    }
+  }, []);
 
   const emergencyContacts = [
     { 
@@ -85,6 +106,50 @@ export default function EmergencyModule() {
               If you are experiencing a life-threatening emergency, call your local emergency number immediately.
             </p>
           </div>
+        </div>
+
+        {/* Current Location Display */}
+        <div className="glass-card p-6 rounded-[2rem] border-l-4 border-l-blue-500 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl">
+              <MapPin size={24} />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-1">Your Current Location</h3>
+              <p className="text-lg font-bold text-slate-900 dark:text-white">
+                {location.error ? (
+                  <span className="text-rose-500 flex items-center gap-2">
+                    <AlertTriangle size={16} /> Location Access Denied
+                  </span>
+                ) : (
+                  location.address
+                )}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex gap-4">
+            <div className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl">
+              <span className="text-[10px] font-black text-slate-400 uppercase block">Latitude</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white font-mono">{location.lat || '---'}</span>
+            </div>
+            <div className="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl">
+              <span className="text-[10px] font-black text-slate-400 uppercase block">Longitude</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white font-mono">{location.lng || '---'}</span>
+            </div>
+          </div>
+
+          <button 
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-colors"
+            onClick={() => {
+              navigator.clipboard.writeText(`My current location: Lat ${location.lat}, Lng ${location.lng}`);
+              alert('Location copied to clipboard');
+            }}
+            disabled={location.error}
+          >
+            <ExternalLink size={18} />
+            Share Coordinates
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
