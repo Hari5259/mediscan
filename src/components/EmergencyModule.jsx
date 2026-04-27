@@ -107,8 +107,13 @@ export default function EmergencyModule() {
                     </div>
                   </div>
                   <h4 className="text-lg font-black text-slate-900 dark:text-white mb-1">{contact.name}</h4>
-                  <p className="text-2xl font-black text-rose-600 mb-2">{contact.number}</p>
-                  <p className="text-xs font-bold text-slate-400 leading-relaxed">{contact.desc}</p>
+                  <p className="text-2xl font-black text-rose-600 mb-4">{contact.number}</p>
+                  <p className="text-xs font-bold text-slate-400 leading-relaxed mb-6">{contact.desc}</p>
+                  
+                  <div className="w-full py-3 bg-rose-50 dark:bg-rose-900/20 rounded-xl flex items-center justify-center gap-2 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                    <Phone size={16} fill="currentColor" />
+                    <span className="font-bold uppercase tracking-wider text-sm">Call Now</span>
+                  </div>
                 </button>
               ))}
             </div>
