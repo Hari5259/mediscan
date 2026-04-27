@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Heart, LogOut, Stethoscope, ClipboardList, 
   BrainCircuit, Calendar, Pill, BarChart3, 
-  Settings, User, Bell, ChevronRight, Activity
+  Settings, User, Bell, ChevronRight, Activity, Scale
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -143,7 +143,19 @@ export default function Dashboard() {
               </div>
               <ChevronRight size={18} className="text-slate-300 group-hover:text-blue-600" />
             </button>
-            <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 group transition-all">
+            <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-200 hover:bg-emerald-50/30 group transition-all"
+              onClick={() => navigate('/bmi-calculator')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                  <Scale size={20} />
+                </div>
+                <span className="font-bold text-slate-700 dark:text-slate-300">BMI Calculator</span>
+              </div>
+              <ChevronRight size={18} className="text-slate-300 group-hover:text-emerald-600" />
+            </button>
+            <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:bg-indigo-50/30 group transition-all">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <BarChart3 size={20} />
