@@ -170,7 +170,10 @@ export default function Dashboard() {
               </div>
               <ChevronRight size={18} className="text-slate-300 group-hover:text-emerald-600" />
             </button>
-            <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:bg-indigo-50/30 group transition-all">
+            <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:bg-indigo-50/30 group transition-all"
+              onClick={() => navigate('/health-reports')}
+            >
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <BarChart3 size={20} />

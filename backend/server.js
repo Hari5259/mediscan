@@ -7,6 +7,7 @@ import path from 'path';
 
 // Route imports
 import authRoutes from './src/routes/auth.js';
+import medicalRecordRoutes from './src/routes/medicalRecord.js';
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/medical-records', medicalRecordRoutes);
 
 // Health Check
 app.get('/api/health', (req, res) => {
