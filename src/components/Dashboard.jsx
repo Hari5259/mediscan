@@ -171,6 +171,18 @@ export default function Dashboard() {
               <ChevronRight size={18} className="text-slate-300 group-hover:text-emerald-600" />
             </button>
             <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-amber-200 hover:bg-amber-50/30 group transition-all"
+              onClick={() => navigate('/symptom-checker')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-amber-100 text-amber-600 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                  <Activity size={20} />
+                </div>
+                <span className="font-bold text-slate-700 dark:text-slate-300">Symptom Checker</span>
+              </div>
+              <ChevronRight size={18} className="text-slate-300 group-hover:text-amber-600" />
+            </button>
+            <button 
               className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 hover:bg-indigo-50/30 group transition-all"
               onClick={() => navigate('/health-reports')}
             >
@@ -200,7 +212,7 @@ export default function Dashboard() {
           <div className="card p-8 border-dashed border-2 border-slate-200 bg-transparent shadow-none">
             <h3 className="text-lg font-bold text-slate-400 mb-6 uppercase tracking-widest">Upcoming Tech</h3>
             <div className="space-y-4">
-              {['AI Diagnosis', 'Lab Integration', 'Video Support'].map((tech, i) => (
+              {['Lab Integration', 'Video Support', 'Prescription AI'].map((tech, i) => (
                 <div key={i} className="flex items-center gap-3 text-slate-400 font-bold text-sm">
                   <div className="w-2 h-2 rounded-full bg-slate-200"></div>
                   {tech}
