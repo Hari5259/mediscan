@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Mail, Lock, User, Activity, ArrowRight } from 'lucide-react';
+import { Heart, Mail, Lock, User, Activity, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,90 +28,98 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse"></div>
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-100/50 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-black flex items-center justify-center p-6 sm:p-12 relative overflow-hidden font-sans">
+      {/* Sharp Grid Background */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      
+      {/* Abstract monochrome shapes */}
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-white/5 rounded-full blur-[120px] -z-10"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-white/5 rounded-full blur-[120px] -z-10"></div>
 
-      <div className="w-full max-w-lg">
+      <div className="w-full max-w-lg relative z-10">
         {/* Logo Section */}
-        <div className="text-center mb-10 group">
-          <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-xl mb-4 group-hover:scale-110 transition-transform duration-300">
-            <Heart className="w-10 h-10 text-blue-600 animate-pulse" fill="#2563eb" />
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center p-4 bg-white rounded-full mb-6 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+            <Heart className="w-8 h-8 text-black" fill="black" />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-2">
-            Medi<span className="text-blue-600">Scan</span>
+          <h1 className="text-5xl font-black tracking-tighter text-white mb-2 uppercase italic">
+            Medi<span className="text-slate-400">Scan</span>
           </h1>
-          <p className="text-slate-500 font-medium tracking-wide flex items-center justify-center gap-2">
-            Advanced Health Intelligence <Activity size={16} className="text-blue-400" />
-          </p>
+          <div className="flex items-center justify-center gap-3 text-slate-500 text-xs font-bold tracking-[0.3em] uppercase">
+            <span>Precision</span>
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+            <span>Intelligence</span>
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+            <span>Care</span>
+          </div>
         </div>
 
         {/* Main Card */}
-        <div className="glass-card rounded-[2.5rem] p-10 sm:p-12">
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h2>
-            <p className="text-slate-500">Enter your credentials to access your health portal</p>
+        <div className="bg-neutral-900/50 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-10 sm:p-14 shadow-2xl">
+          <div className="mb-10 text-center sm:text-left">
+            <h2 className="text-3xl font-bold text-white mb-3">Sign In</h2>
+            <p className="text-slate-400 font-medium">Access the future of healthcare management.</p>
           </div>
 
           {/* User Type Switcher */}
-          <div className="flex p-1 bg-slate-100 rounded-2xl mb-10 relative">
+          <div className="flex p-1.5 bg-black border border-white/5 rounded-2xl mb-10 relative">
             <button
               onClick={() => setUserType('patient')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all duration-300 z-10 ${
-                userType === 'patient' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-500 z-10 ${
+                userType === 'patient' ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <User size={18} />
-              <span>Patient</span>
+              <User size={16} />
+              <span>PATIENT</span>
             </button>
             <button
               onClick={() => setUserType('doctor')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold transition-all duration-300 z-10 ${
-                userType === 'doctor' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-500 z-10 ${
+                userType === 'doctor' ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'text-slate-500 hover:text-white'
               }`}
             >
-              <Activity size={18} />
-              <span>Doctor</span>
+              <ShieldCheck size={16} />
+              <span>DOCTOR</span>
             </button>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Email Address</label>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Account Email</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                  <Mail size={20} />
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-600 group-focus-within:text-white transition-colors">
+                  <Mail size={18} />
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="input-field pl-12"
+                  placeholder="name@nexus.com"
+                  className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 pl-12 text-white focus:outline-none focus:border-white/40 focus:ring-4 focus:ring-white/5 transition-all duration-300 placeholder:text-slate-700 font-medium"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex justify-between items-center px-1">
-                <label className="text-sm font-bold text-slate-700">Password</label>
-                <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-                  Forgot Password?
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Secure Password</label>
+                <a href="#" className="text-[10px] font-black text-white hover:text-slate-300 transition-colors uppercase tracking-widest">
+                  Reset?
                 </a>
               </div>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                  <Lock size={20} />
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-600 group-focus-within:text-white transition-colors">
+                  <Lock size={18} />
                 </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-field pl-12"
+                  className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 pl-12 text-white focus:outline-none focus:border-white/40 focus:ring-4 focus:ring-white/5 transition-all duration-300 placeholder:text-slate-700 font-medium"
                   required
                 />
               </div>
@@ -120,38 +128,40 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full flex items-center justify-center gap-2 group mt-4 h-[56px] text-lg"
+              className="w-full bg-white text-black py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-slate-200 active:scale-[0.98] transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.1)] group"
             >
               {loading ? (
-                <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
               ) : (
                 <>
-                  <span>Sign In</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  <span>Initialize Session</span>
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
 
           {/* Footer Link */}
-          <div className="mt-10 text-center">
-            <p className="text-slate-500 font-medium">
-              Don't have an account?{' '}
+          <div className="mt-12 text-center">
+            <p className="text-slate-500 text-xs font-bold tracking-wider uppercase">
+              New to the platform?{' '}
               <button
                 onClick={() => navigate('/signup')}
-                className="text-blue-600 font-bold hover:underline underline-offset-4"
+                className="text-white hover:underline underline-offset-8 decoration-white/30"
               >
-                Create Account
+                Create Identity
               </button>
             </p>
           </div>
         </div>
 
         {/* Bottom Legal Links */}
-        <div className="mt-8 flex items-center justify-center gap-6 text-sm font-semibold text-slate-400">
-          <a href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</a>
-          <div className="w-1 h-1 bg-slate-200 rounded-full"></div>
-          <a href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
+        <div className="mt-12 flex items-center justify-center gap-8 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+          <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+          <div className="w-1 h-1 bg-white/10 rounded-full"></div>
+          <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+          <div className="w-1 h-1 bg-white/10 rounded-full"></div>
+          <a href="#" className="hover:text-white transition-colors">Support</a>
         </div>
       </div>
     </div>
