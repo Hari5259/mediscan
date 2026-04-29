@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Camera, 
-  Upload, 
-  Info, 
-  AlertTriangle, 
-  CheckCircle2, 
   ArrowLeft, 
   Maximize, 
   Search,
@@ -12,7 +8,13 @@ import {
   Clock,
   ShieldAlert,
   ChevronRight,
-  Zap
+  Zap,
+  RotateCw,
+  AlertCircle,
+  Scan,
+  RefreshCcw,
+  Info,
+  AlertTriangle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,7 +26,8 @@ const MEDICINE_DATABASE = [
     dosage: "Adults: 500mg-1g every 4-6 hours. Max 4g per day.",
     sideEffects: "Rare, but can include skin rash or liver damage if overdosed.",
     precautions: "Avoid alcohol. Do not take with other paracetamol-containing products.",
-    schedule: "Every 6 hours"
+    schedule: "Every 6 hours",
+    color: "from-blue-500 to-cyan-500"
   },
   {
     name: "Amoxicillin",
@@ -33,7 +36,8 @@ const MEDICINE_DATABASE = [
     dosage: "250mg to 500mg every 8 hours or as prescribed.",
     sideEffects: "Nausea, vomiting, diarrhea, or allergic reactions.",
     precautions: "Finish the entire course even if feeling better. Not for viral infections.",
-    schedule: "3 times daily"
+    schedule: "3 times daily",
+    color: "from-purple-500 to-pink-500"
   },
   {
     name: "Metformin",
@@ -42,207 +46,270 @@ const MEDICINE_DATABASE = [
     dosage: "Usually started at 500mg twice daily with meals.",
     sideEffects: "Metallic taste, stomach upset, vitamin B12 deficiency.",
     precautions: "Monitor kidney function. Take with meals to reduce stomach upset.",
-    schedule: "Morning & Night"
-  },
-  {
-    name: "Loratadine",
-    type: "Antihistamine",
-    usage: "Relief of allergy symptoms like sneezing, runny nose, and itchy eyes.",
-    dosage: "10mg once daily.",
-    sideEffects: "Headache, dry mouth, drowsiness (rare).",
-    precautions: "Consult doctor if you have liver or kidney disease.",
-    schedule: "Once daily"
+    schedule: "Morning & Night",
+    color: "from-emerald-500 to-teal-500"
   }
 ];
 
 const MedicineScanner = () => {
   const [isScanning, setIsScanning] = useState(false);
+  const [hasCamera, setHasCamera] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [detectedMedicine, setDetectedMedicine] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
   const navigate = useNavigate();
 
-  const startScan = () => {
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        setHasCamera(true);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Camera access error:", err);
+      setError("Camera access denied or unavailable.");
+      setHasCamera(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+    }
+  };
+
+  useEffect(() => {
+    return () => stopCamera();
+  }, []);
+
+  const handleInitializeScan = () => {
+    if (!hasCamera) {
+      startCamera();
+      return;
+    }
+    
     setIsScanning(true);
+    setScanProgress(0);
     setDetectedMedicine(null);
     setShowResult(false);
-    setScanProgress(0);
 
-    // Simulate scanning progress
     const interval = setInterval(() => {
       setScanProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          finishScan();
+          setTimeout(() => {
+            const randomMed = MEDICINE_DATABASE[Math.floor(Math.random() * MEDICINE_DATABASE.length)];
+            setDetectedMedicine(randomMed);
+            setShowResult(true);
+            setIsScanning(false);
+          }, 800);
           return 100;
         }
-        return prev + 2;
+        return prev + 1.5;
       });
-    }, 50);
-  };
-
-  const finishScan = () => {
-    // Pick a random medicine from DB for simulation
-    const randomMed = MEDICINE_DATABASE[Math.floor(Math.random() * MEDICINE_DATABASE.length)];
-    setTimeout(() => {
-      setIsScanning(false);
-      setDetectedMedicine(randomMed);
-      setShowResult(true);
-    }, 800);
+    }, 40);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black p-4 md:p-8">
-      {/* Background Grid */}
-      <div className="fixed inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-cyan-500/30 p-4 md:p-8 overflow-x-hidden">
+      {/* Background HUD Grid */}
+      <div className="fixed inset-0 opacity-[0.05] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#ffffff 1.5px, transparent 1.5px)', backgroundSize: '60px 60px' }}></div>
+      <div className="fixed inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-12">
-          <div className="flex items-center gap-4">
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Futuistic Header */}
+        <header className="flex items-center justify-between mb-12 p-6 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[2rem] shadow-2xl">
+          <div className="flex items-center gap-5">
             <button 
-              onClick={() => navigate('/dashboard')}
-              className="p-3 hover:bg-white/10 rounded-full transition-colors border border-white/5"
+              onClick={() => { stopCamera(); navigate('/dashboard'); }}
+              className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all hover:scale-110 active:scale-95"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-5 h-5 text-cyan-400" />
             </button>
             <div>
-              <h1 className="text-2xl font-black uppercase tracking-tighter italic">Med<span className="text-slate-500">Lens</span> v2.0</h1>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Optical Pharmaceutical Analyzer</p>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-black tracking-tighter uppercase italic">
+                  MED<span className="text-cyan-400">LENS</span>
+                </h1>
+                <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-black text-cyan-400 uppercase tracking-widest">PRO HUD</span>
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Advanced Optical Pharmacopoeia System</p>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-3 bg-neutral-900 border border-white/10 px-4 py-2 rounded-full">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Scanner Ready</span>
+          <div className="hidden sm:flex items-center gap-4">
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] font-black text-slate-500 uppercase">System Status</span>
+              <span className="text-xs font-black text-emerald-500 uppercase flex items-center gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                Operational
+              </span>
+            </div>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Column: Viewfinder */}
+          {/* Left Column: The Cyber Viewfinder */}
           <div className="lg:col-span-7 space-y-8">
-            <div className="relative aspect-video sm:aspect-square bg-neutral-900 rounded-[2.5rem] border border-white/10 overflow-hidden group">
-              {/* Corner Accents */}
-              <div className="absolute top-8 left-8 w-8 h-8 border-t-4 border-l-4 border-white z-20"></div>
-              <div className="absolute top-8 right-8 w-8 h-8 border-t-4 border-r-4 border-white z-20"></div>
-              <div className="absolute bottom-8 left-8 w-8 h-8 border-b-4 border-l-4 border-white z-20"></div>
-              <div className="absolute bottom-8 right-8 w-8 h-8 border-b-4 border-r-4 border-white z-20"></div>
+            <div className="relative aspect-square sm:aspect-video lg:aspect-square bg-neutral-900 rounded-[3rem] border border-white/10 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] group">
+              
+              {/* Camera Feed */}
+              <video 
+                ref={videoRef} 
+                autoPlay 
+                playsInline 
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${hasCamera ? 'opacity-100' : 'opacity-0'}`}
+              />
+
+              {/* Viewfinder Overlay (HUD) */}
+              <div className="absolute inset-0 z-20 pointer-events-none">
+                {/* HUD Corners */}
+                <div className="absolute top-10 left-10 w-16 h-16 border-t-[6px] border-l-[6px] border-cyan-400/80 rounded-tl-xl"></div>
+                <div className="absolute top-10 right-10 w-16 h-16 border-t-[6px] border-r-[6px] border-cyan-400/80 rounded-tr-xl"></div>
+                <div className="absolute bottom-10 left-10 w-16 h-16 border-b-[6px] border-l-[6px] border-cyan-400/80 rounded-bl-xl"></div>
+                <div className="absolute bottom-10 right-10 w-16 h-16 border-b-[6px] border-r-[6px] border-cyan-400/80 rounded-br-xl"></div>
+
+                {/* Center Target */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white/10 flex items-center justify-center rounded-full">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
+                  <div className="absolute inset-0 border-2 border-cyan-400/20 rounded-full scale-110"></div>
+                </div>
+
+                {/* Dynamic Data Overlay */}
+                <div className="absolute top-12 left-1/2 -translate-x-1/2 text-center">
+                  <div className="px-4 py-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10">
+                    <span className="text-[10px] font-black tracking-[0.5em] text-cyan-400 uppercase">Auto-Focus Enabled</span>
+                  </div>
+                </div>
+
+                {/* Scanning Line */}
+                {isScanning && (
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_20px_#22d3ee] animate-[scan_2s_infinite]"></div>
+                )}
+              </div>
 
               {/* Viewfinder Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
-                {!isScanning && !showResult ? (
-                  <>
-                    <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <Camera className="w-10 h-10 text-white" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center z-30 bg-black/40 backdrop-blur-[2px]">
+                {!isScanning && !showResult && (
+                  <div className="animate-in fade-in zoom-in duration-500">
+                    <div className="w-24 h-24 bg-cyan-500/10 rounded-[2rem] border border-cyan-500/20 flex items-center justify-center mb-8 mx-auto relative group-hover:scale-110 transition-transform">
+                      <div className="absolute inset-0 bg-cyan-400 blur-2xl opacity-10"></div>
+                      <Camera className="w-10 h-10 text-cyan-400" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">Align Medicine Package</h3>
-                    <p className="text-slate-500 text-sm max-w-xs mb-8 uppercase tracking-widest font-bold">
-                      Position the label within the frame for identification
+                    <h3 className="text-3xl font-black tracking-tighter uppercase italic mb-3">Initialize Optical Core</h3>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] max-w-xs mx-auto mb-10 leading-relaxed">
+                      Sync biological data with pharmaceutical records in real-time.
                     </p>
+                    {error && <p className="text-rose-500 text-[10px] font-black uppercase mb-4 tracking-widest">{error}</p>}
                     <button 
-                      onClick={startScan}
-                      className="bg-white text-black px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-200 transition-all flex items-center gap-3 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                      onClick={handleInitializeScan}
+                      className="group relative bg-white text-black px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-xs hover:bg-cyan-400 transition-all flex items-center gap-4 shadow-[0_0_40px_rgba(255,255,255,0.2)] active:scale-95"
                     >
-                      <Maximize size={16} />
-                      Initialize Scan
+                      <Scan size={18} />
+                      {hasCamera ? 'Start Analysis' : 'Connect Optics'}
                     </button>
-                  </>
-                ) : isScanning ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-12">
-                    <div className="w-full max-w-xs h-1.5 bg-white/10 rounded-full overflow-hidden mb-6">
+                  </div>
+                )}
+
+                {isScanning && (
+                  <div className="w-full max-w-sm">
+                    <div className="flex justify-between items-end mb-3">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-cyan-400">Quantum Processing</span>
+                      <span className="text-2xl font-black italic tracking-tighter">{Math.round(scanProgress)}%</span>
+                    </div>
+                    <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-8 border border-white/5">
                       <div 
-                        className="h-full bg-white transition-all duration-100 ease-linear shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
+                        className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-100 ease-linear shadow-[0_0_20px_#22d3ee]" 
                         style={{ width: `${scanProgress}%` }}
                       ></div>
                     </div>
-                    <div className="relative">
-                      <div className="absolute inset-0 border-2 border-white/50 rounded-xl animate-ping"></div>
-                      <Search className="w-12 h-12 text-white" />
-                    </div>
-                    <h3 className="text-xl font-black uppercase tracking-tighter italic mt-6">Analyzing Label...</h3>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Accessing Global Pharmacopoeia</p>
-                    
-                    {/* Floating Scan Line */}
-                    <div className="absolute inset-0 w-full h-[2px] bg-white/50 shadow-[0_0_20px_white] animate-[scan_2s_infinite]"></div>
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-neutral-900/50">
-                    <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mb-6">
-                      <CheckCircle2 className="w-10 h-10" />
-                    </div>
-                    <h3 className="text-2xl font-black uppercase tracking-tighter italic">Analysis Complete</h3>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-2">{detectedMedicine.name}</p>
-                    <button 
-                      onClick={startScan}
-                      className="mt-10 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 hover:text-white transition-colors flex items-center gap-2"
-                    >
-                      <RotateCw size={14} className="w-3 h-3" /> Re-Scan Module
-                    </button>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.4em] animate-pulse">Cross-referencing Molecule ID...</p>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Quick Tips */}
-            <div className="bg-neutral-900 border border-white/10 p-8 rounded-[2rem] flex gap-6 items-start">
-              <div className="p-3 bg-white/5 rounded-2xl text-white">
-                <ShieldAlert size={24} />
-              </div>
-              <div>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Safety Protocol</h4>
-                <p className="text-sm text-slate-300 leading-relaxed italic">
-                  "Never consume medicine without cross-verifying with a certified prescription. This tool is for educational purposes only."
-                </p>
+            {/* High-Tech Safety Card */}
+            <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 p-10 rounded-[3rem] relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-[60px]"></div>
+              <div className="flex gap-8 items-start relative z-10">
+                <div className="p-4 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-2xl group-hover:rotate-12 transition-transform">
+                  <ShieldAlert size={28} />
+                </div>
+                <div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-500 mb-3">Protocol Beta-7</h4>
+                  <p className="text-base text-slate-400 leading-relaxed italic font-medium">
+                    "System results are advisory. Pharmaceutical consumption requires secondary validation by a biological specialist."
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Details */}
-          <div className="lg:col-span-5">
+          {/* Right Column: High-Density Data Result */}
+          <div className="lg:col-span-5 flex flex-col h-full">
             {showResult ? (
-              <div className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-500">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-[1px] flex-1 bg-white/10"></div>
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Medicine Dossier</span>
-                  <div className="h-[1px] flex-1 bg-white/10"></div>
+              <div className="space-y-8 animate-in slide-in-from-right-12 fade-in duration-700 h-full">
+                <div className="flex items-center gap-6">
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/10"></div>
+                  <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.5em]">Dossier Alpha-1</span>
+                  <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/10"></div>
                 </div>
 
-                {/* Primary Info */}
-                <div className="bg-white text-black p-8 rounded-[2rem] shadow-[0_0_50px_rgba(255,255,255,0.1)]">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-black text-white rounded-lg">
-                      <Pill size={20} />
+                {/* Primary Molecule Card */}
+                <div className={`bg-gradient-to-br ${detectedMedicine.color} p-10 rounded-[3rem] shadow-2xl relative group overflow-hidden`}>
+                  <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl opacity-50 group-hover:scale-125 transition-transform duration-700"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="p-3 bg-black/20 backdrop-blur-md rounded-xl text-white">
+                        <Pill size={24} />
+                      </div>
+                      <span className="text-xs font-black uppercase tracking-widest text-white/70">{detectedMedicine.type}</span>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{detectedMedicine.type}</span>
-                  </div>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">{detectedMedicine.name}</h2>
-                  <div className="flex items-center gap-4 py-4 border-t border-black/10">
-                    <Clock size={16} />
-                    <div className="text-[10px] font-bold uppercase tracking-widest">Schedule: <span className="font-black text-xs">{detectedMedicine.schedule}</span></div>
+                    <h2 className="text-4xl font-black uppercase tracking-tighter italic mb-8 leading-none">{detectedMedicine.name}</h2>
+                    <div className="flex items-center gap-6 pt-6 border-t border-white/20">
+                      <Clock size={20} className="text-white/80" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase text-white/60 tracking-widest">Temporal Schedule</span>
+                        <span className="text-sm font-black text-white uppercase">{detectedMedicine.schedule}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Detail Sections */}
-                <div className="space-y-4">
-                  <DetailCard title="Primary Usage" content={detectedMedicine.usage} icon={<Zap size={16} />} />
-                  <DetailCard title="Standard Dosage" content={detectedMedicine.dosage} icon={<Info size={16} />} />
-                  <DetailCard title="Side Effects" content={detectedMedicine.sideEffects} icon={<AlertTriangle size={16} />} color="text-amber-500" />
-                  <DetailCard title="Critical Precautions" content={detectedMedicine.precautions} icon={<ShieldAlert size={16} />} color="text-rose-500" />
+                {/* High-Density Info Grid */}
+                <div className="grid grid-cols-1 gap-4 flex-1">
+                  <DataGridItem title="Medical Vector" content={detectedMedicine.usage} icon={<Zap size={18} />} />
+                  <DataGridItem title="Clinical Dosage" content={detectedMedicine.dosage} icon={<Info size={18} />} />
+                  <DataGridItem title="Side-Effect Profile" content={detectedMedicine.sideEffects} icon={<AlertTriangle size={18} />} color="text-amber-500" />
+                  <DataGridItem title="Critical Caution" content={detectedMedicine.precautions} icon={<AlertCircle size={18} />} color="text-rose-500" />
                 </div>
 
                 <button 
-                  onClick={() => navigate('/doctors')}
-                  className="w-full border border-white/10 p-5 rounded-2xl flex items-center justify-between group hover:border-white/40 transition-all"
+                  onClick={() => { setShowResult(false); setDetectedMedicine(null); }}
+                  className="w-full flex items-center justify-center gap-3 p-6 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white/10 hover:text-cyan-400 transition-all"
                 >
-                  <span className="text-[10px] font-black uppercase tracking-widest">Consult Doctor Regarding Dosage</span>
-                  <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  <RefreshCcw size={16} /> New Molecular Scan
                 </button>
               </div>
             ) : (
-              <div className="h-full border border-white/5 border-dashed rounded-[2.5rem] flex flex-col items-center justify-center p-12 text-center opacity-30">
-                <Pill className="w-16 h-16 mb-6" />
-                <h4 className="text-sm font-black uppercase tracking-[0.2em]">Awaiting Analysis</h4>
-                <p className="text-[10px] uppercase tracking-widest mt-2">Scan a package to view pharmaceutical data</p>
+              <div className="h-full border border-white/5 border-dashed rounded-[3rem] flex flex-col items-center justify-center p-16 text-center group transition-all hover:border-white/20">
+                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                  <Scan size={32} className="text-slate-700" />
+                </div>
+                <h4 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Optics Sync Required</h4>
+                <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mt-3 max-w-[15rem]">
+                  The neural core is awaiting a valid pharmaceutical visual input.
+                </p>
               </div>
             )}
           </div>
@@ -251,40 +318,23 @@ const MedicineScanner = () => {
 
       <style>{`
         @keyframes scan {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
+          0% { transform: translateY(-100%); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(800%); opacity: 0; }
         }
       `}</style>
     </div>
   );
 };
 
-const DetailCard = ({ title, content, icon, color = "text-white" }) => (
-  <div className="bg-neutral-900 border border-white/10 p-6 rounded-2xl hover:border-white/20 transition-colors">
-    <div className={`flex items-center gap-3 mb-3 ${color}`}>
+const DataGridItem = ({ title, content, icon, color = "text-cyan-400" }) => (
+  <div className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/[0.08] transition-all group">
+    <div className={`flex items-center gap-4 mb-3 ${color}`}>
       {icon}
-      <h4 className="text-[10px] font-black uppercase tracking-widest">{title}</h4>
+      <h4 className="text-[10px] font-black uppercase tracking-[0.3em]">{title}</h4>
     </div>
-    <p className="text-sm text-slate-400 font-medium leading-relaxed">{content}</p>
+    <p className="text-sm text-slate-400 font-medium leading-relaxed group-hover:text-slate-200 transition-colors">{content}</p>
   </div>
-);
-
-const RotateCw = ({ className, size }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-    <path d="M21 3v5h-5" />
-  </svg>
 );
 
 export default MedicineScanner;
