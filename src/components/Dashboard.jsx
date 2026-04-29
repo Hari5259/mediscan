@@ -194,6 +194,18 @@ export default function Dashboard() {
               </div>
               <ChevronRight size={18} className="text-slate-300 group-hover:text-indigo-600" />
             </button>
+            <button 
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-slate-900 hover:bg-slate-900 hover:text-white group transition-all shadow-sm"
+              onClick={() => navigate('/medicine-scanner')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-slate-100 text-slate-900 rounded-xl group-hover:bg-white group-hover:text-black transition-all">
+                  <Pill size={20} />
+                </div>
+                <span className="font-bold">Medicine Scanner</span>
+              </div>
+              <ChevronRight size={18} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
 
           <div className="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden">

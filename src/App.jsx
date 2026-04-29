@@ -13,6 +13,7 @@ import BMICalculator from './components/BMICalculator';
 import EmergencyModule from './components/EmergencyModule';
 import HealthReports from './components/HealthReports';
 import SymptomChecker from './components/SymptomChecker';
+import MedicineScanner from './components/MedicineScanner';
 import './App.css';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/emergency" element={<EmergencyModule />} />
         <Route path="/health-reports" element={<HealthReports />} />
         <Route path="/symptom-checker" element={<SymptomChecker />} />
+        <Route path="/medicine-scanner" element={<MedicineScanner />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
