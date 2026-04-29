@@ -178,7 +178,7 @@ export default function Dashboard() {
                 <div className="p-3 bg-amber-100 text-amber-600 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-colors">
                   <Activity size={20} />
                 </div>
-                <span className="font-bold text-slate-700 dark:text-slate-300">Symptom Checker</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300">AI Medical Chatbot</span>
               </div>
               <ChevronRight size={18} className="text-slate-300 group-hover:text-amber-600" />
             </button>

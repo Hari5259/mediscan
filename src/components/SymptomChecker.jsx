@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Search, 
-  Activity, 
-  AlertCircle, 
-  CheckCircle2, 
-  ChevronRight, 
+  Send, 
+  User, 
+  Bot, 
+  ArrowLeft, 
+  RotateCcw, 
   Info, 
-  Stethoscope, 
   Thermometer, 
   Wind, 
-  Brain,
-  Plus,
-  X,
-  ArrowLeft
+  Brain, 
+  Stethoscope,
+  ChevronRight,
+  AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -68,259 +67,278 @@ const CONDITIONS_DATA = [
   }
 ];
 
-const SymptomChecker = () => {
-  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState([]);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+const SymptomCheckerChatbot = () => {
+  const [messages, setMessages] = useState([
+    { 
+      id: 1, 
+      type: 'bot', 
+      text: "Hello! I'm your AI Medical Assistant. How are you feeling today? Please describe your symptoms.",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [detectedSymptoms, setDetectedSymptoms] = useState([]);
+  const [matchedConditions, setMatchedConditions] = useState([]);
+  
+  const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
-  const filteredSuggestions = SYMPTOMS_DATA.filter(
-    s => s.toLowerCase().includes(searchTerm.toLowerCase()) && !selectedSymptoms.includes(s)
-  );
-
-  const addSymptom = (symptom) => {
-    if (!selectedSymptoms.includes(symptom)) {
-      setSelectedSymptoms([...selectedSymptoms, symptom]);
-      setSearchTerm('');
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const removeSymptom = (symptom) => {
-    setSelectedSymptoms(selectedSymptoms.filter(s => s !== symptom));
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
 
-  const analyzeSymptoms = () => {
-    if (selectedSymptoms.length === 0) return;
-    
-    setIsAnalyzing(true);
-    
-    // Simulate API delay
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = {
+      id: Date.now(),
+      type: 'user',
+      text: input,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
+    setInput('');
+    setIsTyping(true);
+
+    // Analyze symptoms from input
+    const found = SYMPTOMS_DATA.filter(s => 
+      currentInput.toLowerCase().includes(s.toLowerCase())
+    );
+
     setTimeout(() => {
-      const matchedConditions = CONDITIONS_DATA.map(condition => {
-        const matches = condition.symptoms.filter(s => selectedSymptoms.includes(s));
-        const matchScore = (matches.length / condition.symptoms.length) * 100;
-        return { ...condition, matchScore };
-      })
-      .filter(c => c.matchScore > 0)
-      .sort((a, b) => b.matchScore - a.matchScore);
+      setIsTyping(false);
+      
+      if (found.length > 0) {
+        const newDetected = [...new Set([...detectedSymptoms, ...found])];
+        setDetectedSymptoms(newDetected);
+        
+        const conditions = CONDITIONS_DATA.map(condition => {
+          const matches = condition.symptoms.filter(s => newDetected.includes(s));
+          const score = (matches.length / condition.symptoms.length) * 100;
+          return { ...condition, matchScore: score, matchedCount: matches.length };
+        })
+        .filter(c => c.matchScore > 0)
+        .sort((a, b) => b.matchScore - a.matchScore);
 
-      setResults(matchedConditions);
-      setIsAnalyzing(false);
-    }, 1500);
+        setMatchedConditions(conditions);
+
+        const botResponse = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: `I've noted these symptoms: ${found.join(', ')}. Based on what you've told me, I've found some possible conditions. Would you like to see the analysis?`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          hasAction: true
+        };
+        setMessages(prev => [...prev, botResponse]);
+      } else {
+        const botResponse = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: "I couldn't identify specific medical symptoms from that. Could you try describing them differently? (e.g., 'I have a fever and a headache')",
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, botResponse]);
+      }
+    }, 1200);
+  };
+
+  const resetChat = () => {
+    setMessages([{ 
+      id: 1, 
+      type: 'bot', 
+      text: "Hello! I'm your AI Medical Assistant. How are you feeling today? Please describe your symptoms.",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }]);
+    setDetectedSymptoms([]);
+    setMatchedConditions([]);
+    setShowResults(false);
   };
 
   return (
-    <div className="min-h-screen gradient-bg p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
+      {/* Background Grid */}
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+
+      <div className="max-w-5xl mx-auto min-h-screen flex flex-col relative z-10">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <button 
-            onClick={() => navigate('/dashboard')}
-            className="p-2 hover:bg-white/20 rounded-full transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <div>
-            <h1 className="text-3xl font-bold gradient-text">Symptom Checker</h1>
-            <p className="text-slate-500 dark:text-slate-400">Identify potential health conditions based on how you feel.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left Column: Input */}
-          <div className="md:col-span-1 space-y-6">
-            <div className="glass-card p-6 rounded-2xl">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Search className="w-5 h-5 text-blue-500" />
-                Add Symptoms
-              </h2>
-              
-              <div className="relative mb-4">
-                <input
-                  type="text"
-                  placeholder="e.g. Fever, Headache"
-                  className="input-field pr-10"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <header className="p-6 border-b border-white/10 flex items-center justify-between backdrop-blur-md sticky top-0 z-20">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate('/dashboard')}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-xl font-black uppercase tracking-tighter italic">Medi<span className="text-slate-500">Bot</span> v1.0</h1>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">AI Diagnostics Online</span>
               </div>
-
-              {searchTerm && filteredSuggestions.length > 0 && (
-                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden mb-4 shadow-lg">
-                  {filteredSuggestions.map(s => (
-                    <button
-                      key={s}
-                      onClick={() => addSymptom(s)}
-                      className="w-full text-left px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-between group"
-                    >
-                      <span>{s}</span>
-                      <Plus className="w-4 h-4 text-slate-400 group-hover:text-blue-500" />
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {selectedSymptoms.map(s => (
-                  <span 
-                    key={s}
-                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full text-sm flex items-center gap-1 animate-in fade-in zoom-in duration-200"
-                  >
-                    {s}
-                    <button onClick={() => removeSymptom(s)}>
-                      <X className="w-3 h-3 hover:text-blue-900" />
-                    </button>
-                  </span>
-                ))}
-                {selectedSymptoms.length === 0 && (
-                  <p className="text-sm text-slate-400 italic">No symptoms added yet.</p>
-                )}
-              </div>
-
-              <button
-                onClick={analyzeSymptoms}
-                disabled={selectedSymptoms.length === 0 || isAnalyzing}
-                className={`w-full btn-primary flex items-center justify-center gap-2 ${
-                  (selectedSymptoms.length === 0 || isAnalyzing) ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                {isAnalyzing ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Activity className="w-5 h-5" />
-                    Check Symptoms
-                  </>
-                )}
-              </button>
             </div>
+          </div>
+          <button 
+            onClick={resetChat}
+            className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-500 hover:text-white"
+            title="Reset Conversation"
+          >
+            <RotateCcw className="w-5 h-5" />
+          </button>
+        </header>
 
-            <div className="glass-card p-6 rounded-2xl bg-amber-50/50 dark:bg-amber-900/10 border-amber-200/50">
-              <div className="flex gap-3">
-                <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" />
-                <div>
-                  <h3 className="font-semibold text-amber-800 dark:text-amber-400">Important Disclaimer</h3>
-                  <p className="text-sm text-amber-700 dark:text-amber-500/80 mt-1">
-                    This tool is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician.
+        {/* Chat Area */}
+        <main className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
+          {messages.map((msg) => (
+            <div 
+              key={msg.id} 
+              className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-4 duration-300`}
+            >
+              <div className={`flex gap-4 max-w-[80%] ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-white/10 ${msg.type === 'user' ? 'bg-white text-black' : 'bg-neutral-900 text-white'}`}>
+                  {msg.type === 'user' ? <User size={18} /> : <Bot size={18} />}
+                </div>
+                <div className="space-y-2">
+                  <div className={`p-5 rounded-3xl text-sm leading-relaxed ${
+                    msg.type === 'user' 
+                    ? 'bg-neutral-900 border border-white/20 text-white rounded-tr-none' 
+                    : 'bg-white text-black font-medium rounded-tl-none'
+                  }`}>
+                    {msg.text}
+                    {msg.hasAction && !showResults && (
+                      <button 
+                        onClick={() => setShowResults(true)}
+                        className="mt-4 w-full bg-black text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
+                      >
+                        Show Analysis <ChevronRight size={14} />
+                      </button>
+                    )}
+                  </div>
+                  <p className={`text-[10px] font-bold text-slate-600 uppercase tracking-widest ${msg.type === 'user' ? 'text-right' : 'text-left'}`}>
+                    {msg.timestamp}
                   </p>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right Column: Results */}
-          <div className="md:col-span-2">
-            {isAnalyzing ? (
-              <div className="glass-card p-12 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
-                <div className="relative">
-                  <div className="w-20 h-20 border-4 border-blue-100 dark:border-blue-900 rounded-full animate-ping" />
-                  <Stethoscope className="w-10 h-10 text-blue-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          ))}
+          {isTyping && (
+            <div className="flex justify-start animate-pulse">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center text-white">
+                  <Bot size={18} />
                 </div>
-                <h3 className="text-xl font-bold">Scanning Medical Database</h3>
-                <p className="text-slate-500 max-w-xs">Comparing your symptoms with thousands of clinical patterns...</p>
+                <div className="bg-neutral-900 border border-white/10 p-4 rounded-3xl rounded-tl-none flex gap-1">
+                  <div className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                </div>
               </div>
-            ) : results.length > 0 ? (
-              <div className="space-y-6">
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                  <CheckCircle2 className="w-6 h-6 text-green-500" />
-                  Possible Conditions Found
-                </h2>
-                
-                {results.map((condition, idx) => (
-                  <div 
-                    key={condition.name} 
-                    className="glass-card overflow-hidden rounded-2xl hover:border-blue-300 transition-all duration-300 group"
-                    style={{ animationDelay: `${idx * 100}ms` }}
-                  >
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-xl font-bold">{condition.name}</h3>
-                            <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                              condition.severity === 'High' ? 'bg-red-100 text-red-700' :
-                              condition.severity === 'Medium' ? 'bg-amber-100 text-amber-700' :
-                              'bg-green-100 text-green-700'
-                            }`}>
-                              {condition.severity} Risk
-                            </span>
-                          </div>
-                          <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">
-                            Match Confidence: {Math.round(condition.matchScore)}%
-                          </p>
+            </div>
+          )}
+
+          {/* Results Pane (Inline when requested) */}
+          {showResults && matchedConditions.length > 0 && (
+            <div className="animate-in zoom-in fade-in duration-500 space-y-6 pt-4">
+              <div className="flex items-center gap-3 px-4">
+                <div className="h-[1px] flex-1 bg-white/10"></div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Diagnostic Report</span>
+                <div className="h-[1px] flex-1 bg-white/10"></div>
+              </div>
+
+              {matchedConditions.map((condition, idx) => (
+                <div key={idx} className="bg-neutral-900 border border-white/10 rounded-[2rem] overflow-hidden hover:border-white/30 transition-all duration-300">
+                  <div className="p-8">
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-black uppercase tracking-tighter italic">{condition.name}</h3>
+                          <span className={`text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest ${
+                            condition.severity === 'High' ? 'bg-white text-black' : 'border border-white/20 text-white'
+                          }`}>
+                            {condition.severity} RISK
+                          </span>
                         </div>
-                        <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                          {condition.name.includes('Cold') || condition.name.includes('Flu') ? <Thermometer className="text-blue-500" /> :
-                           condition.name.includes('COVID') ? <Wind className="text-blue-500" /> :
-                           condition.name.includes('Migraine') ? <Brain className="text-blue-500" /> :
-                           <Stethoscope className="text-blue-500" />}
+                        <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em]">
+                          System Confidence: {Math.round(condition.matchScore)}%
+                        </p>
+                      </div>
+                      <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                        {condition.name.includes('Cold') ? <Thermometer size={24} /> : <Stethoscope size={24} />}
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="bg-black/50 p-6 rounded-2xl border border-white/5">
+                        <div className="flex items-center gap-2 mb-3 text-slate-400">
+                          <Info size={14} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Medical Protocol</span>
                         </div>
+                        <p className="text-sm text-slate-300 leading-relaxed italic">
+                          "{condition.advice}"
+                        </p>
                       </div>
 
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wider">Symptoms Matched</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {condition.symptoms.map(s => (
-                              <span key={s} className={`text-xs px-2 py-1 rounded-md ${
-                                selectedSymptoms.includes(s) 
-                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium' 
-                                : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'
-                              }`}>
-                                {s}
-                              </span>
-                            ))}
-                          </div>
+                      <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          Specialist: <span className="text-white ml-2">{condition.specialist}</span>
                         </div>
-
-                        <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
-                          <div className="flex gap-2 mb-2">
-                            <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-                            <h4 className="text-sm font-bold">Recommended Advice</h4>
-                          </div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            {condition.advice}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
-                          <div className="text-sm">
-                            <span className="text-slate-500">Suggested Specialist:</span>
-                            <span className="ml-2 font-semibold text-slate-700 dark:text-slate-300">{condition.specialist}</span>
-                          </div>
-                          <button 
-                            onClick={() => navigate('/doctors')}
-                            className="text-blue-600 dark:text-blue-400 text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
-                          >
-                            Book Consultation <ChevronRight className="w-4 h-4" />
-                          </button>
-                        </div>
+                        <button 
+                          onClick={() => navigate('/doctors')}
+                          className="flex items-center gap-2 text-white hover:text-slate-300 text-[10px] font-black uppercase tracking-widest group transition-all"
+                        >
+                          Book Protocol <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="glass-card p-12 rounded-2xl text-center">
-                <div className="bg-blue-50 dark:bg-blue-900/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Stethoscope className="w-10 h-10 text-blue-500" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Ready to Check?</h3>
-                <p className="text-slate-500 max-w-sm mx-auto">
-                  Add your symptoms on the left and click "Check Symptoms" to see potential health conditions.
+              ))}
+
+              <div className="bg-white/5 border border-white/10 p-6 rounded-[2rem] flex gap-4">
+                <AlertCircle className="w-6 h-6 text-white shrink-0" />
+                <p className="text-[10px] text-slate-500 font-bold uppercase leading-relaxed tracking-widest">
+                  Legal Disclaimer: This automated report is for informational purposes only and does not constitute a medical diagnosis. Consult a human professional for all health matters.
                 </p>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </main>
+
+        {/* Input Area */}
+        <footer className="p-6 border-t border-white/10 backdrop-blur-md sticky bottom-0 bg-black/80">
+          <form onSubmit={handleSend} className="relative group">
+            <input 
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Describe your symptoms (e.g. 'I have a dry cough and fatigue')"
+              className="w-full bg-neutral-900 border border-white/10 rounded-3xl px-6 py-5 pr-16 text-sm focus:outline-none focus:border-white/40 focus:ring-4 focus:ring-white/5 transition-all duration-300 placeholder:text-slate-600 font-medium"
+            />
+            <button 
+              type="submit"
+              disabled={!input.trim() || isTyping}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-4 bg-white text-black rounded-2xl hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
+            >
+              <Send size={18} />
+            </button>
+          </form>
+          <p className="text-center text-[10px] font-black text-slate-700 uppercase tracking-widest mt-4">
+            MediBot Intelligence System © 2026
+          </p>
+        </footer>
       </div>
     </div>
   );
 };
 
-export default SymptomChecker;
+export default SymptomCheckerChatbot;
