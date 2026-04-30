@@ -10,8 +10,8 @@ export default function Terms() {
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 rounded-full blur-[140px] animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute inset-0 opacity-[0.02]" 
-             style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        <div className="absolute inset-0 opacity-[0.02]"
+          style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent animate-scan"></div>
       </div>
 
@@ -38,7 +38,7 @@ export default function Terms() {
 
         {/* Terms Content */}
         <div className="bg-[#080808] border border-white/5 rounded-[3.5rem] p-12 space-y-16 shadow-2xl relative overflow-hidden">
-           <div className="absolute top-0 right-0 p-12 text-slate-900 pointer-events-none opacity-[0.03]">
+          <div className="absolute top-0 right-0 p-12 text-slate-900 pointer-events-none opacity-[0.03]">
             <ShieldCheck size={200} />
           </div>
 
@@ -57,7 +57,7 @@ export default function Terms() {
 
           {/* User Responsibilities */}
           <section className="relative z-10">
-             <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-8">
               <div className="w-1 h-8 bg-cyan-500 rounded-full shadow-[0_0_15px_#06b6d4]"></div>
               <h2 className="text-2xl font-black uppercase tracking-tighter italic">
                 2. Node Responsibilities
@@ -73,8 +73,8 @@ export default function Terms() {
                 'No platform reverse-engineering'
               ].map((item, i) => (
                 <div key={i} className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center gap-4 group hover:bg-white/[0.04] transition-all">
-                   <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_#06b6d4]"></div>
-                   <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">{item}</span>
+                  <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_10px_#06b6d4]"></div>
+                  <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">{item}</span>
                 </div>
               ))}
             </div>
@@ -82,7 +82,7 @@ export default function Terms() {
 
           {/* Medical Disclaimer */}
           <section className="relative z-10 p-10 bg-rose-500/5 border border-rose-500/20 rounded-[2.5rem]">
-             <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-1 h-8 bg-rose-500 rounded-full shadow-[0_0_15px_#f43f5e]"></div>
               <h2 className="text-2xl font-black uppercase tracking-tighter italic text-rose-500">
                 3. Tactical Warning
@@ -97,18 +97,18 @@ export default function Terms() {
           <section className="relative z-10 pt-10 border-t border-white/5">
             <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-8 italic">Operational Command</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-               <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
-                 <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">Legal Node</p>
-                 <p className="text-xs font-black text-cyan-400 italic">LEGAL@MEDISCAN.CORE</p>
-               </div>
-               <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
-                 <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">Support ID</p>
-                 <p className="text-xs font-black text-white italic">+1 (800) MEDI-CORE</p>
-               </div>
-               <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
-                 <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">HQ Sector</p>
-                 <p className="text-xs font-black text-white italic">CYBER CITY, S-7</p>
-               </div>
+              <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">Legal Node</p>
+                <p className="text-xs font-black text-cyan-400 italic">LEGAL@MEDISCAN.CORE</p>
+              </div>
+              <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">Support ID</p>
+                <p className="text-xs font-black text-white italic">+1 (800) MEDI-CORE</p>
+              </div>
+              <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2">HQ Sector</p>
+                <p className="text-xs font-black text-white italic">CYBER CITY, S-7</p>
+              </div>
             </div>
           </section>
 
@@ -118,7 +118,7 @@ export default function Terms() {
               ARCHIVE VERSION: 9.4.2026
             </p>
             <div className="flex gap-2">
-               {[1,2,3].map(i => <div key={i} className="w-1 h-1 bg-white/10 rounded-full animate-pulse" style={{ animationDelay: `${i*0.5}s` }}></div>)}
+              {[1, 2, 3].map(i => <div key={i} className="w-1 h-1 bg-white/10 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.5}s` }}></div>)}
             </div>
           </div>
         </div>
