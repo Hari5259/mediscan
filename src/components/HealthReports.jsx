@@ -5,21 +5,21 @@ import {
   Activity, Droplets, BrainCircuit, Bone, Filter,
   Calendar, TrendingUp, TrendingDown, Minus, ChevronDown,
   Clock, CheckCircle2, AlertTriangle, ShieldCheck, Pill,
-  Plus, X, Upload, Loader2, Trash2
+  Plus, X, Upload, Loader2, Trash2, Microscope
 } from 'lucide-react';
 
 // Status and Trend configs remain same
 const statusConfig = {
-  normal: { label: 'Normal', color: 'bg-emerald-50 text-emerald-600 border-emerald-200', icon: CheckCircle2, dot: 'bg-emerald-500' },
-  attention: { label: 'Needs Attention', color: 'bg-amber-50 text-amber-600 border-amber-200', icon: AlertTriangle, dot: 'bg-amber-500' },
-  critical: { label: 'Action Required', color: 'bg-red-50 text-red-600 border-red-200', icon: AlertTriangle, dot: 'bg-red-500' },
-  submitted: { label: 'Submitted', color: 'bg-blue-50 text-blue-600 border-blue-200', icon: Clock, dot: 'bg-blue-500' },
+  normal: { label: 'Normal', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', icon: CheckCircle2, dot: 'bg-emerald-500' },
+  attention: { label: 'Attention', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20', icon: AlertTriangle, dot: 'bg-amber-500' },
+  critical: { label: 'Critical', color: 'bg-rose-500/10 text-rose-400 border-rose-500/20', icon: AlertTriangle, dot: 'bg-rose-500' },
+  submitted: { label: 'Syncing', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20', icon: Clock, dot: 'bg-blue-500' },
 };
 
 const trendConfig = {
-  up: { icon: TrendingUp, color: 'text-amber-500', label: 'Increasing' },
-  down: { icon: TrendingDown, color: 'text-blue-500', label: 'Decreasing' },
-  stable: { icon: Minus, color: 'text-emerald-500', label: 'Stable' },
+  up: { icon: TrendingUp, color: 'text-amber-400', label: 'Increasing' },
+  down: { icon: TrendingDown, color: 'text-blue-400', label: 'Decreasing' },
+  stable: { icon: Minus, color: 'text-emerald-400', label: 'Stable' },
 };
 
 const categoryIcons = {
@@ -27,8 +27,8 @@ const categoryIcons = {
   'Imaging': BrainCircuit,
   'Vitals': Activity,
   'Endocrine': Pill,
-  'X-Ray': BrainCircuit,
-  'CT Scan': BrainCircuit,
+  'X-Ray': Microscope,
+  'CT Scan': Microscope,
   'ECG': Activity,
   'Prescription': Pill,
   'Lab Report': FileText,
@@ -61,7 +61,7 @@ export default function HealthReports() {
     file: null
   });
 
-  // Mock initial data if backend fails or is empty
+  // Mock initial data
   const mockReports = [
     {
       _id: '1',
@@ -82,14 +82,6 @@ export default function HealthReports() {
   const fetchReports = async () => {
     setLoading(true);
     try {
-      // In a real app, we'd fetch from API
-      // const response = await fetch('/api/medical-records/patient', {
-      //   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      // });
-      // const data = await response.json();
-      // if (data.success) setReports(data.data);
-      
-      // For now, simulate a delay and use mock data combined with local storage if any
       setTimeout(() => {
         setReports(mockReports);
         setLoading(false);
@@ -106,7 +98,6 @@ export default function HealthReports() {
     
     setUploading(true);
     try {
-      // Simulate upload
       const newReport = {
         _id: Date.now().toString(),
         title: formData.title,
@@ -152,122 +143,125 @@ export default function HealthReports() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-[#020202] text-white font-sans selection:bg-cyan-500/30 overflow-x-hidden">
+      {/* Background HUD elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 rounded-full blur-[140px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 rounded-full blur-[140px]"></div>
+        <div className="absolute inset-0 opacity-[0.02]" 
+             style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      </div>
+
+      {/* Cyber Nav */}
+      <nav className="bg-black/40 backdrop-blur-3xl sticky top-0 z-50 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+          <div className="flex items-center gap-6">
             <button
               onClick={() => navigate('/dashboard')}
-              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+              className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all hover:scale-110 active:scale-95 text-cyan-400 shadow-2xl"
             >
-              <ArrowLeft size={22} />
+              <ArrowLeft size={24} />
             </button>
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-              <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-200">
-                <Heart className="w-6 h-6 text-white" fill="currentColor" />
-              </div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-                Medi<span className="text-blue-600">Scan</span>
+            <div>
+              <h1 className="text-2xl font-black tracking-tighter uppercase italic">
+                Health <span className="text-cyan-400">Dossier</span>
               </h1>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Secure Encryption</span>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsUploadOpen(true)}
-              className="btn-primary flex items-center gap-2 text-sm !py-2.5 !px-5"
+              className="px-6 py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-cyan-400 transition-all flex items-center gap-2 shadow-2xl active:scale-95"
             >
-              <Plus size={18} />
-              <span className="hidden sm:inline">Upload Report</span>
+              <Plus size={16} />
+              <span className="hidden sm:inline">Upload Record</span>
             </button>
-            <button className="btn-secondary flex items-center gap-2 text-sm !py-2.5 !px-5">
-              <Download size={16} />
-              <span className="hidden sm:inline">Export All</span>
+            <button className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center gap-2">
+              <Download size={14} />
+              <span className="hidden sm:inline">Export</span>
             </button>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-10">
-        {/* Page Title */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h2 className="text-3xl font-extrabold text-slate-900 mb-2 flex items-center gap-3">
-              <FileText className="text-indigo-600" size={32} />
-              Health Reports
-            </h2>
-            <p className="text-slate-500 font-medium">
-              Your complete medical history and diagnostic reports in one place.
+      <main className="max-w-7xl mx-auto px-6 py-12 relative z-10 w-full space-y-12">
+        {/* Page Title & Search */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="w-1.5 h-10 bg-indigo-500 rounded-full shadow-[0_0_15px_#6366f1]"></div>
+              <h2 className="text-4xl font-black uppercase tracking-tighter italic">Diagnostic Archives</h2>
+            </div>
+            <p className="text-slate-500 font-medium text-sm uppercase tracking-widest max-w-lg">
+              Authorized clinical repository. All data synchronized with MediScan Core Engine.
             </p>
           </div>
           
-          {/* Filters Row - Integrated with title for better layout */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-            <div className="relative flex-1 md:w-64">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                <Search size={18} />
-              </div>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search reports..."
-                className="input-field pl-11 !py-2.5"
-              />
+          <div className="relative group w-full md:w-80">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors" size={18} />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="SEARCH ARCHIVES..."
+              className="w-full pl-16 pr-8 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500/30 transition-all font-black text-[10px] tracking-widest text-white outline-none uppercase placeholder:text-slate-700"
+            />
+          </div>
+        </div>
+
+        {/* Summary Stats - HUD Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {[
+            { label: 'Total Dossiers', val: summaryStats.total, color: 'text-white', border: 'border-white/10' },
+            { label: 'Optimal Status', val: summaryStats.normal, color: 'text-emerald-400', border: 'border-emerald-500/20' },
+            { label: 'Review Required', val: summaryStats.attention, color: 'text-amber-400', border: 'border-amber-500/20' },
+            { label: 'Critical Action', val: summaryStats.critical, color: 'text-rose-400', border: 'border-rose-500/20' },
+          ].map((stat, i) => (
+            <div key={i} className={`bg-white/[0.02] border ${stat.border} p-8 rounded-[2.5rem] shadow-2xl group hover:bg-white/[0.04] transition-all`}>
+              <p className={`text-4xl font-black ${stat.color} tracking-tighter italic`}>{stat.val}</p>
+              <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mt-2">{stat.label}</p>
             </div>
-          </div>
-        </div>
-
-        {/* Summary Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-10">
-          <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 border-l-4 border-blue-500">
-            <p className="text-3xl font-black text-slate-900">{summaryStats.total}</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Total Reports</p>
-          </div>
-          <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 border-l-4 border-emerald-500">
-            <p className="text-3xl font-black text-emerald-600">{summaryStats.normal}</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Normal</p>
-          </div>
-          <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 border-l-4 border-amber-500">
-            <p className="text-3xl font-black text-amber-600">{summaryStats.attention}</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Attention</p>
-          </div>
-          <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 border-l-4 border-red-500">
-            <p className="text-3xl font-black text-red-600">{summaryStats.critical}</p>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Action Needed</p>
-          </div>
-        </div>
-
-        {/* Categories Scroller */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
-          <Filter size={16} className="text-slate-400 flex-shrink-0 mr-2" />
-          {['All', ...recordTypes].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 border ${
-                selectedCategory === cat
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-100'
-                  : 'bg-white text-slate-500 border-slate-200 hover:border-blue-200 hover:text-blue-600'
-              }`}
-            >
-              {cat}
-            </button>
           ))}
         </div>
 
-        {/* Reports List */}
-        <div className="space-y-4">
+        {/* Categories Bar */}
+        <div className="flex items-center gap-4 overflow-x-auto pb-4 no-scrollbar border-b border-white/5">
+          <Filter size={16} className="text-slate-600 flex-shrink-0" />
+          <div className="flex gap-3">
+            {['All', ...recordTypes].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 border ${
+                  selectedCategory === cat
+                    ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                    : 'bg-white/5 text-slate-500 border-white/5 hover:border-white/10 hover:text-white'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Reports List - High Tech Rows */}
+        <div className="space-y-6 pb-20">
           {loading ? (
-            <div className="card p-20 flex flex-col items-center justify-center text-slate-400">
-              <Loader2 size={40} className="animate-spin mb-4" />
-              <p className="font-bold">Analyzing your health records...</p>
+            <div className="bg-white/[0.02] border border-white/5 p-24 rounded-[3.5rem] flex flex-col items-center justify-center text-slate-600">
+              <Loader2 size={40} className="animate-spin mb-6 text-cyan-500" />
+              <p className="text-[10px] font-black uppercase tracking-[0.5em] animate-pulse">Synchronizing Neural Archive...</p>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="card p-16 text-center">
-              <FileText size={48} className="mx-auto text-slate-200 mb-4" />
-              <p className="text-lg font-bold text-slate-400">No reports found</p>
-              <p className="text-sm text-slate-300 mt-1">Try adjusting your search or filter criteria.</p>
+            <div className="bg-white/[0.02] border border-white/5 p-24 rounded-[3.5rem] text-center">
+              <div className="w-20 h-20 bg-white/5 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                <FileText size={32} className="text-slate-800" />
+              </div>
+              <p className="text-2xl font-black text-white uppercase italic tracking-tighter">Zero Match Found</p>
+              <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mt-4">No diagnostic records detected in current vector.</p>
             </div>
           ) : (
             filtered.map((report) => {
@@ -281,43 +275,40 @@ export default function HealthReports() {
               return (
                 <div
                   key={report._id}
-                  className={`card transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/60 ${
-                    isExpanded ? 'ring-2 ring-blue-100 bg-blue-50/10' : ''
+                  className={`group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden transition-all duration-500 ${
+                    isExpanded ? 'border-white/20 bg-[#0c0c0c] shadow-2xl' : 'hover:border-white/10'
                   }`}
                 >
-                  {/* Report Header Row */}
                   <button
                     onClick={() => setExpandedReport(isExpanded ? null : report._id)}
-                    className="w-full p-5 sm:p-6 flex items-center gap-5 text-left"
+                    className="w-full p-8 flex items-center gap-8 text-left"
                   >
-                    {/* Category Icon */}
-                    <div className="hidden sm:flex w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl items-center justify-center flex-shrink-0">
-                      <CategoryIcon size={20} />
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${isExpanded ? 'bg-cyan-500 text-black rotate-12' : 'bg-white/5 text-slate-500 group-hover:text-cyan-400 border border-white/5'}`}>
+                      <CategoryIcon size={24} />
                     </div>
 
-                    {/* Title & Meta */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <h3 className="text-base font-bold text-slate-900 truncate">{report.title}</h3>
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase border ${status.color}`}>
-                          <StatusIcon size={10} />
+                      <div className="flex items-center gap-4 mb-2">
+                        <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">{report.title}</h3>
+                        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border ${status.color}`}>
+                          <StatusIcon size={12} />
                           {status.label}
                         </span>
                       </div>
-                      <div className="flex items-center gap-4 text-[12px] text-slate-400 font-bold">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar size={12} />
+                      <div className="flex items-center gap-6 text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                        <span className="flex items-center gap-2">
+                          <Calendar size={14} className="text-slate-700" />
                           {new Date(report.recordDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
-                        <span className="hidden sm:inline">•</span>
-                        <span className="hidden sm:inline">
-                          {report.doctorId ? `Dr. ${report.doctorId.firstName} ${report.doctorId.lastName}` : 'Self Uploaded'}
+                        <span className="w-1.5 h-1.5 bg-slate-800 rounded-full"></span>
+                        <span className="italic">
+                          {report.doctorId ? `ID: PRO-${report.doctorId.firstName[0]}${report.doctorId.lastName[0]}` : 'AUTO-GEN'}
                         </span>
                         {report.trend && (
                           <>
-                            <span className="hidden sm:inline">•</span>
-                            <span className="hidden sm:flex items-center gap-1">
-                              <TrendIcon size={12} className={trend.color} />
+                            <span className="w-1.5 h-1.5 bg-slate-800 rounded-full"></span>
+                            <span className="flex items-center gap-2">
+                              <TrendIcon size={14} className={trend.color} />
                               <span className={trend.color}>{trend.label}</span>
                             </span>
                           </>
@@ -325,48 +316,48 @@ export default function HealthReports() {
                       </div>
                     </div>
 
-                    {/* Category Badge + Expand */}
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className="hidden lg:inline-block px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg text-[10px] font-black uppercase">
+                    <div className="flex items-center gap-6">
+                      <span className="hidden lg:inline-block px-4 py-1.5 bg-white/5 text-slate-600 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] border border-white/5">
                         {report.recordType}
                       </span>
-                      <ChevronDown
-                        size={18}
-                        className={`text-slate-300 transition-transform duration-300 ${
-                          isExpanded ? 'rotate-180 text-blue-600' : ''
-                        }`}
-                      />
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isExpanded ? 'bg-white text-black -rotate-180' : 'bg-white/5 text-slate-700'}`}>
+                        <ChevronDown size={20} />
+                      </div>
                     </div>
                   </button>
 
-                  {/* Expanded Details */}
                   {isExpanded && (
-                    <div className="px-5 sm:px-6 pb-6 border-t border-slate-100">
-                      <div className="pt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Summary */}
-                        <div className="md:col-span-2">
-                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Clinical Summary</h4>
-                          <p className="text-slate-600 text-sm leading-relaxed">{report.description || 'No detailed summary provided.'}</p>
-                          <div className="mt-6 flex items-center gap-3 text-[11px] text-slate-400 font-bold">
-                            <Clock size={12} />
-                            <span>Record Date: {new Date(report.recordDate).toDateString()}</span>
+                    <div className="px-8 pb-10 border-t border-white/5 animate-in slide-in-from-top-4 duration-500">
+                      <div className="pt-10 grid grid-cols-1 md:grid-cols-12 gap-12">
+                        <div className="md:col-span-8 space-y-8">
+                          <div>
+                            <h4 className="text-[10px] font-black text-cyan-500 uppercase tracking-[0.4em] mb-4">Neural Analysis Summary</h4>
+                            <p className="text-slate-400 text-lg font-medium leading-relaxed italic">
+                              "{report.description || 'No diagnostic intelligence available for this record.'}"
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
+                            <div>
+                              <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">Source Authentication</p>
+                              <p className="text-xs font-bold text-slate-300">Biometric Verified</p>
+                            </div>
+                            <div>
+                              <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">Sync Latency</p>
+                              <p className="text-xs font-bold text-emerald-500">0ms [Offline Mode]</p>
+                            </div>
                           </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="space-y-2">
-                          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Actions</h4>
-                          <button className="w-full btn-primary flex items-center justify-center gap-2 !text-xs !py-2.5">
-                            <Eye size={14} />
-                            View Full Report
+                        <div className="md:col-span-4 space-y-4">
+                          <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.4em] mb-6">Archive Operations</h4>
+                          <button className="w-full flex items-center justify-center gap-3 p-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-2xl active:scale-95">
+                            <Eye size={16} /> Open Dossier
                           </button>
-                          <button className="w-full btn-secondary flex items-center justify-center gap-2 !text-xs !py-2.5">
-                            <Download size={14} />
-                            Download PDF
+                          <button className="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">
+                            <Download size={16} /> Export Data
                           </button>
-                          <button className="w-full flex items-center justify-center gap-2 text-xs py-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors font-bold">
-                            <Trash2 size={14} />
-                            Remove Record
+                          <button className="w-full flex items-center justify-center gap-3 p-4 bg-rose-500/5 text-rose-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-500/10 transition-all mt-4">
+                            <Trash2 size={16} /> Purge Record
                           </button>
                         </div>
                       </div>
@@ -377,114 +368,74 @@ export default function HealthReports() {
             })
           )}
         </div>
-
-        {/* Health Trend Overview Section Remains Similar but simplified for cleaner look */}
-        {!loading && reports.length > 0 && (
-          <div className="mt-12 card p-8">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <TrendingUp className="text-blue-600" size={24} />
-                Health Insights
-              </h3>
-              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">Updated Today</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {/* Circular Metrics simplified */}
-              {[
-                { label: 'Blood Work', score: 85, color: 'emerald', status: 'Excellent' },
-                { label: 'Cardiovascular', score: 72, color: 'amber', status: 'Monitor' },
-                { label: 'Metabolic', score: 91, color: 'indigo', status: 'Stable' }
-              ].map((metric, i) => (
-                <div key={i} className="text-center group">
-                   <div className="relative w-24 h-24 mx-auto mb-4">
-                    <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" strokeWidth="10" />
-                      <circle
-                        cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="10"
-                        strokeDasharray={`${metric.score * 2.64} 264`}
-                        strokeLinecap="round"
-                        className={`transition-all duration-1000 text-${metric.color}-500`}
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xl font-black text-slate-900">{metric.score}%</span>
-                    </div>
-                  </div>
-                  <p className="font-bold text-slate-900 text-sm">{metric.label}</p>
-                  <p className={`text-[10px] font-black uppercase tracking-wider mt-1 text-${metric.color}-500`}>{metric.status}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
 
-      {/* Upload Modal */}
+      {/* Upload Modal - Cyber Style */}
       {isUploadOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => !uploading && setIsUploadOpen(false)}></div>
-          <div className="bg-white rounded-[2.5rem] w-full max-w-lg relative z-10 overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-            <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-blue-50 to-transparent">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => !uploading && setIsUploadOpen(false)}></div>
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-[3.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-500">
+            <div className="p-10 border-b border-white/5 flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-bold text-slate-900">Upload Report</h3>
-                <p className="text-slate-500 text-sm font-medium">Add a new medical record to your profile</p>
+                <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Archive Record</h3>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-2">Initialize New Clinical Node</p>
               </div>
               <button 
                 onClick={() => setIsUploadOpen(false)}
-                className="p-2 hover:bg-white rounded-xl text-slate-400 hover:text-slate-600 transition-colors shadow-sm"
+                className="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl text-slate-400 transition-all flex items-center justify-center"
               >
-                <X size={20} />
+                <X size={24} />
               </button>
             </div>
             
-            <form onSubmit={handleUpload} className="p-8 space-y-5">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Report Title</label>
+            <form onSubmit={handleUpload} className="p-10 space-y-8">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-2">Dossier Title</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Annual Blood Panel"
-                  className="input-field"
+                  placeholder="E.G. NEURAL PANEL 2026"
+                  className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm font-bold text-white placeholder:text-slate-800 focus:outline-none focus:border-cyan-500/30 transition-all"
                   value={formData.title}
                   onChange={e => setFormData({...formData, title: e.target.value})}
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Type</label>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-2">Vector Type</label>
                   <select 
-                    className="input-field cursor-pointer"
+                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-xs font-black text-white focus:outline-none focus:border-cyan-500/30 transition-all appearance-none cursor-pointer uppercase"
                     value={formData.recordType}
                     onChange={e => setFormData({...formData, recordType: e.target.value})}
                   >
-                    {recordTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                    {recordTypes.map(t => <option key={t} value={t} className="bg-black">{t}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Date</label>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-2">Record Date</label>
                   <input
                     type="date"
                     required
-                    className="input-field"
+                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-xs font-black text-white focus:outline-none focus:border-cyan-500/30 transition-all uppercase"
                     value={formData.recordDate}
                     onChange={e => setFormData({...formData, recordDate: e.target.value})}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Notes (Optional)</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-2">Neural Notes</label>
                 <textarea
-                  placeholder="Any specific observations..."
-                  className="input-field min-h-[100px] py-3 resize-none"
+                  placeholder="INPUT OBSERVATIONS..."
+                  className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-slate-800 focus:outline-none focus:border-cyan-500/30 transition-all min-h-[120px] resize-none"
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                 ></textarea>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">File Attachment</label>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-2">Data Attachment</label>
                 <div className="relative group">
                   <input
                     type="file"
@@ -493,12 +444,11 @@ export default function HealthReports() {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     accept=".pdf,.jpg,.jpeg,.png"
                   />
-                  <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center group-hover:border-blue-400 group-hover:bg-blue-50/50 transition-all">
-                    <Upload className="mx-auto text-slate-300 group-hover:text-blue-500 mb-2" size={32} />
-                    <p className="text-sm font-bold text-slate-500">
-                      {formData.file ? formData.file.name : 'Click or drag to upload'}
+                  <div className="bg-white/[0.02] border-2 border-dashed border-white/5 rounded-[2rem] p-10 text-center group-hover:border-cyan-500/30 transition-all">
+                    <Upload className="mx-auto text-slate-700 group-hover:text-cyan-400 mb-4" size={40} />
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                      {formData.file ? formData.file.name : 'Drop Source File'}
                     </p>
-                    <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">PDF, JPG, PNG up to 10MB</p>
                   </div>
                 </div>
               </div>
@@ -506,17 +456,17 @@ export default function HealthReports() {
               <button
                 type="submit"
                 disabled={uploading}
-                className="btn-primary w-full py-4 mt-4 flex items-center justify-center gap-2 group shadow-xl shadow-blue-100"
+                className="w-full bg-white text-black py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-cyan-400 transition-all shadow-2xl flex items-center justify-center gap-4 disabled:opacity-50"
               >
                 {uploading ? (
                   <>
                     <Loader2 size={20} className="animate-spin" />
-                    <span>Uploading Record...</span>
+                    <span>Synchronizing...</span>
                   </>
                 ) : (
                   <>
-                    <span>Confirm Upload</span>
-                    <Plus size={20} className="group-hover:rotate-90 transition-transform" />
+                    <span>Archive Dossier</span>
+                    <Plus size={20} />
                   </>
                 )}
               </button>

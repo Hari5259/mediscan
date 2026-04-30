@@ -91,6 +91,8 @@ const MedicineScanner = () => {
     return () => stopCamera();
   }, []);
 
+  const intervalRef = useRef(null);
+
   const handleInitializeScan = () => {
     if (!hasCamera) {
       startCamera();
@@ -102,10 +104,12 @@ const MedicineScanner = () => {
     setDetectedMedicine(null);
     setShowResult(false);
 
-    const interval = setInterval(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
       setScanProgress(prev => {
         if (prev >= 100) {
-          clearInterval(interval);
+          clearInterval(intervalRef.current);
           setTimeout(() => {
             const randomMed = MEDICINE_DATABASE[Math.floor(Math.random() * MEDICINE_DATABASE.length)];
             setDetectedMedicine(randomMed);
@@ -118,6 +122,13 @@ const MedicineScanner = () => {
       });
     }, 40);
   };
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-cyan-500/30 p-4 md:p-8 overflow-x-hidden">

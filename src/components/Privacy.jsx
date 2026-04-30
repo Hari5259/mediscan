@@ -5,230 +5,151 @@ export default function Privacy() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#020202] text-white font-sans selection:bg-cyan-500/30 py-16 px-6 relative overflow-x-hidden">
+      {/* Background HUD elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 rounded-full blur-[140px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute inset-0 opacity-[0.02]" 
+             style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent animate-scan"></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto relative z-10">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-16">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-6"
+            className="flex items-center gap-3 p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all hover:scale-105 text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 mb-12 shadow-2xl"
           >
-            <ChevronLeft size={20} />
-            Back
+            <ChevronLeft size={18} />
+            Sector Return
           </button>
 
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <Heart className="w-12 h-12 text-blue-600" fill="currentColor" />
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center justify-center p-6 bg-white/5 border border-white/10 rounded-[2.5rem] mb-10 shadow-2xl relative group">
+              <div className="absolute inset-0 bg-cyan-500 blur-3xl opacity-10"></div>
+              <ShieldCheck className="w-12 h-12 text-cyan-400" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">Privacy Policy</h1>
-            <p className="text-gray-600 mt-2">How we protect your personal information</p>
+            <h1 className="text-5xl font-black tracking-tighter uppercase italic mb-4 leading-none">Privacy <span className="text-cyan-400">Vault</span></h1>
+            <p className="text-slate-500 font-black uppercase text-[10px] tracking-[0.4em]">Biometric data protection & neural security</p>
           </div>
         </div>
 
         {/* Privacy Content */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-8">
+        <div className="bg-[#080808] border border-white/5 rounded-[3.5rem] p-12 space-y-16 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-12 text-slate-900 pointer-events-none opacity-[0.03]">
+            <Lock size={200} />
+          </div>
+
           {/* Introduction */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              1. Introduction
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              MediCare ("we," "us," "our") is committed to protecting your privacy. This Privacy Policy
-              explains our practices regarding personal and health information collection, use, and protection.
+          <section className="relative z-10">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-1 h-8 bg-cyan-500 rounded-full shadow-[0_0_15px_#06b6d4]"></div>
+              <h2 className="text-2xl font-black uppercase tracking-tighter italic">
+                1. Security Mandate
+              </h2>
+            </div>
+            <p className="text-slate-400 leading-relaxed font-medium text-lg italic">
+              MediScan is engineered for absolute biometric confidentiality. This mandate outlines how your clinical data, diagnostic history, and personal identifiers are encrypted, stored, and protected within the neural vault.
             </p>
           </section>
 
           {/* Information We Collect */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              2. Information We Collect
-            </h2>
-            <div className="space-y-4 text-gray-700">
-              <h3 className="font-semibold text-gray-900">Personal Information:</h3>
-              <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Name, email, and phone number</li>
-                <li>Date of birth and address</li>
-                <li>Payment information (if applicable)</li>
-                <li>Account credentials and login history</li>
-              </ul>
-
-              <h3 className="font-semibold text-gray-900">Health Information:</h3>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>Medical history and diagnoses</li>
-                <li>Medications and allergies</li>
-                <li>Test results and health metrics</li>
-                <li>Communication with healthcare providers</li>
-              </ul>
+          <section className="relative z-10">
+             <div className="flex items-center gap-4 mb-8">
+              <div className="w-1 h-8 bg-cyan-500 rounded-full shadow-[0_0_15px_#06b6d4]"></div>
+              <h2 className="text-2xl font-black uppercase tracking-tighter italic">
+                2. Data Extraction
+              </h2>
             </div>
-          </section>
-
-          {/* How We Use Information */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              3. How We Use Your Information
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-              <li>Provide healthcare services and treatments</li>
-              <li>Send appointment reminders and important notifications</li>
-              <li>Improve our platform and services</li>
-              <li>Comply with legal and regulatory requirements</li>
-              <li>Conduct medical research (with your consent)</li>
-              <li>Prevent fraud and secure your account</li>
-            </ul>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl">
+                <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-6">Identity Vectors</h3>
+                <ul className="space-y-4">
+                  {['Personal Identifiers', 'Biometric Coordinates', 'Neural Access History', 'Financial Metadata'].map((item, i) => (
+                    <li key={i} className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-3">
+                      <div className="w-1 h-1 bg-cyan-500/30 rounded-full"></div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl">
+                <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-6">Clinical Vectors</h3>
+                <ul className="space-y-4">
+                  {['Diagnostic History', 'Molecular Scan Results', 'Consultation Logs', 'Vital Baseline Data'].map((item, i) => (
+                    <li key={i} className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-3">
+                      <div className="w-1 h-1 bg-indigo-500/30 rounded-full"></div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </section>
 
           {/* Data Security */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              4. Data Security
-            </h2>
-            <div className="space-y-4 text-gray-700">
-              <p className="leading-relaxed">
-                Your data is protected using:
-              </p>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>End-to-end encryption for all health data</li>
-                <li>Secure servers with regular security audits</li>
-                <li>Multi-factor authentication for account access</li>
-                <li>Compliance with HIPAA and international data protection laws</li>
-                <li>Limited access to personnel with the need-to-know</li>
-              </ul>
+          <section className="relative z-10">
+             <div className="flex items-center gap-4 mb-8">
+              <div className="w-1 h-8 bg-cyan-500 rounded-full shadow-[0_0_15px_#06b6d4]"></div>
+              <h2 className="text-2xl font-black uppercase tracking-tighter italic">
+                3. Encryption Protocol
+              </h2>
+            </div>
+            <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] flex flex-col md:flex-row items-center gap-10">
+               <div className="p-6 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 animate-pulse">
+                  <ShieldCheck size={40} />
+               </div>
+               <p className="text-slate-400 font-black uppercase text-[10px] tracking-[0.2em] leading-relaxed">
+                 ALL NEURAL DATA IS ENCRYPTED VIA AES-256 QUANTUM-RESISTANT ALGORITHMS. DATA IS SHARDED ACROSS SECURE NODES WITH ZERO-KNOWLEDGE ARCHITECTURE.
+               </p>
             </div>
           </section>
 
-          {/* Your Rights */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              5. Your Privacy Rights
-            </h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              You have the right to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-              <li>Access your personal and health information</li>
-              <li>Request corrections to inaccurate data</li>
-              <li>Request deletion of your information</li>
-              <li>Opt-out of marketing communications</li>
-              <li>Download your data in a portable format</li>
-              <li>Lodge a complaint with data protection authorities</li>
-            </ul>
-          </section>
-
-          {/* Third-Party Sharing */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              6. Sharing Your Information
-            </h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              We share information only when necessary:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-              <li>With healthcare providers you authorize</li>
-              <li>With insurance companies (if necessary)</li>
-              <li>With emergency services in urgent situations</li>
-              <li>As required by law enforcement or court orders</li>
-            </ul>
-            <p className="text-gray-700 leading-relaxed mt-4">
-              We do NOT sell your data to third parties.
-            </p>
-          </section>
-
-          {/* Cookies */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              7. Cookies & Tracking
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              We use cookies to improve your experience and maintain security. You can control cookie
-              preferences through your browser settings. Non-essential cookies can be disabled without
-              affecting platform functionality.
-            </p>
-          </section>
-
-          {/* Children's Privacy */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              8. Children's Privacy
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              MediCare is not intended for users under 18. We will not knowingly collect information
-              from minors. If we become aware of such collection, we will delete the information immediately.
-              Parents or guardians may create accounts for minors with their consent.
-            </p>
-          </section>
-
-          {/* Data Retention */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              9. Data Retention
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              We retain your data as long as your account is active and for a reasonable period afterward
-              for legal and business purposes. Medical records are retained per applicable laws and
-              regulations. You can request deletion of your account and data at any time.
-            </p>
-          </section>
-
-          {/* International Data Transfer */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              10. International Data Transfer
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              Your information may be transferred to and processed in countries other than where you reside.
-              By using MediCare, you consent to transfers subject to appropriate safeguards and legal frameworks.
-            </p>
-          </section>
-
-          {/* Changes to Policy */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              11. Policy Changes
-            </h2>
-            <p className="text-gray-700 leading-relaxed">
-              We may update this Privacy Policy periodically. Significant changes will be communicated
-              via email or through the platform. Continued use of MediCare constitutes acceptance of
-              the updated policy.
-            </p>
-          </section>
-
           {/* Contact */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              12. Contact Us
-            </h2>
-            <div className="space-y-2 text-gray-700">
-              <p>For privacy concerns, contact our Data Protection Officer:</p>
-              <ul className="space-y-2 ml-4">
-                <li>📧 Privacy: privacy@medigit.com</li>
-                <li>📧 DPO: dpo@medigit.com</li>
-                <li>🏢 Data Protection Office, Healthcare Way, Medical City, MC 12345</li>
-              </ul>
+          <section className="relative z-10 pt-10 border-t border-white/5">
+            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mb-8 italic">Privacy Control Node</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+               <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center gap-6">
+                 <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-cyan-400"><Mail size={20} /></div>
+                 <div>
+                   <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">DPO Contact</p>
+                   <p className="text-xs font-black text-white italic">PRIVACY@MEDISCAN.CORE</p>
+                 </div>
+               </div>
+               <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl flex items-center gap-6">
+                 <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-indigo-400"><Lock size={20} /></div>
+                 <div>
+                   <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">Security Node</p>
+                   <p className="text-xs font-black text-white italic">SECURE.MEDISCAN.HQ</p>
+                 </div>
+               </div>
             </div>
           </section>
 
           {/* Last Updated */}
-          <div className="border-t border-gray-200 pt-6">
-            <p className="text-sm text-gray-600">
-              Last updated: April 4, 2024
+          <div className="pt-10 flex items-center justify-between border-t border-white/5">
+            <p className="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em]">
+              VAULT VERSION: 2.1.2026
             </p>
+            <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">ALL SYSTEMS PROTECTED</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 mt-8">
+        <div className="flex flex-col sm:flex-row gap-6 mt-16 pb-20">
           <button
             onClick={() => navigate('/signup')}
-            className="flex-1 btn-primary"
+            className="flex-1 bg-white text-black py-6 rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] hover:bg-cyan-400 transition-all shadow-2xl active:scale-95"
           >
-            I Understand
+            I UNDERSTAND
           </button>
           <button
             onClick={() => navigate(-1)}
-            className="flex-1 btn-secondary"
+            className="flex-1 bg-white/5 border border-white/10 text-white py-6 rounded-2xl font-black text-[11px] uppercase tracking-[0.5em] hover:bg-white/10 transition-all"
           >
-            Go Back
+            SECTOR RETURN
           </button>
         </div>
       </div>

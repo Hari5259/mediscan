@@ -20,83 +20,94 @@ export default function BMICalculator() {
 
     if (bmi < 18.5) {
       setCategory('Underweight');
-      setColor('text-amber-500');
+      setColor('text-amber-400');
     } else if (bmi >= 18.5 && bmi < 25) {
       setCategory('Normal Weight');
-      setColor('text-emerald-500');
+      setColor('text-cyan-400');
     } else if (bmi >= 25 && bmi < 30) {
       setCategory('Overweight');
-      setColor('text-orange-500');
+      setColor('text-orange-400');
     } else {
       setCategory('Obese');
-      setColor('text-rose-500');
+      setColor('text-rose-400');
     }
   };
 
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center p-6 sm:p-12 relative overflow-hidden">
-      {/* Background Decorative Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-100/50 dark:bg-blue-900/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-100/50 dark:bg-indigo-900/20 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-[#020202] text-white font-sans selection:bg-cyan-500/30 flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background HUD elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 rounded-full blur-[140px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/5 rounded-full blur-[140px]"></div>
+        <div className="absolute inset-0 opacity-[0.02]" 
+             style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      </div>
 
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-4xl relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-16 px-4">
           <button 
             onClick={() => navigate('/dashboard')}
-            className="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-xl hover:scale-110 transition-transform text-slate-600 dark:text-slate-300"
+            className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all hover:scale-110 active:scale-95 text-cyan-400 shadow-2xl"
           >
             <ArrowLeft size={24} />
           </button>
           <div className="text-center group">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              BMI <span className="text-blue-600">Calculator</span>
+            <h1 className="text-4xl font-black uppercase tracking-tighter italic">
+              Metabolic <span className="text-cyan-400">Scanner</span>
             </h1>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">Diagnostic Node active</span>
+            </div>
           </div>
-          <div className="w-12 h-12"></div> {/* Spacer for symmetry */}
+          <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 text-slate-700">
+             <Activity size={24} />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Input Card */}
-          <div className="glass-card rounded-[2.5rem] p-8 sm:p-10">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600">
-                <Activity size={20} />
-              </div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Enter Metrics</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {/* Input Card - High Tech Terminal */}
+          <div className="bg-[#080808] border border-white/5 rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
+            {/* Background HUD Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <div className="flex items-center gap-4 mb-12">
+              <div className="w-1.5 h-10 bg-cyan-500 rounded-full shadow-[0_0_15px_#06b6d4]"></div>
+              <h2 className="text-2xl font-black uppercase tracking-tighter italic">Biometric Entry</h2>
             </div>
 
-            <form onSubmit={calculateBMI} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Weight (kg)</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+            <form onSubmit={calculateBMI} className="space-y-10">
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-2">Current Weight (KG)</label>
+                <div className="relative group/input">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-700 group-focus-within/input:text-cyan-400 transition-colors">
                     <Scale size={20} />
                   </div>
                   <input
                     type="number"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    placeholder="e.g. 70"
-                    className="input-field pl-12"
+                    placeholder="00.0"
+                    className="w-full pl-16 pr-8 py-5 bg-black/40 border border-white/5 rounded-2xl focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500/30 transition-all font-black text-xl tracking-tighter text-white outline-none placeholder:text-slate-900"
                     required
                     min="1"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Height (cm)</label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-2">Current Stature (CM)</label>
+                <div className="relative group/input">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-700 group-focus-within/input:text-cyan-400 transition-colors">
                     <Ruler size={20} />
                   </div>
                   <input
                     type="number"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    placeholder="e.g. 175"
-                    className="input-field pl-12"
+                    placeholder="000"
+                    className="w-full pl-16 pr-8 py-5 bg-black/40 border border-white/5 rounded-2xl focus:ring-4 focus:ring-cyan-500/10 focus:border-cyan-500/30 transition-all font-black text-xl tracking-tighter text-white outline-none placeholder:text-slate-900"
                     required
                     min="1"
                   />
@@ -105,61 +116,67 @@ export default function BMICalculator() {
 
               <button
                 type="submit"
-                className="btn-primary w-full h-[56px] text-lg flex items-center justify-center gap-2 mt-4"
+                className="w-full py-5 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] hover:bg-cyan-400 transition-all shadow-[0_0_30px_rgba(255,255,255,0.05)] active:scale-95 flex items-center justify-center gap-3 mt-6"
               >
-                <span>Calculate Now</span>
-                <Heart size={20} fill="currentColor" />
+                <span>Execute Diagnostic</span>
+                <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse"></div>
               </button>
             </form>
           </div>
 
-          {/* Result Card */}
-          <div className="glass-card rounded-[2.5rem] p-8 sm:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+          {/* Result Card - HUD Display */}
+          <div className="bg-[#080808] border border-white/5 rounded-[3rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
+            {/* Background scanline */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.02] to-transparent animate-scan pointer-events-none"></div>
+
             {!result ? (
-              <div className="space-y-4 animate-in fade-in duration-500">
-                <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto text-slate-400">
-                  <Info size={40} />
+              <div className="space-y-8 animate-in fade-in duration-1000 relative z-10">
+                <div className="w-24 h-24 bg-white/5 border border-white/5 rounded-[2rem] flex items-center justify-center mx-auto text-slate-800 shadow-2xl">
+                  <Info size={40} className="animate-pulse" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Ready to calculate?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
-                  Enter your height and weight to see your Body Mass Index and health category.
-                </p>
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Standby Mode</h3>
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                    Input biometric parameters to initialize <br/> neural health computation.
+                  </p>
+                </div>
               </div>
             ) : (
-              <div className="space-y-6 animate-in zoom-in duration-500">
-                <p className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Your Results</p>
+              <div className="space-y-10 animate-in zoom-in duration-700 relative z-10 w-full">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Index Result</p>
                 
                 <div className="relative inline-block">
-                  <div className={`text-6xl font-black ${color} transition-colors`}>
+                  <div className={`text-8xl font-black ${color} tracking-tighter italic transition-all duration-1000 drop-shadow-[0_0_30px_rgba(6,182,212,0.1)]`}>
                     {result}
                   </div>
-                  <div className="absolute -bottom-2 right-[-20px] bg-white dark:bg-slate-800 shadow-lg px-2 py-1 rounded-md text-[10px] font-black text-slate-400">BMI</div>
+                  <div className="absolute -bottom-4 right-[-30px] bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl px-3 py-1 rounded-lg text-[9px] font-black text-slate-500 uppercase tracking-widest">Score</div>
                 </div>
 
-                <div className={`text-2xl font-extrabold ${color} transition-colors`}>
+                <div className={`text-3xl font-black uppercase italic tracking-tighter ${color} transition-all duration-1000`}>
                   {category}
                 </div>
 
-                <div className="w-full bg-slate-100 dark:bg-slate-800 h-3 rounded-full overflow-hidden mt-8 flex">
-                   <div className="h-full bg-amber-500" style={{ width: '18.5%' }}></div>
-                   <div className="h-full bg-emerald-500" style={{ width: '6.5%' }}></div>
-                   <div className="h-full bg-orange-500" style={{ width: '5%' }}></div>
-                   <div className="h-full bg-rose-500" style={{ width: '70%' }}></div>
+                <div className="w-full space-y-4 mt-4">
+                  <div className="w-full bg-white/5 border border-white/5 h-3 rounded-full overflow-hidden flex shadow-inner">
+                     <div className="h-full bg-amber-500/50 shadow-[0_0_10px_#f59e0b]" style={{ width: '18.5%' }}></div>
+                     <div className="h-full bg-cyan-400/50 shadow-[0_0_10px_#22d3ee]" style={{ width: '6.5%' }}></div>
+                     <div className="h-full bg-orange-400/50 shadow-[0_0_10px_#fb923c]" style={{ width: '5%' }}></div>
+                     <div className="h-full bg-rose-500/50 shadow-[0_0_10px_#f43f5e]" style={{ width: '70%' }}></div>
+                  </div>
+                  <div className="flex justify-between text-[8px] font-black text-slate-600 uppercase tracking-widest px-1">
+                    <span>Low</span>
+                    <span>Optimum</span>
+                    <span>Elevated</span>
+                    <span>Critical</span>
+                  </div>
                 </div>
                 
-                <div className="flex justify-between text-[10px] font-bold text-slate-400 px-1">
-                  <span>Under</span>
-                  <span>Normal</span>
-                  <span>Over</span>
-                  <span>Obese</span>
-                </div>
-
-                <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3 text-left">
-                  <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-blue-600">
-                    <AlertCircle size={20} />
+                <div className="mt-6 p-6 bg-white/[0.02] border border-white/5 rounded-3xl flex items-start gap-4 text-left group hover:bg-white/[0.04] transition-all">
+                  <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-cyan-400 border border-white/10 shrink-0">
+                    <AlertCircle size={18} />
                   </div>
-                  <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                    Note: BMI is a useful measure of overweight and obesity, but it's not a direct measure of body fat.
+                  <p className="text-[10px] text-slate-500 leading-relaxed font-black uppercase tracking-widest">
+                    AI Disclaimer: This index is a mathematical proxy for health and does not constitute a definitive medical diagnostic.
                   </p>
                 </div>
               </div>
