@@ -14,7 +14,8 @@ import {
   MessageCircle,
   Camera,
   FileText,
-  Users
+  Users,
+  Scale
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -75,6 +76,7 @@ export default function SymptomChecker() {
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
     { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
     { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
+    { id: 'bmi-calculator', label: 'BMI Index', icon: Scale, path: '/bmi-calculator' },
     { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },

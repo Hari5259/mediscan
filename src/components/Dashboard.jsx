@@ -13,18 +13,20 @@ import {
   Microscope,
   Zap,
   Star,
-  Users
+  Users,
+  Scale
 } from 'lucide-react';
 import Navbar from './Navbar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('symptom-checker');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   const tabs = [
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
     { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
     { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
+    { id: 'bmi-calculator', label: 'BMI Index', icon: Scale, path: '/bmi-calculator' },
     { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
@@ -112,7 +114,10 @@ const Dashboard = () => {
 
         {/* Feature Highlights Section */}
         <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+          <div 
+            onClick={() => navigate('/medicine-scanner')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
               <Zap size={32} />
             </div>
@@ -121,16 +126,22 @@ const Dashboard = () => {
               <p className="text-[13px] text-gray-500 font-medium">Get medicine details in 2 seconds.</p>
             </div>
           </div>
-          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+          <div 
+            onClick={() => navigate('/bmi-calculator')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:scale-110 transition-transform">
-              <Star size={32} />
+              <Scale size={32} />
             </div>
             <div>
-              <h4 className="text-[18px] font-extrabold mb-1">AI Verified</h4>
-              <p className="text-[13px] text-gray-500 font-medium">99.4% accuracy in symptom analysis.</p>
+              <h4 className="text-[18px] font-extrabold mb-1">Metabolic Index</h4>
+              <p className="text-[13px] text-gray-500 font-medium">Calculate your BMI and health score.</p>
             </div>
           </div>
-          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+          <div 
+            onClick={() => navigate('/health-reports')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
               <FileText size={32} />
             </div>
