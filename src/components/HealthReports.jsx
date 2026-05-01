@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FileText, Download, Eye, Search,
   Activity, Droplets, Calendar,
-  CheckCircle2, AlertTriangle, 
+  CheckCircle, AlertTriangle, 
   Plus, X, Upload, Loader2, Trash2, Microscope,
-  ChevronDown, ChevronRight, MessageCircle, Camera, Users
+  ChevronDown, ChevronRight, MessageCircle, Camera, Users,
+  ShieldCheck, AlertCircle
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -63,10 +64,11 @@ export default function HealthReports() {
   ];
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setReports(mockReports);
       setLoading(false);
     }, 800);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleUpload = (e) => {
@@ -79,7 +81,7 @@ export default function HealthReports() {
         status: 'normal',
         trend: 'stable',
       };
-      setReports([newReport, ...reports]);
+      setReports(prev => [newReport, ...prev]);
       setUploading(false);
       setIsUploadOpen(false);
       setFormData({ title: '', recordType: 'Lab Report', recordDate: new Date().toISOString().split('T')[0], description: '', file: null });
@@ -217,12 +219,12 @@ export default function HealthReports() {
                             <div>
                               <p className="text-[10px] font-black text-gray-300 uppercase mb-2">Verification</p>
                               <p className="text-[14px] font-black text-green-600 flex items-center gap-2 italic">
-                                <CheckCircle2 size={16} /> CERTIFIED
+                                <CheckCircle size={16} /> CERTIFIED
                               </p>
                             </div>
                             <div>
                               <p className="text-[10px] font-black text-gray-300 uppercase mb-2">Health Trend</p>
-                              <p className="text-[14px] font-black text-gray-800 uppercase italic">STABLE</p>
+                              <p className="text-[14px] font-black text-gray-800 uppercase italic">{report.trend?.toUpperCase() || 'STABLE'}</p>
                             </div>
                           </div>
                         </div>
