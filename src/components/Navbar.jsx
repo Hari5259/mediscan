@@ -16,11 +16,11 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden lg:flex items-center gap-6 border-l border-white/20 pl-6">
-          <Link className="nav-link">
+          <Link to="/emergency" className="nav-link">
             <div className="p-1.5 bg-orange-500 rounded-lg"><Briefcase size={14} /></div>
             <span>Corporate Health</span>
           </Link>
-          <Link className="nav-link">
+          <Link to="/health-reports" className="nav-link">
             <div className="p-1.5 bg-pink-500 rounded-lg"><Heart size={14} /></div>
             <span>My Health Records</span>
           </Link>

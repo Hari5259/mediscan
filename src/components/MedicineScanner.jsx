@@ -14,7 +14,8 @@ import {
   MessageCircle,
   FileText,
   Users,
-  AlertCircle
+  AlertCircle,
+  Shield
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -62,9 +63,13 @@ const MedicineScanner = () => {
   ];
 
   const startCamera = async () => {
+    setError(null);
     try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("Your browser does not support camera access.");
+      }
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } 
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -73,7 +78,8 @@ const MedicineScanner = () => {
         setError(null);
       }
     } catch (err) {
-      setError("Camera access denied.");
+      console.error("Camera Error:", err);
+      setError(err.message || "Camera access denied. Please ensure you have granted permission.");
       setHasCamera(false);
     }
   };
@@ -130,6 +136,27 @@ const MedicineScanner = () => {
               <div className="w-full aspect-square max-w-[500px] bg-black rounded-[24px] overflow-hidden shadow-2xl relative border-4 border-gray-100">
                 <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
                 
+                {error && (
+                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
+                    <AlertTriangle size={48} className="text-red-500 mb-4" />
+                    <p className="text-white font-bold mb-6 text-sm">{error}</p>
+                    <div className="flex gap-4">
+                      <button 
+                        onClick={startCamera}
+                        className="px-6 py-2 bg-[#008cff] text-white rounded-lg font-black uppercase text-[10px] tracking-widest shadow-lg"
+                      >
+                        Retry Camera
+                      </button>
+                      <button 
+                        onClick={() => { setHasCamera(true); setError(null); }}
+                        className="px-6 py-2 bg-green-600 text-white rounded-lg font-black uppercase text-[10px] tracking-widest shadow-lg"
+                      >
+                        Simulate Scan
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {isScanning && (
                   <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden mb-4">
