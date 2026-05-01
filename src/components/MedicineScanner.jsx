@@ -21,7 +21,9 @@ import {
   CornerDownRight,
   ShieldAlert,
   ThermometerSnowflake,
-  FlaskConical
+  FlaskConical,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -72,6 +74,7 @@ const MedicineScanner = () => {
   const [detectedMedicine, setDetectedMedicine] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [error, setError] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
   const [history, setHistory] = useState([
     { name: 'Cetirizine', time: '2 hours ago', status: 'Verified' },
     { name: 'Paracetamol', time: 'Yesterday', status: 'Verified' }
@@ -79,6 +82,7 @@ const MedicineScanner = () => {
   
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const tabs = [
@@ -92,9 +96,10 @@ const MedicineScanner = () => {
 
   const startCamera = async () => {
     setError(null);
+    setUploadedImage(null);
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("Browser restricted access.");
+        throw new Error("Your environment restricts direct camera access.");
       }
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } 
@@ -106,8 +111,23 @@ const MedicineScanner = () => {
         setError(null);
       }
     } catch (err) {
-      setError("Camera interface unavailable. Ensure permissions are granted in browser settings.");
+      console.warn("Camera fallback triggered:", err.message);
+      setError("CAMERA UNAVAILABLE. Please ensure you are using HTTPS or grant browser permissions.");
       setHasCamera(false);
+    }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedImage(reader.result);
+        setError(null);
+        setHasCamera(false);
+        handleCapture();
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -117,7 +137,7 @@ const MedicineScanner = () => {
     
     let progress = 0;
     const interval = setInterval(() => {
-      progress += Math.random() * 15;
+      progress += Math.random() * 20;
       if (progress > 100) progress = 100;
       setScanProgress(progress);
       
@@ -132,7 +152,7 @@ const MedicineScanner = () => {
           setHistory(prev => [{ name: med.name, time: 'Just now', status: 'Verified' }, ...prev.slice(0, 4)]);
         }, 800);
       }
-    }, 100);
+    }, 150);
   };
 
   useEffect(() => {
@@ -167,40 +187,42 @@ const MedicineScanner = () => {
             {/* Left: Scanner HUD */}
             <div className="flex flex-col items-center">
               <div className="w-full aspect-square max-w-[500px] bg-[#0a0a0a] rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative border-8 border-gray-50 group">
-                <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover transition-opacity duration-1000 ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
+                {uploadedImage ? (
+                  <img src={uploadedImage} alt="Uploaded medicine" className="w-full h-full object-cover" />
+                ) : (
+                  <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover transition-opacity duration-1000 ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
+                )}
                 
                 {/* Scanner Overlay Graphics */}
                 <div className="absolute inset-0 z-10 pointer-events-none">
-                  {/* Corners */}
                   <div className="absolute top-10 left-10 w-12 h-12 border-t-4 border-l-4 border-[#008cff] rounded-tl-xl" />
                   <div className="absolute top-10 right-10 w-12 h-12 border-t-4 border-r-4 border-[#008cff] rounded-tr-xl" />
                   <div className="absolute bottom-10 left-10 w-12 h-12 border-b-4 border-l-4 border-[#008cff] rounded-bl-xl" />
                   <div className="absolute bottom-10 right-10 w-12 h-12 border-b-4 border-r-4 border-[#008cff] rounded-br-xl" />
                   
-                  {/* Scanning Line */}
-                  {hasCamera && !showResult && (
+                  {isScanning && (
                     <div className="absolute left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#008cff] to-transparent animate-[scan_3s_infinite]" 
                          style={{ top: '50%', boxShadow: '0 0 20px #008cff' }} />
                   )}
                 </div>
 
-                {error && (
+                {(error && !uploadedImage) && (
                   <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/80 p-10 text-center animate-fade-in">
                     <ShieldAlert size={56} className="text-red-500 mb-6" />
-                    <h3 className="text-white font-black uppercase tracking-tighter text-xl mb-2">Access Restricted</h3>
+                    <h3 className="text-white font-black uppercase tracking-tighter text-xl mb-2">Interface Blocked</h3>
                     <p className="text-gray-400 font-bold mb-10 text-sm leading-relaxed">{error}</p>
-                    <div className="flex flex-col gap-4 w-full max-w-[240px]">
+                    <div className="flex flex-col gap-4 w-full max-w-[260px]">
                       <button 
-                        onClick={startCamera}
-                        className="btn-search !text-[12px] py-4 !px-0 w-full"
+                        onClick={() => fileInputRef.current.click()}
+                        className="btn-search !text-[12px] py-4 !px-0 w-full flex items-center justify-center gap-3"
                       >
-                        RETRY CONNECTION
+                        <ImageIcon size={18} /> UPLOAD MEDICINE PHOTO
                       </button>
                       <button 
                         onClick={() => handleCapture(0)}
-                        className="py-4 border-2 border-white/10 rounded-full text-white font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all"
+                        className="py-4 border-2 border-white/10 rounded-full text-white font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-3"
                       >
-                        SIMULATE DETECTION
+                        <Zap size={14} className="text-blue-400" /> SIMULATE SCAN
                       </button>
                     </div>
                   </div>
@@ -216,20 +238,41 @@ const MedicineScanner = () => {
                     <div className="w-64 h-2 bg-black/40 rounded-full overflow-hidden mb-3">
                       <div className="h-full bg-[#008cff] transition-all duration-300" style={{ width: `${scanProgress}%` }} />
                     </div>
-                    <span className="text-[#008cff] text-[13px] font-black uppercase tracking-[0.2em] italic">Analyzing Molecular Structure...</span>
+                    <span className="text-[#008cff] text-[13px] font-black uppercase tracking-[0.2em] italic">De-constructing Metadata...</span>
                   </div>
                 )}
               </div>
 
-              <div className="mt-12 flex flex-col items-center gap-4">
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileUpload} 
+                accept="image/*" 
+                className="hidden" 
+              />
+
+              <div className="mt-12 flex items-center gap-8">
+                <button 
+                  onClick={() => fileInputRef.current.click()}
+                  className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#008cff] hover:bg-blue-50 transition-all border border-gray-100"
+                  title="Upload image"
+                >
+                  <Upload size={24} />
+                </button>
                 <button 
                   onClick={() => handleCapture()}
-                  disabled={!hasCamera || isScanning}
+                  disabled={(!hasCamera && !uploadedImage) || isScanning}
                   className="w-28 h-28 rounded-full bg-white border-[10px] border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.15)] flex items-center justify-center active:scale-90 transition-all disabled:opacity-30 group"
                 >
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#008cff] to-[#0056cc] group-hover:scale-110 transition-transform shadow-lg shadow-blue-200" />
                 </button>
-                <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest">Capture Frame</span>
+                <button 
+                  onClick={startCamera}
+                  className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#008cff] hover:bg-blue-50 transition-all border border-gray-100"
+                  title="Refresh camera"
+                >
+                  <RefreshCcw size={24} />
+                </button>
               </div>
             </div>
 
@@ -242,7 +285,7 @@ const MedicineScanner = () => {
                       Optical <span className="text-[#008cff]">Core</span>
                     </h2>
                     <p className="text-[18px] text-gray-500 font-bold leading-relaxed max-w-md italic uppercase tracking-tight">
-                      Deploying neural vision to decode pharmaceutical compositions in real-time.
+                      Neural-Link active. Please position the medical artifact within the scan window or upload a high-resolution image.
                     </p>
                   </div>
 
@@ -251,21 +294,21 @@ const MedicineScanner = () => {
                       <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#008cff] shadow-sm mb-4">
                         <Zap size={24} />
                       </div>
-                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Instant ID</h4>
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">Millisecond processing latency</p>
+                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Optical ID</h4>
+                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">AI molecular identification</p>
                     </div>
                     <div className="p-8 bg-emerald-50/50 rounded-[24px] border-2 border-emerald-100/50 group hover:border-emerald-500 transition-all">
                       <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm mb-4">
                         <Shield size={24} />
                       </div>
-                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Secure Check</h4>
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">Cross-verified drug database</p>
+                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Safe-Verify</h4>
+                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">Secure clinical cross-check</p>
                     </div>
                   </div>
 
                   <div className="pt-8">
                     <h3 className="text-[12px] font-black text-gray-300 uppercase tracking-widest mb-6 flex items-center gap-3 italic">
-                      <History size={16} /> Recent Detections
+                      <History size={16} /> Analysis History
                     </h3>
                     <div className="space-y-4">
                       {history.map((item, i) => (
@@ -346,12 +389,12 @@ const MedicineScanner = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-4 pt-8">
+                  <div className="flex gap-4 pt-8 pb-10">
                     <button 
-                      onClick={() => setShowResult(false)}
+                      onClick={() => { setShowResult(false); setUploadedImage(null); }}
                       className="flex-1 btn-search !text-[13px] py-5 shadow-none"
                     >
-                      SCAN NEW ARCHIVE
+                      INITIALIZE NEW SCAN
                     </button>
                     <button className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 hover:text-[#008cff] transition-all border-2 border-gray-100">
                       <FileText size={24} />
