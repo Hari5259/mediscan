@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Shield, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, Shield, ArrowRight, Briefcase, Heart, AlertCircle } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,7 +12,6 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
     setTimeout(() => {
       setLoading(false);
       navigate(userType === 'doctor' ? '/doctor-login' : '/dashboard');
@@ -20,67 +19,72 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center p-6 font-apple selection:bg-[#0071E3]/20">
-      <div className="w-full max-w-[440px] animate-fade-in">
-        {/* Logo Section */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0071E3] rounded-[18px] mb-6 shadow-lg shadow-[#0071E3]/20 transition-transform hover:scale-105">
-            <Shield className="w-8 h-8 text-white" />
+    <div className="bg-immersive min-h-screen flex flex-col">
+      {/* Mini Nav for Login */}
+      <nav className="px-12 py-6 flex justify-between items-center relative z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+            <Shield size={24} className="text-[#008cff]" />
           </div>
-          <h1 className="text-[32px] font-semibold tracking-tight text-[#1D1D1F]">MediScan</h1>
-          <p className="text-[17px] text-[#86868B] mt-1">Your health, refined.</p>
+          <span className="text-white font-black text-2xl italic tracking-tighter">MEDI<span className="text-blue-400">SCAN</span></span>
         </div>
+        <div className="flex items-center gap-8 text-white/80 text-[12px] font-black uppercase tracking-widest">
+          <button className="hover:text-blue-400">Support</button>
+          <button className="hover:text-blue-400">Corporate</button>
+          <div className="w-4 h-4 rounded-full bg-white/20"></div>
+        </div>
+      </nav>
 
-        {/* Login Card */}
-        <div className="apple-card p-10 bg-white border border-black/5 shadow-2xl">
-          <div className="mb-8">
-            <h2 className="text-[24px] font-semibold text-[#1D1D1F] mb-1">Welcome Back</h2>
-            <p className="text-[15px] text-[#86868B]">Sign in to your secure health node.</p>
+      <main className="flex-1 flex items-center justify-center p-6 pb-24">
+        <div className="main-floating-card w-full max-w-[500px] p-12 animate-slide-up">
+          <div className="text-center mb-12">
+            <h1 className="text-[36px] font-black tracking-tighter leading-tight mb-2">Access Portal</h1>
+            <p className="text-[14px] font-bold text-gray-500 uppercase tracking-widest">Secure Medical Synchronization</p>
           </div>
 
-          {/* Segmented Control (iOS Style) */}
-          <div className="flex p-1 bg-[#F2F2F7] rounded-full mb-8">
+          <div className="flex p-1 bg-gray-100 rounded-full mb-10 border border-gray-200">
             <button
               onClick={() => setUserType('patient')}
-              className={`flex-1 py-2 rounded-full text-[13px] font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-full text-[12px] font-black uppercase tracking-widest transition-all ${
                 userType === 'patient' 
-                ? 'bg-white text-[#1D1D1F] shadow-sm' 
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
+                ? 'bg-[#008cff] text-white shadow-lg' 
+                : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              Patient
+              Patient Node
             </button>
             <button
               onClick={() => setUserType('doctor')}
-              className={`flex-1 py-2 rounded-full text-[13px] font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-full text-[12px] font-black uppercase tracking-widest transition-all ${
                 userType === 'doctor' 
-                ? 'bg-white text-[#1D1D1F] shadow-sm' 
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
+                ? 'bg-[#008cff] text-white shadow-lg' 
+                : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              Doctor
+              Clinical Pro
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[13px] font-semibold ml-1 text-[#1D1D1F]">Email</label>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-3">
+              <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Registry Email</label>
               <div className="relative">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="apple-input"
+                  placeholder="name@nexus.med"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
+                <Mail className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex justify-between items-center px-1">
-                <label className="text-[13px] font-semibold text-[#1D1D1F]">Password</label>
-                <button type="button" className="text-[13px] text-[#0071E3] hover:underline font-medium">Forgot?</button>
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Neural Key</label>
+                <button type="button" className="text-[11px] text-[#008cff] font-black uppercase hover:underline">Recover</button>
               </div>
               <div className="relative">
                 <input
@@ -88,57 +92,56 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
+                <Lock className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full apple-button apple-button-primary mt-4 flex items-center justify-center gap-2 group"
+              className="w-full btn-search !text-[18px] py-4 mt-4 flex items-center justify-center gap-3"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  <span>Sign In</span>
-                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  <span>INITIALIZE SYNC</span>
+                  <ArrowRight size={22} />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-10 text-center border-t border-[#F2F2F7] pt-8">
-            <p className="text-[14px] text-[#86868B]">
+          <div className="mt-12 text-center border-t border-gray-100 pt-10">
+            <p className="text-[14px] font-bold text-gray-500">
               New to MediScan?{' '}
               <button
                 onClick={() => navigate('/signup')}
-                className="text-[#0071E3] font-semibold hover:underline"
+                className="text-[#008cff] font-black hover:underline"
               >
-                Create an account
+                CREATE IDENTITY
               </button>
             </p>
           </div>
         </div>
+      </main>
 
-        {/* Footer Info */}
-        <div className="mt-12 flex items-center justify-center gap-8 text-[11px] font-medium text-[#86868B] uppercase tracking-widest">
-          <span className="flex items-center gap-1.5">
-            <div className="w-1 h-1 bg-[#34C759] rounded-full" />
-            Secure
-          </span>
-          <span className="flex items-center gap-1.5">
-            <div className="w-1 h-1 bg-[#34C759] rounded-full" />
-            Encrypted
-          </span>
-          <span className="flex items-center gap-1.5">
-            <div className="w-1 h-1 bg-[#34C759] rounded-full" />
-            HIPAA Compliant
-          </span>
+      <footer className="px-12 py-8 flex justify-between items-center bg-black/40 backdrop-blur-sm relative z-10">
+        <div className="flex gap-10">
+          <div className="flex items-center gap-2 text-white/40 text-[10px] font-black uppercase tracking-widest">
+            <Shield size={14} />
+            <span>HIPAA Compliant</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/40 text-[10px] font-black uppercase tracking-widest">
+            <Heart size={14} />
+            <span>End-to-End Encryption</span>
+          </div>
         </div>
-      </div>
+        <p className="text-white/20 text-[10px] font-black tracking-widest">© 2026 MEDISCAN CORE SYSTEMS</p>
+      </footer>
     </div>
   );
 }

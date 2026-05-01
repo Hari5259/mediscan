@@ -9,7 +9,12 @@ import {
   RefreshCcw,
   Info,
   AlertTriangle,
-  X
+  X,
+  Activity,
+  MessageCircle,
+  FileText,
+  Users,
+  AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -22,7 +27,7 @@ const MEDICINE_DATABASE = [
     dosage: "Adults: 500mg-1g every 4-6 hours. Max 4g per day.",
     sideEffects: "Rare, but can include skin rash or liver damage.",
     schedule: "Every 6 hours",
-    color: "#0071E3"
+    color: "#008cff"
   },
   {
     name: "Amoxicillin",
@@ -32,15 +37,6 @@ const MEDICINE_DATABASE = [
     sideEffects: "Nausea, vomiting, or allergic reactions.",
     schedule: "3 times daily",
     color: "#34C759"
-  },
-  {
-    name: "Metformin",
-    type: "Antidiabetic",
-    usage: "Control of blood sugar levels in patients with type 2 diabetes.",
-    dosage: "Usually started at 500mg twice daily with meals.",
-    sideEffects: "Metallic taste, stomach upset.",
-    schedule: "Morning & Night",
-    color: "#AF52DE"
   }
 ];
 
@@ -56,6 +52,15 @@ const MedicineScanner = () => {
   const streamRef = useRef(null);
   const navigate = useNavigate();
 
+  const tabs = [
+    { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
+    { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
+    { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
+    { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
+    { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
+    { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
+  ];
+
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -68,14 +73,8 @@ const MedicineScanner = () => {
         setError(null);
       }
     } catch (err) {
-      setError("Camera access denied. Please enable camera permissions.");
+      setError("Camera access denied.");
       setHasCamera(false);
-    }
-  };
-
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
     }
   };
 
@@ -90,8 +89,7 @@ const MedicineScanner = () => {
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
-          const randomMed = MEDICINE_DATABASE[Math.floor(Math.random() * MEDICINE_DATABASE.length)];
-          setDetectedMedicine(randomMed);
+          setDetectedMedicine(MEDICINE_DATABASE[0]);
           setShowResult(true);
           setIsScanning(false);
         }, 500);
@@ -101,150 +99,134 @@ const MedicineScanner = () => {
 
   useEffect(() => {
     startCamera();
-    return () => stopCamera();
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] flex flex-col">
+    <div className="bg-immersive pb-24 min-h-screen">
       <Navbar />
       
-      <main className="flex-1 max-w-[1200px] w-full mx-auto px-6 py-12 flex flex-col items-center">
-        <header className="mb-10 text-center animate-fade-in">
-          <h1 className="apple-heading mb-3">Medicine Scanner</h1>
-          <p className="apple-subheading">Identify medications with high-precision AI.</p>
-        </header>
+      <main className="floating-container animate-slide-up">
+        <div className="module-tabs">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              onClick={() => navigate(tab.path)}
+              className={`module-tab-item ${tab.id === 'medicine-scanner' ? 'active' : ''}`}
+            >
+              <tab.icon size={24} className="icon" />
+              <span>{tab.label}</span>
+            </div>
+          ))}
+        </div>
 
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Camera Section */}
-          <div className="flex flex-col items-center">
-            <div className="relative w-full aspect-[4/3] max-w-[600px] bg-black rounded-[32px] overflow-hidden shadow-2xl group">
-              <video 
-                ref={videoRef} 
-                autoPlay 
-                playsInline 
-                className={`w-full h-full object-cover transition-opacity duration-700 ${hasCamera ? 'opacity-100' : 'opacity-20'}`}
-              />
-              
-              {!hasCamera && !error && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+        <div className="main-floating-card mt-4 overflow-hidden p-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div className="flex flex-col items-center">
+              <div className="w-full aspect-square max-w-[500px] bg-black rounded-[24px] overflow-hidden shadow-2xl relative border-4 border-gray-100">
+                <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
+                
+                {isScanning && (
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden mb-4">
+                      <div className="h-full bg-[#008cff] transition-all duration-100" style={{ width: `${scanProgress}%` }} />
+                    </div>
+                    <span className="text-white text-[12px] font-black uppercase tracking-widest">Scanning Molecule...</span>
+                  </div>
+                )}
+                
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-48 border-2 border-white/40 rounded-3xl" />
                 </div>
-              )}
-
-              {error && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                  <AlertTriangle size={48} className="text-[#FF3B30] mb-4" />
-                  <p className="text-white font-medium">{error}</p>
-                </div>
-              )}
-
-              {/* Viewfinder HUD */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-48 border-2 border-white/30 rounded-2xl" />
-                <div className="absolute inset-0 bg-black/20" />
               </div>
 
-              {/* Scanning Overlay */}
-              {isScanning && (
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                  <div className="w-64 h-1 bg-white/20 rounded-full overflow-hidden mb-4">
-                    <div 
-                      className="h-full bg-[#0071E3] transition-all duration-100"
-                      style={{ width: `${scanProgress}%` }}
-                    />
+              <div className="mt-12">
+                <button 
+                  onClick={handleCapture}
+                  disabled={!hasCamera || isScanning}
+                  className="w-24 h-24 rounded-full bg-white border-[8px] border-gray-100 shadow-2xl flex items-center justify-center active:scale-95 transition-all disabled:opacity-50 group"
+                >
+                  <div className="w-16 h-16 rounded-full bg-[#008cff] group-hover:scale-110 transition-transform" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center">
+              {!showResult ? (
+                <div className="text-center lg:text-left space-y-6">
+                  <h2 className="text-[42px] font-black tracking-tighter leading-tight">Optical Medical Core</h2>
+                  <p className="text-[18px] text-gray-500 font-bold leading-relaxed max-w-md">
+                    Position your medicine label within the scanner frame for instant AI identification and dosage analysis.
+                  </p>
+                  <div className="pt-8 grid grid-cols-2 gap-6">
+                    <div className="p-6 bg-blue-50 rounded-[12px] border border-blue-100">
+                      <Zap className="text-[#008cff] mb-3" />
+                      <h4 className="text-[14px] font-black uppercase">Instant Results</h4>
+                    </div>
+                    <div className="p-6 bg-green-50 rounded-[12px] border border-green-100">
+                      <Shield className="text-green-600 mb-3" />
+                      <h4 className="text-[14px] font-black uppercase">99% Accuracy</h4>
+                    </div>
                   </div>
-                  <span className="text-white text-[13px] font-medium tracking-widest uppercase">Analyzing...</span>
                 </div>
-              )}
-            </div>
-
-            {/* Capture Button */}
-            <div className="mt-8 flex items-center gap-6">
-              <button 
-                onClick={handleCapture}
-                disabled={!hasCamera || isScanning}
-                className="w-20 h-20 rounded-full bg-white border-[6px] border-[#F2F2F7] shadow-xl flex items-center justify-center active:scale-95 transition-all disabled:opacity-50"
-              >
-                <div className="w-14 h-14 rounded-full bg-[#0071E3]" />
-              </button>
-            </div>
-          </div>
-
-          {/* Results Section */}
-          <div className="flex flex-col h-full">
-            {showResult && detectedMedicine ? (
-              <div className="animate-fade-in space-y-6">
-                <div className="apple-card p-8 bg-white">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div 
-                      className="w-14 h-14 rounded-[16px] flex items-center justify-center text-white"
-                      style={{ backgroundColor: detectedMedicine.color }}
-                    >
-                      <Pill size={28} />
+              ) : (
+                <div className="animate-slide-up space-y-8">
+                  <div className="flex items-center gap-6 mb-8">
+                    <div className="w-20 h-20 bg-[#008cff] rounded-[16px] flex items-center justify-center text-white shadow-xl shadow-blue-200">
+                      <Pill size={40} />
                     </div>
                     <div>
-                      <span className="text-[13px] text-[#86868B] font-medium uppercase tracking-wider">{detectedMedicine.type}</span>
-                      <h2 className="text-[28px] font-semibold leading-tight">{detectedMedicine.name}</h2>
+                      <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">{detectedMedicine.type} Identified</span>
+                      <h2 className="text-[36px] font-black tracking-tight">{detectedMedicine.name}</h2>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-8">
-                    <div className="p-4 bg-[#F5F5F7] rounded-[16px]">
-                      <div className="flex items-center gap-2 text-[#86868B] mb-1">
-                        <Clock size={14} />
-                        <span className="text-[12px] font-medium uppercase">Schedule</span>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="p-6 bg-gray-50 rounded-[16px] border border-gray-100">
+                      <div className="flex items-center gap-3 text-gray-400 mb-2">
+                        <Clock size={16} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Schedule</span>
                       </div>
-                      <span className="text-[15px] font-semibold">{detectedMedicine.schedule}</span>
+                      <span className="text-[18px] font-extrabold">{detectedMedicine.schedule}</span>
                     </div>
-                    <div className="p-4 bg-[#F5F5F7] rounded-[16px]">
-                      <div className="flex items-center gap-2 text-[#86868B] mb-1">
-                        <Info size={14} />
-                        <span className="text-[12px] font-medium uppercase">Dosage</span>
+                    <div className="p-6 bg-gray-50 rounded-[16px] border border-gray-100">
+                      <div className="flex items-center gap-3 text-gray-400 mb-2">
+                        <Info size={16} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Dosage</span>
                       </div>
-                      <span className="text-[15px] font-semibold">Standard</span>
+                      <span className="text-[18px] font-extrabold">Standard Oral</span>
                     </div>
                   </div>
 
-                  <div className="space-y-6">
-                    <InfoSection title="Usage" content={detectedMedicine.usage} />
-                    <InfoSection title="Recommended Dosage" content={detectedMedicine.dosage} />
-                    <InfoSection title="Side Effects" content={detectedMedicine.sideEffects} isWarning />
+                  <div className="space-y-6 pt-6">
+                    <div>
+                      <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-2">Usage Protocol</h4>
+                      <p className="text-[16px] font-bold leading-relaxed">{detectedMedicine.usage}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-2 text-red-500">Cautionary Profile</h4>
+                      <p className="text-[16px] font-bold leading-relaxed text-red-900">{detectedMedicine.sideEffects}</p>
+                    </div>
                   </div>
 
                   <button 
                     onClick={() => setShowResult(false)}
-                    className="w-full mt-8 apple-button apple-button-secondary flex items-center justify-center gap-2"
+                    className="w-full btn-search !text-[16px] py-4 mt-8"
                   >
-                    <RefreshCcw size={16} />
-                    New Scan
+                    SCAN NEW MEDICINE
                   </button>
                 </div>
-              </div>
-            ) : (
-              <div className="h-full min-h-[400px] apple-card border border-dashed border-[#86868B]/30 flex flex-col items-center justify-center p-12 text-center">
-                <div className="w-20 h-20 bg-[#F2F2F7] rounded-full flex items-center justify-center mb-6 text-[#86868B]">
-                  <Scan size={32} />
-                </div>
-                <h3 className="text-[20px] font-semibold mb-2">Ready to Scan</h3>
-                <p className="text-[#86868B] max-w-[280px]">
-                  Position the medicine label within the frame and press the capture button to identify it.
-                </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </main>
     </div>
   );
 };
-
-const InfoSection = ({ title, content, isWarning = false }) => (
-  <div>
-    <h4 className={`text-[13px] font-bold uppercase tracking-wider mb-2 ${isWarning ? 'text-[#FF3B30]' : 'text-[#86868B]'}`}>
-      {title}
-    </h4>
-    <p className="text-[16px] text-[#1D1D1F] leading-relaxed">{content}</p>
-  </div>
-);
 
 export default MedicineScanner;

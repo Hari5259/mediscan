@@ -1,110 +1,142 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, MessageCircle, Camera, FileText, AlertCircle, ChevronRight } from 'lucide-react';
+import { 
+  Activity, 
+  MessageCircle, 
+  Camera, 
+  FileText, 
+  AlertCircle, 
+  ChevronRight, 
+  Search,
+  Stethoscope,
+  Pill,
+  Microscope,
+  Zap,
+  Star,
+  Users
+} from 'lucide-react';
 import Navbar from './Navbar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('symptom-checker');
 
-  const modules = [
-    {
-      id: 'symptom-checker',
-      title: 'Symptom Checker',
-      description: 'Analyze your symptoms with advanced AI diagnostics.',
-      icon: Activity,
-      color: '#0071E3',
-      path: '/symptom-checker'
-    },
-    {
-      id: 'chatbot',
-      title: 'Health Assistant',
-      description: 'Chat with our AI for instant medical guidance.',
-      icon: MessageCircle,
-      color: '#34C759',
-      path: '/chatbot'
-    },
-    {
-      id: 'medicine-scanner',
-      title: 'Medicine Scanner',
-      description: 'Identify medications and view dosage info instantly.',
-      icon: Camera,
-      color: '#AF52DE',
-      path: '/medicine-scanner'
-    },
-    {
-      id: 'health-report',
-      title: 'Health Reports',
-      description: 'Access and manage your digital medical records.',
-      icon: FileText,
-      color: '#FF9500',
-      path: '/health-reports'
-    },
-    {
-      id: 'emergency',
-      title: 'Emergency',
-      description: 'Quick access to emergency contacts and first aid.',
-      icon: AlertCircle,
-      color: '#FF3B30',
-      path: '/emergency'
-    }
+  const tabs = [
+    { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
+    { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
+    { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
+    { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
+    { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
+    { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="bg-immersive pb-24">
       <Navbar />
       
-      <main className="max-w-[1200px] mx-auto px-6 py-12 animate-fade-in">
-        <header className="mb-12 text-center">
-          <h1 className="apple-heading mb-3">Welcome, Alex</h1>
-          <p className="apple-subheading">Your health, refined and simplified.</p>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {modules.map((module) => (
+      <main className="floating-container animate-slide-up">
+        {/* Module Selection Tabs */}
+        <div className="module-tabs">
+          {tabs.map((tab) => (
             <div
-              key={module.id}
-              onClick={() => navigate(module.path)}
-              className="apple-card p-8 cursor-pointer group flex flex-col justify-between h-[240px]"
+              key={tab.id}
+              onClick={() => { setActiveTab(tab.id); navigate(tab.path); }}
+              className={`module-tab-item ${activeTab === tab.id ? 'active' : ''}`}
             >
-              <div>
-                <div 
-                  className="w-12 h-12 rounded-[12px] flex items-center justify-center mb-6 transition-transform group-hover:scale-110"
-                  style={{ backgroundColor: `${module.color}10`, color: module.color }}
-                >
-                  <module.icon size={26} />
-                </div>
-                <h3 className="text-[21px] font-semibold mb-2">{module.title}</h3>
-                <p className="text-[15px] text-[#86868B] leading-relaxed">
-                  {module.description}
-                </p>
-              </div>
-              
-              <div className="flex items-center text-[#0071E3] font-medium text-[15px] opacity-0 group-hover:opacity-100 transition-opacity">
-                Get Started <ChevronRight size={16} className="ml-1" />
-              </div>
+              <tab.icon size={24} className="icon" />
+              <span>{tab.label}</span>
             </div>
           ))}
         </div>
 
-        <section className="mt-16">
-          <div className="apple-card p-8 bg-gradient-to-br from-white to-[#F2F2F7]">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="max-w-md">
-                <h2 className="text-[24px] font-semibold mb-4">Complete Your Profile</h2>
-                <p className="text-[#86868B] mb-6">
-                  Fill in your medical history to get more personalized insights and accurate AI diagnostics.
-                </p>
-                <button className="apple-button apple-button-primary">
-                  Update Now
-                </button>
-              </div>
-              <div className="relative w-48 h-48">
-                <div className="absolute inset-0 bg-[#0071E3]/5 rounded-full animate-pulse" />
-                <div className="absolute inset-4 bg-[#0071E3]/10 rounded-full" />
-                <div className="absolute inset-8 bg-[#0071E3]/20 rounded-full flex items-center justify-center">
-                  <Activity size={48} className="text-[#0071E3]" />
-                </div>
-              </div>
+        {/* Main Floating Card */}
+        <div className="main-floating-card p-12 mt-4">
+          <div className="flex items-center justify-between mb-8">
+            <div className="radio-group">
+              <label className="radio-item">
+                <input type="radio" name="checkType" defaultChecked />
+                <span>General Checkup</span>
+              </label>
+              <label className="radio-item">
+                <input type="radio" name="checkType" />
+                <span>Specialized Consultation</span>
+              </label>
+              <label className="radio-item">
+                <input type="radio" name="checkType" />
+                <span>Emergency Review</span>
+              </label>
+            </div>
+            <p className="text-[14px] font-bold text-gray-500">Fast & Accurate Health Diagnostics</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden">
+            <div className="section-card border-r rounded-none">
+              <span className="section-label">Your Current Location</span>
+              <span className="section-value">Bengaluru</span>
+              <span className="section-sub">KA, India - Reliable Connectivity</span>
+            </div>
+            <div className="section-card border-r rounded-none">
+              <span className="section-label">Health Priority</span>
+              <span className="section-value">Urgent</span>
+              <span className="section-sub">Analyze symptoms immediately</span>
+            </div>
+            <div className="section-card border-r rounded-none">
+              <span className="section-label">Last Sync Date</span>
+              <span className="section-value">01 May'26</span>
+              <span className="section-sub">Friday - 12:30 PM</span>
+            </div>
+            <div className="section-card rounded-none">
+              <span className="section-label">Connected Device</span>
+              <span className="section-value">MediScan Pro</span>
+              <span className="section-sub">Optical Core v4.2 Active</span>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <span className="text-[14px] font-bold text-gray-500 uppercase flex items-center pt-2">Special Filters:</span>
+            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">AI Diagnostics</button>
+            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Tele-Consult</button>
+            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Digital Pharmacy</button>
+            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Health Wallet</button>
+          </div>
+
+          <div className="absolute left-1/2 -bottom-6 -translate-x-1/2">
+            <button 
+              onClick={() => navigate('/symptom-checker')}
+              className="btn-search"
+            >
+              RUN DIAGNOSTICS
+            </button>
+          </div>
+        </div>
+
+        {/* Feature Highlights Section */}
+        <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+              <Zap size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">Instant Scan</h4>
+              <p className="text-[13px] text-gray-500 font-medium">Get medicine details in 2 seconds.</p>
+            </div>
+          </div>
+          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 group-hover:scale-110 transition-transform">
+              <Star size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">AI Verified</h4>
+              <p className="text-[13px] text-gray-500 font-medium">99.4% accuracy in symptom analysis.</p>
+            </div>
+          </div>
+          <div className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
+              <FileText size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">Digital Vault</h4>
+              <p className="text-[13px] text-gray-500 font-medium">All your reports in one secure place.</p>
             </div>
           </div>
         </section>

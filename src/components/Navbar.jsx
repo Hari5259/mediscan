@@ -1,58 +1,53 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Home, Search, MessageSquare, Camera, FileText, AlertCircle, User } from 'lucide-react';
+import { Shield, Home, Search, MessageSquare, Camera, FileText, AlertCircle, User, Briefcase, Heart, Plane } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
 
-  const navItems = [
-    { path: '/dashboard', icon: Home, label: 'Home' },
-    { path: '/symptom-checker', icon: Search, label: 'Scan' },
-    { path: '/chatbot', icon: MessageSquare, label: 'Chat' },
-    { path: '/medicine-scanner', icon: Camera, label: 'Camera' },
-    { path: '/health-reports', icon: FileText, label: 'Report' },
-  ];
-
   return (
-    <nav className="nav-blur h-[64px] flex items-center justify-center px-4 md:px-8">
-      <div className="max-w-[1200px] w-full flex items-center justify-between">
-        <Link to="/dashboard" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 bg-[#0071E3] rounded-[8px] flex items-center justify-center transition-transform group-active:scale-95">
-            <Shield size={18} className="text-white" />
+    <nav className="nav-top">
+      <div className="flex items-center gap-8">
+        <Link to="/dashboard" className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <Shield size={24} className="text-[#008cff]" />
           </div>
-          <span className="font-semibold text-[19px] tracking-tight hidden sm:block">MediScan</span>
+          <span className="text-white font-black text-2xl italic tracking-tighter">MEDI<span className="text-blue-400">SCAN</span></span>
         </Link>
 
-        <div className="flex items-center gap-1 md:gap-4">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`p-2.5 rounded-full transition-all duration-300 flex items-center gap-2 ${
-                  isActive 
-                    ? 'bg-[#F2F2F7] text-[#0071E3]' 
-                    : 'text-[#86868B] hover:text-[#1D1D1F] hover:bg-[#F5F5F7]'
-                }`}
-              >
-                <Icon size={20} />
-                <span className={`text-[14px] font-medium hidden lg:block ${isActive ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
+        <div className="hidden lg:flex items-center gap-6 border-l border-white/20 pl-6">
+          <Link className="nav-link">
+            <div className="p-1.5 bg-orange-500 rounded-lg"><Briefcase size={14} /></div>
+            <span>Corporate Health</span>
+          </Link>
+          <Link className="nav-link">
+            <div className="p-1.5 bg-pink-500 rounded-lg"><Heart size={14} /></div>
+            <span>My Health Records</span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 border-r border-white/20 pr-6">
+          <Link to="/dashboard" className="nav-link flex flex-col items-center">
+            <Home size={18} />
+            <span className="text-[10px]">Home</span>
+          </Link>
+          <Link to="/health-reports" className="nav-link flex flex-col items-center">
+            <FileText size={18} />
+            <span className="text-[10px]">Reports</span>
+          </Link>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link to="/emergency" className="p-2.5 text-[#FF3B30] hover:bg-[#FFF2F2] rounded-full transition-all">
-            <AlertCircle size={20} />
-          </Link>
-          <div className="w-8 h-8 rounded-full bg-[#F2F2F7] flex items-center justify-center text-[#86868B] cursor-pointer hover:bg-[#E5E5EA] transition-all">
-            <User size={18} />
-          </div>
+        <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg text-[12px] font-black uppercase tracking-wider flex items-center gap-2 shadow-lg">
+          <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center"><User size={14} /></div>
+          Login or Create Account
+        </button>
+
+        <div className="flex items-center gap-2 text-white/60 text-[11px] font-bold">
+          <span>INR</span>
+          <div className="w-4 h-3 bg-white/20"></div>
+          <span>English</span>
         </div>
       </div>
     </nav>

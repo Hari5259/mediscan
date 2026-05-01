@@ -1,108 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* Apple Design System Colors */
-  --apple-bg: #F5F5F7;
-  --apple-card: #FFFFFF;
-  --apple-text: #1D1D1F;
-  --apple-text-secondary: #86868B;
-  --apple-blue: #0071E3;
-  --apple-gray: #F2F2F7;
-  --apple-border: rgba(0, 0, 0, 0.05);
-  
-  --radius-xl: 24px;
-  --radius-lg: 16px;
-  
-  --font-apple: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --primary-blue: #008cff;
+  --primary-gradient: linear-gradient(90deg, #008cff 0%, #0056cc 100%);
+  --apple-bg: #f2f2f2;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --font-main: 'Inter', sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-apple);
-  background-color: var(--apple-bg);
-  color: var(--apple-text);
+  font-family: var(--font-main);
+  background-color: #000;
+  color: #1d1d1f;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer components {
-  .apple-card {
-    @apply bg-white rounded-[24px] transition-all duration-500 ease-out;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-  }
-
-  .apple-card:hover {
-    @apply scale-[1.02];
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-  }
-
-  .apple-glass {
-    @apply bg-white/70 backdrop-blur-xl border-b border-white/20;
-  }
-
-  .apple-button {
-    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 active:scale-95;
-  }
-
-  .apple-button-primary {
-    @apply bg-[#0071E3] text-white hover:bg-[#0077ED];
-  }
-
-  .apple-button-secondary {
-    @apply bg-[#F2F2F7] text-[#0071E3] hover:bg-[#E5E5EA];
-  }
-
-  .apple-input {
-    @apply w-full px-5 py-4 bg-white border-none rounded-[16px] text-[17px] focus:ring-2 focus:ring-[#0071E3]/20 outline-none transition-all duration-300;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-  }
-
-  .apple-input:focus {
-    box-shadow: inset 0 0 0 1px rgba(0,113,227,0.5);
-  }
-
-  .nav-blur {
-    @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5;
-  }
-
-  .apple-heading {
-    @apply text-[40px] font-semibold tracking-tight leading-tight;
-  }
-
-  .apple-subheading {
-    @apply text-[21px] text-[#86868B] font-normal leading-relaxed;
-  }
+/* Immersive Background */
+.bg-immersive {
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Floating Card System */
+.floating-container {
+  @apply max-w-[1200px] mx-auto pt-24 px-4 pb-12;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.main-floating-card {
+  @apply bg-white rounded-[12px] shadow-2xl relative overflow-visible;
+  box-shadow: 0 1px 30px 0 rgba(0, 0, 0, 0.2);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+/* MakeMyTrip Style Module Tabs */
+.module-tabs {
+  @apply flex items-center justify-center gap-1 bg-white rounded-[10px] shadow-lg -mt-12 mx-auto w-fit px-4 py-2 border border-gray-100;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+.module-tab-item {
+  @apply flex flex-col items-center gap-1 px-5 py-2 cursor-pointer transition-all duration-300 relative;
+}
+
+.module-tab-item .icon {
+  @apply text-gray-500 transition-colors;
+}
+
+.module-tab-item span {
+  @apply text-[12px] font-semibold text-gray-500 uppercase tracking-tight;
+}
+
+.module-tab-item.active .icon {
+  @apply text-[#008cff];
+}
+
+.module-tab-item.active span {
+  @apply text-[#008cff];
+}
+
+.module-tab-item.active::after {
+  content: '';
+  @apply absolute bottom-[-8px] left-0 w-full h-[3px] bg-[#008cff] rounded-t-full;
+}
+
+/* Section Styling */
+.section-card {
+  @apply border border-gray-200 rounded-[10px] p-4 transition-all hover:bg-blue-50/30 cursor-pointer relative;
+}
+
+.section-label {
+  @apply text-[14px] font-bold text-gray-500 uppercase mb-1 block;
+}
+
+.section-value {
+  @apply text-[28px] font-extrabold text-[#1d1d1f] block leading-tight;
+}
+
+.section-sub {
+  @apply text-[14px] text-gray-600 block truncate;
+}
+
+/* Action Buttons */
+.btn-search {
+  @apply bg-gradient-to-r from-[#53b2fe] to-[#065af3] text-white font-black text-[24px] px-16 py-3 rounded-full shadow-xl 
+         uppercase tracking-widest hover:scale-105 transition-transform active:scale-95;
+}
+
+/* Nav styles */
+.nav-top {
+  @apply flex items-center justify-between px-12 py-3 bg-black/40 backdrop-blur-sm fixed top-0 w-full z-50;
+}
+
+.nav-link {
+  @apply text-white text-[12px] font-bold flex items-center gap-2 hover:text-blue-400 transition-colors;
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
+.animate-slide-up {
+  animation: slideUp 0.8s ease-out forwards;
+}
+
+/* Form Elements */
+.radio-group {
+  @apply flex items-center gap-6 mb-4;
+}
+
+.radio-item {
+  @apply flex items-center gap-2 cursor-pointer text-[14px] font-bold;
+}
+
+.radio-item input {
+  @apply w-4 h-4 accent-[#008cff];
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Phone, Shield, ArrowRight, UserPlus, Stethoscope } from 'lucide-react';
+import { Mail, Lock, User, Phone, Shield, ArrowRight, UserPlus, Stethoscope, Heart } from 'lucide-react';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -30,32 +30,31 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center p-6 font-apple selection:bg-[#0071E3]/20">
-      <div className="w-full max-w-[600px] animate-fade-in py-12">
-        {/* Logo Section */}
-        <div className="text-center mb-10 cursor-pointer" onClick={() => navigate('/login')}>
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-[#0071E3] rounded-[16px] mb-4 shadow-lg shadow-[#0071E3]/10 transition-transform hover:scale-105">
-            <Shield className="w-7 h-7 text-white" />
+    <div className="bg-immersive min-h-screen flex flex-col">
+      <nav className="px-12 py-6 flex justify-between items-center relative z-10">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/login')}>
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+            <Shield size={24} className="text-[#008cff]" />
           </div>
-          <h1 className="text-[28px] font-semibold tracking-tight text-[#1D1D1F]">MediScan</h1>
+          <span className="text-white font-black text-2xl italic tracking-tighter">MEDI<span className="text-blue-400">SCAN</span></span>
         </div>
+      </nav>
 
-        {/* Signup Card */}
-        <div className="apple-card p-10 bg-white border border-black/5 shadow-2xl">
-          <div className="mb-8 text-center md:text-left">
-            <h2 className="text-[24px] font-semibold text-[#1D1D1F] mb-1">Create Account</h2>
-            <p className="text-[15px] text-[#86868B]">Join the next generation of healthcare.</p>
+      <main className="flex-1 flex items-center justify-center p-6 py-24">
+        <div className="main-floating-card w-full max-w-[700px] p-14 animate-slide-up">
+          <div className="text-center mb-12">
+            <h1 className="text-[42px] font-black tracking-tighter leading-tight mb-2">Create Identity</h1>
+            <p className="text-[14px] font-bold text-gray-400 uppercase tracking-widest">Join the Global Healthcare Node</p>
           </div>
 
-          {/* User Type Switcher */}
-          <div className="flex p-1 bg-[#F2F2F7] rounded-full mb-10">
+          <div className="flex p-1 bg-gray-100 rounded-full mb-12 border border-gray-200 w-fit mx-auto px-4">
             <button
               type="button"
               onClick={() => setFormData({ ...formData, userType: 'patient' })}
-              className={`flex-1 py-2.5 rounded-full text-[13px] font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`px-8 py-3 rounded-full text-[12px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                 formData.userType === 'patient' 
-                ? 'bg-white text-[#1D1D1F] shadow-sm' 
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
+                ? 'bg-[#008cff] text-white shadow-lg' 
+                : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <User size={16} /> Patient
@@ -63,150 +62,156 @@ export default function Signup() {
             <button
               type="button"
               onClick={() => setFormData({ ...formData, userType: 'doctor' })}
-              className={`flex-1 py-2.5 rounded-full text-[13px] font-semibold transition-all flex items-center justify-center gap-2 ${
+              className={`px-8 py-3 rounded-full text-[12px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                 formData.userType === 'doctor' 
-                ? 'bg-white text-[#1D1D1F] shadow-sm' 
-                : 'text-[#86868B] hover:text-[#1D1D1F]'
+                ? 'bg-[#008cff] text-white shadow-lg' 
+                : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <Stethoscope size={16} /> Doctor
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">First Name</label>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Given Name</label>
                 <input
                   type="text"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="John"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Last Name</label>
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Surname</label>
                 <input
                   type="text"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Email</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Registry</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="name@example.com"
-                  className="apple-input"
+                  placeholder="name@nexus.med"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Phone</label>
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Link</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="(555) 000-0000"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
             </div>
 
             {formData.userType === 'doctor' && (
-              <div className="space-y-2 animate-fade-in">
-                <label className="text-[13px] font-semibold ml-1">Specialization</label>
+              <div className="space-y-3 animate-slide-up">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Clinical Specialization</label>
                 <input
                   type="text"
                   name="specialization"
                   value={formData.specialization}
                   onChange={handleChange}
                   placeholder="e.g. Cardiology"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Password</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Neural Key</label>
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Confirm Password</label>
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Verify Key</label>
                 <input
                   type="password"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   required
                 />
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-4 bg-[#F5F5F7] rounded-[18px]">
-              <input type="checkbox" className="mt-1 w-4 h-4 rounded border-[#D2D2D7] text-[#0071E3] focus:ring-[#0071E3]" required />
-              <p className="text-[12px] text-[#86868B] leading-snug">
-                I agree to the <a href="/terms" className="text-[#0071E3] font-medium hover:underline">Terms of Service</a> and <a href="/privacy" className="text-[#0071E3] font-medium hover:underline">Privacy Policy</a>.
-              </p>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full apple-button apple-button-primary mt-4 flex items-center justify-center gap-2 group"
+              className="w-full btn-search !text-[18px] py-4 mt-6 flex items-center justify-center gap-3"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  <UserPlus size={18} />
-                  <span>Create Account</span>
-                  <ArrowRight size={18} className="ml-auto transition-transform group-hover:translate-x-1" />
+                  <UserPlus size={22} />
+                  <span>INITIALIZE ENROLLMENT</span>
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-10 text-center border-t border-[#F2F2F7] pt-8">
-            <p className="text-[14px] text-[#86868B]">
-              Already have an account?{' '}
+          <div className="mt-12 text-center border-t border-gray-100 pt-10">
+            <p className="text-[14px] font-bold text-gray-500">
+              Already provisioned?{' '}
               <button
                 onClick={() => navigate('/login')}
-                className="text-[#0071E3] font-semibold hover:underline"
+                className="text-[#008cff] font-black hover:underline"
               >
-                Sign In
+                ACCESS SESSION
               </button>
             </p>
           </div>
         </div>
-      </div>
+      </main>
+
+      <footer className="px-12 py-8 flex justify-between items-center bg-black/40 backdrop-blur-sm relative z-10">
+        <div className="flex gap-10">
+          <div className="flex items-center gap-2 text-white/40 text-[10px] font-black uppercase tracking-widest">
+            <Shield size={14} />
+            <span>Identity Secured</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/40 text-[10px] font-black uppercase tracking-widest">
+            <Heart size={14} />
+            <span>Privacy Ensured</span>
+          </div>
+        </div>
+        <p className="text-white/20 text-[10px] font-black tracking-widest">© 2026 MEDISCAN CORE SYSTEMS</p>
+      </footer>
     </div>
   );
 }
