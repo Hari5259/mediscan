@@ -16,7 +16,12 @@ import {
   Users,
   AlertCircle,
   Shield,
-  Zap
+  Zap,
+  History,
+  CornerDownRight,
+  ShieldAlert,
+  ThermometerSnowflake,
+  FlaskConical
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -24,21 +29,39 @@ import Navbar from './Navbar';
 const MEDICINE_DATABASE = [
   {
     name: "Paracetamol",
+    brand: "Calpol / Crocin",
     type: "Analgesic",
-    usage: "Relief of mild to moderate pain and reduction of fever.",
-    dosage: "Adults: 500mg-1g every 4-6 hours. Max 4g per day.",
-    sideEffects: "Rare, but can include skin rash or liver damage.",
+    usage: "Relief of mild to moderate pain (headache, toothache, muscle ache) and reduction of fever.",
+    dosage: "Adults: 500mg-1g every 4-6 hours. Maximum 4g per 24 hours.",
+    sideEffects: "Very rare. Excessive dosage can lead to severe liver damage.",
+    precautions: "Do not use with other paracetamol products. Avoid alcohol.",
+    storage: "Store below 25°C in a dry place.",
     schedule: "Every 6 hours",
     color: "#008cff"
   },
   {
     name: "Amoxicillin",
+    brand: "Amoxil / Mox",
     type: "Antibiotic",
-    usage: "Treatment of bacterial infections like pneumonia.",
-    dosage: "250mg to 500mg every 8 hours.",
-    sideEffects: "Nausea, vomiting, or allergic reactions.",
+    usage: "Treatment of bacterial infections like pneumonia, bronchitis, and infections of the ear/throat.",
+    dosage: "Typically 250mg to 500mg three times daily, depending on severity.",
+    sideEffects: "Nausea, diarrhea, or allergic skin reactions.",
+    precautions: "Complete the full course even if feeling better. Avoid if allergic to penicillin.",
+    storage: "Refrigerate suspension; tablets at room temp.",
     schedule: "3 times daily",
     color: "#34C759"
+  },
+  {
+    name: "Cetirizine",
+    brand: "Zyrtec / Okacet",
+    type: "Antihistamine",
+    usage: "Relief of allergy symptoms like sneezing, itching, watery eyes, and runny nose.",
+    dosage: "One 10mg tablet daily.",
+    sideEffects: "Drowsiness, dry mouth, or headache.",
+    precautions: "May cause drowsiness. Use caution when driving or operating machinery.",
+    storage: "Store at room temperature.",
+    schedule: "Once daily",
+    color: "#AF52DE"
   }
 ];
 
@@ -49,6 +72,10 @@ const MedicineScanner = () => {
   const [detectedMedicine, setDetectedMedicine] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [error, setError] = useState(null);
+  const [history, setHistory] = useState([
+    { name: 'Cetirizine', time: '2 hours ago', status: 'Verified' },
+    { name: 'Paracetamol', time: 'Yesterday', status: 'Verified' }
+  ]);
   
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -67,7 +94,7 @@ const MedicineScanner = () => {
     setError(null);
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("Your browser does not support camera access.");
+        throw new Error("Browser restricted access.");
       }
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } 
@@ -79,38 +106,33 @@ const MedicineScanner = () => {
         setError(null);
       }
     } catch (err) {
-      console.error("Camera Error:", err);
-      setError(err.message || "Camera access denied. Please ensure you have granted permission.");
+      setError("Camera interface unavailable. Ensure permissions are granted in browser settings.");
       setHasCamera(false);
     }
   };
 
-  const handleCapture = () => {
-    console.log("Capture initiated");
+  const handleCapture = (simulatedIndex = -1) => {
     setIsScanning(true);
     setScanProgress(0);
     
     let progress = 0;
     const interval = setInterval(() => {
-      progress += 10;
+      progress += Math.random() * 15;
+      if (progress > 100) progress = 100;
       setScanProgress(progress);
+      
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
-          console.log("Scan complete, setting results");
-          const med = MEDICINE_DATABASE[0];
-          if (med) {
-            setDetectedMedicine(med);
-            setShowResult(true);
-            setIsScanning(false);
-          } else {
-            console.error("No medicine found in database");
-            setError("Internal Error: Medicine database is empty.");
-            setIsScanning(false);
-          }
-        }, 500);
+          const index = simulatedIndex >= 0 ? simulatedIndex : Math.floor(Math.random() * MEDICINE_DATABASE.length);
+          const med = MEDICINE_DATABASE[index];
+          setDetectedMedicine(med);
+          setShowResult(true);
+          setIsScanning(false);
+          setHistory(prev => [{ name: med.name, time: 'Just now', status: 'Verified' }, ...prev.slice(0, 4)]);
+        }, 800);
       }
-    }, 50);
+    }, 100);
   };
 
   useEffect(() => {
@@ -142,125 +164,199 @@ const MedicineScanner = () => {
 
         <div className="main-floating-card mt-4 overflow-hidden p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Left: Scanner HUD */}
             <div className="flex flex-col items-center">
-              <div className="w-full aspect-square max-w-[500px] bg-black rounded-[24px] overflow-hidden shadow-2xl relative border-4 border-gray-100">
-                <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
+              <div className="w-full aspect-square max-w-[500px] bg-[#0a0a0a] rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative border-8 border-gray-50 group">
+                <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover transition-opacity duration-1000 ${hasCamera ? 'opacity-100' : 'opacity-20'}`} />
                 
+                {/* Scanner Overlay Graphics */}
+                <div className="absolute inset-0 z-10 pointer-events-none">
+                  {/* Corners */}
+                  <div className="absolute top-10 left-10 w-12 h-12 border-t-4 border-l-4 border-[#008cff] rounded-tl-xl" />
+                  <div className="absolute top-10 right-10 w-12 h-12 border-t-4 border-r-4 border-[#008cff] rounded-tr-xl" />
+                  <div className="absolute bottom-10 left-10 w-12 h-12 border-b-4 border-l-4 border-[#008cff] rounded-bl-xl" />
+                  <div className="absolute bottom-10 right-10 w-12 h-12 border-b-4 border-r-4 border-[#008cff] rounded-br-xl" />
+                  
+                  {/* Scanning Line */}
+                  {hasCamera && !showResult && (
+                    <div className="absolute left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#008cff] to-transparent animate-[scan_3s_infinite]" 
+                         style={{ top: '50%', boxShadow: '0 0 20px #008cff' }} />
+                  )}
+                </div>
+
                 {error && (
-                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
-                    <AlertTriangle size={48} className="text-red-500 mb-4" />
-                    <p className="text-white font-bold mb-6 text-sm">{error}</p>
-                    <div className="flex gap-4">
+                  <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/80 p-10 text-center animate-fade-in">
+                    <ShieldAlert size={56} className="text-red-500 mb-6" />
+                    <h3 className="text-white font-black uppercase tracking-tighter text-xl mb-2">Access Restricted</h3>
+                    <p className="text-gray-400 font-bold mb-10 text-sm leading-relaxed">{error}</p>
+                    <div className="flex flex-col gap-4 w-full max-w-[240px]">
                       <button 
                         onClick={startCamera}
-                        className="px-6 py-2 bg-[#008cff] text-white rounded-lg font-black uppercase text-[10px] tracking-widest shadow-lg"
+                        className="btn-search !text-[12px] py-4 !px-0 w-full"
                       >
-                        Retry Camera
+                        RETRY CONNECTION
                       </button>
                       <button 
-                        onClick={() => { setHasCamera(true); setError(null); }}
-                        className="px-6 py-2 bg-green-600 text-white rounded-lg font-black uppercase text-[10px] tracking-widest shadow-lg"
+                        onClick={() => handleCapture(0)}
+                        className="py-4 border-2 border-white/10 rounded-full text-white font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all"
                       >
-                        Simulate Scan
+                        SIMULATE DETECTION
                       </button>
                     </div>
                   </div>
                 )}
 
                 {isScanning && (
-                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm">
-                    <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden mb-4">
-                      <div className="h-full bg-[#008cff] transition-all duration-100" style={{ width: `${scanProgress}%` }} />
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#008cff]/10 backdrop-blur-md">
+                    <div className="relative w-48 h-48 flex items-center justify-center mb-8">
+                      <div className="absolute inset-0 border-4 border-[#008cff]/20 rounded-full" />
+                      <div className="absolute inset-0 border-t-4 border-[#008cff] rounded-full animate-spin" />
+                      <FlaskConical size={48} className="text-[#008cff] animate-pulse" />
                     </div>
-                    <span className="text-white text-[12px] font-black uppercase tracking-widest">Scanning Molecule...</span>
+                    <div className="w-64 h-2 bg-black/40 rounded-full overflow-hidden mb-3">
+                      <div className="h-full bg-[#008cff] transition-all duration-300" style={{ width: `${scanProgress}%` }} />
+                    </div>
+                    <span className="text-[#008cff] text-[13px] font-black uppercase tracking-[0.2em] italic">Analyzing Molecular Structure...</span>
                   </div>
                 )}
-                
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-48 border-2 border-white/40 rounded-3xl" />
-                </div>
               </div>
 
-              <div className="mt-12">
+              <div className="mt-12 flex flex-col items-center gap-4">
                 <button 
-                  onClick={handleCapture}
+                  onClick={() => handleCapture()}
                   disabled={!hasCamera || isScanning}
-                  className="w-24 h-24 rounded-full bg-white border-[8px] border-gray-100 shadow-2xl flex items-center justify-center active:scale-95 transition-all disabled:opacity-50 group"
+                  className="w-28 h-28 rounded-full bg-white border-[10px] border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.15)] flex items-center justify-center active:scale-90 transition-all disabled:opacity-30 group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#008cff] group-hover:scale-110 transition-transform" />
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#008cff] to-[#0056cc] group-hover:scale-110 transition-transform shadow-lg shadow-blue-200" />
                 </button>
+                <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest">Capture Frame</span>
               </div>
             </div>
 
+            {/* Right: Info Panel */}
             <div className="flex flex-col justify-center">
               {!showResult ? (
-                <div className="text-center lg:text-left space-y-6">
-                  <h2 className="text-[42px] font-black tracking-tighter leading-tight">Optical Medical Core</h2>
-                  <p className="text-[18px] text-gray-500 font-bold leading-relaxed max-w-md">
-                    Position your medicine label within the scanner frame for instant AI identification and dosage analysis.
-                  </p>
-                  <div className="pt-8 grid grid-cols-2 gap-6">
-                    <div className="p-6 bg-blue-50 rounded-[12px] border border-blue-100">
-                      <Zap className="text-[#008cff] mb-3" />
-                      <h4 className="text-[14px] font-black uppercase">Instant Results</h4>
-                    </div>
-                    <div className="p-6 bg-green-50 rounded-[12px] border border-green-100">
-                      <Shield className="text-green-600 mb-3" />
-                      <h4 className="text-[14px] font-black uppercase">99% Accuracy</h4>
-                    </div>
-                  </div>
-                </div>
-              ) : detectedMedicine ? (
-                <div className="animate-slide-up space-y-8">
-                  <div className="flex items-center gap-6 mb-8">
-                    <div className="w-20 h-20 bg-[#008cff] rounded-[16px] flex items-center justify-center text-white shadow-xl shadow-blue-200">
-                      <Pill size={40} />
-                    </div>
-                    <div>
-                      <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">{detectedMedicine.type} Identified</span>
-                      <h2 className="text-[36px] font-black tracking-tight">{detectedMedicine.name}</h2>
-                    </div>
+                <div className="space-y-10">
+                  <div className="space-y-4">
+                    <h2 className="text-[52px] font-black tracking-tighter leading-none italic uppercase">
+                      Optical <span className="text-[#008cff]">Core</span>
+                    </h2>
+                    <p className="text-[18px] text-gray-500 font-bold leading-relaxed max-w-md italic uppercase tracking-tight">
+                      Deploying neural vision to decode pharmaceutical compositions in real-time.
+                    </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="p-6 bg-gray-50 rounded-[16px] border border-gray-100">
-                      <div className="flex items-center gap-3 text-gray-400 mb-2">
-                        <Clock size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Schedule</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="p-8 bg-blue-50/50 rounded-[24px] border-2 border-blue-100/50 group hover:border-[#008cff] transition-all">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#008cff] shadow-sm mb-4">
+                        <Zap size={24} />
                       </div>
-                      <span className="text-[18px] font-extrabold">{detectedMedicine.schedule}</span>
+                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Instant ID</h4>
+                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">Millisecond processing latency</p>
                     </div>
-                    <div className="p-6 bg-gray-50 rounded-[16px] border border-gray-100">
-                      <div className="flex items-center gap-3 text-gray-400 mb-2">
-                        <Info size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Dosage</span>
+                    <div className="p-8 bg-emerald-50/50 rounded-[24px] border-2 border-emerald-100/50 group hover:border-emerald-500 transition-all">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm mb-4">
+                        <Shield size={24} />
                       </div>
-                      <span className="text-[18px] font-extrabold">Standard Oral</span>
+                      <h4 className="text-[14px] font-black uppercase tracking-tight mb-1">Secure Check</h4>
+                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-tight">Cross-verified drug database</p>
                     </div>
                   </div>
 
-                  <div className="space-y-6 pt-6">
-                    <div>
-                      <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-2">Usage Protocol</h4>
-                      <p className="text-[16px] font-bold leading-relaxed">{detectedMedicine.usage}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-2 text-red-500">Cautionary Profile</h4>
-                      <p className="text-[16px] font-bold leading-relaxed text-red-900">{detectedMedicine.sideEffects}</p>
+                  <div className="pt-8">
+                    <h3 className="text-[12px] font-black text-gray-300 uppercase tracking-widest mb-6 flex items-center gap-3 italic">
+                      <History size={16} /> Recent Detections
+                    </h3>
+                    <div className="space-y-4">
+                      {history.map((item, i) => (
+                        <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-[16px] border border-gray-100 hover:bg-white transition-all cursor-pointer">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-[#008cff] shadow-sm">
+                              <Pill size={20} />
+                            </div>
+                            <div>
+                              <p className="text-[14px] font-black uppercase italic tracking-tight">{item.name}</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.time}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-full border border-green-100">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+                            <span className="text-[9px] font-black uppercase">{item.status}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-
-                  <button 
-                    onClick={() => setShowResult(false)}
-                    className="w-full btn-search !text-[16px] py-4 mt-8"
-                  >
-                    SCAN NEW MEDICINE
-                  </button>
                 </div>
               ) : (
-                <div className="text-center p-12">
-                  <AlertCircle size={48} className="mx-auto text-gray-300 mb-4" />
-                  <p className="text-gray-500 font-bold uppercase tracking-widest">No data available</p>
+                <div className="animate-slide-up space-y-8 max-h-[70vh] overflow-y-auto no-scrollbar pr-4">
+                  <div className="flex items-center gap-8 border-b-2 border-gray-100 pb-8 mb-8">
+                    <div className="w-24 h-24 bg-[#008cff] rounded-[24px] flex items-center justify-center text-white shadow-2xl shadow-blue-200">
+                      <Pill size={48} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full" />
+                        <span className="text-[11px] font-black text-[#008cff] uppercase tracking-[0.3em] italic">Identity Verified</span>
+                      </div>
+                      <h2 className="text-[42px] font-black tracking-tighter leading-none italic uppercase">{detectedMedicine.name}</h2>
+                      <p className="text-[14px] font-bold text-gray-400 uppercase tracking-widest mt-2">{detectedMedicine.brand}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="p-8 bg-gray-50 rounded-[24px] border-2 border-gray-100">
+                      <div className="flex items-center gap-3 text-gray-400 mb-4">
+                        <Clock size={18} />
+                        <span className="text-[11px] font-black uppercase tracking-widest">Protocol Schedule</span>
+                      </div>
+                      <span className="text-[24px] font-black italic text-gray-800 uppercase tracking-tight leading-tight">{detectedMedicine.schedule}</span>
+                    </div>
+                    <div className="p-8 bg-gray-50 rounded-[24px] border-2 border-gray-100">
+                      <div className="flex items-center gap-3 text-gray-400 mb-4">
+                        <ThermometerSnowflake size={18} />
+                        <span className="text-[11px] font-black uppercase tracking-widest">Storage Conditions</span>
+                      </div>
+                      <span className="text-[24px] font-black italic text-gray-800 uppercase tracking-tight leading-tight">Controlled</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-10 pt-4">
+                    <div className="flex gap-6 items-start">
+                      <div className="p-3 bg-blue-50 text-[#008cff] rounded-xl"><Info size={20} /></div>
+                      <div>
+                        <h4 className="text-[11px] font-black text-gray-300 uppercase tracking-widest mb-2">Primary Usage</h4>
+                        <p className="text-[16px] font-bold text-gray-700 leading-relaxed italic uppercase tracking-tight">"{detectedMedicine.usage}"</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-6 items-start">
+                      <div className="p-3 bg-orange-50 text-orange-600 rounded-xl"><AlertTriangle size={20} /></div>
+                      <div>
+                        <h4 className="text-[11px] font-black text-gray-300 uppercase tracking-widest mb-2">Safety Precautions</h4>
+                        <p className="text-[16px] font-bold text-gray-700 leading-relaxed italic uppercase tracking-tight">"{detectedMedicine.precautions}"</p>
+                      </div>
+                    </div>
+
+                    <div className="p-8 bg-red-50 rounded-[24px] border-2 border-red-100 border-dashed">
+                      <h4 className="text-[11px] font-black text-red-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <ShieldAlert size={16} /> Cautionary profile
+                      </h4>
+                      <p className="text-[14px] font-black text-red-900 leading-relaxed italic uppercase tracking-tight">{detectedMedicine.sideEffects}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 pt-8">
+                    <button 
+                      onClick={() => setShowResult(false)}
+                      className="flex-1 btn-search !text-[13px] py-5 shadow-none"
+                    >
+                      SCAN NEW ARCHIVE
+                    </button>
+                    <button className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 hover:text-[#008cff] transition-all border-2 border-gray-100">
+                      <FileText size={24} />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
