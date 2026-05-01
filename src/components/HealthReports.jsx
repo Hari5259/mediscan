@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, FileText, Download, Eye, Search,
-  Activity, Droplets, BrainCircuit, Calendar,
-  CheckCircle2, AlertTriangle, Pill,
+  FileText, Download, Eye, Search,
+  Activity, Droplets, Calendar,
+  CheckCircle2, AlertTriangle, 
   Plus, X, Upload, Loader2, Trash2, Microscope,
-  ChevronDown, ChevronRight
+  ChevronDown, ChevronRight, MessageCircle, Camera, Users
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -19,7 +19,6 @@ export default function HealthReports() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [expandedReport, setExpandedReport] = useState(null);
-  
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -87,6 +86,15 @@ export default function HealthReports() {
     }, 1500);
   };
 
+  const tabs = [
+    { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
+    { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
+    { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
+    { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
+    { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
+    { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
+  ];
+
   const filtered = reports.filter((r) => {
     const matchesSearch = r.title.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || r.recordType === selectedCategory;
@@ -94,240 +102,239 @@ export default function HealthReports() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="bg-immersive min-h-screen pb-24">
       <Navbar />
       
-      <main className="max-w-[1000px] mx-auto px-6 py-12 animate-fade-in">
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <h1 className="apple-heading mb-2">Health Reports</h1>
-            <p className="apple-subheading">Your clinical history, organized and accessible.</p>
-          </div>
-          <button 
-            onClick={() => setIsUploadOpen(true)}
-            className="apple-button apple-button-primary flex items-center gap-2"
-          >
-            <Plus size={18} />
-            Add Report
-          </button>
-        </header>
-
-        {/* Search and Filters */}
-        <div className="mb-10 space-y-6">
-          <div className="relative">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#86868B]" size={20} />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search reports by title..."
-              className="apple-input pl-14"
-            />
-          </div>
-          
-          <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-            {['All', ...recordTypes].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2 rounded-full text-[14px] font-medium transition-all whitespace-nowrap ${
-                  selectedCategory === cat
-                    ? 'bg-[#1D1D1F] text-white shadow-lg shadow-black/10'
-                    : 'bg-white text-[#86868B] hover:bg-[#E5E5EA] border border-black/5'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+      <main className="floating-container animate-slide-up">
+        <div className="module-tabs">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              onClick={() => navigate(tab.path)}
+              className={`module-tab-item ${tab.id === 'health-reports' ? 'active' : ''}`}
+            >
+              <tab.icon size={24} className="icon" />
+              <span>{tab.label}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Reports List */}
-        <div className="space-y-4">
-          {loading ? (
-            <div className="apple-card p-20 flex flex-col items-center justify-center">
-              <Loader2 size={32} className="animate-spin text-[#0071E3] mb-4" />
-              <p className="text-[#86868B]">Loading your reports...</p>
+        <div className="main-floating-card mt-4 p-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between mb-12 gap-8">
+            <div className="radio-group">
+              <label className="radio-item">
+                <input type="radio" name="reportView" defaultChecked />
+                <span>Clinical Records</span>
+              </label>
+              <label className="radio-item">
+                <input type="radio" name="reportView" />
+                <span>Imaging Archive</span>
+              </label>
+              <label className="radio-item">
+                <input type="radio" name="reportView" />
+                <span>Lab Summaries</span>
+              </label>
             </div>
-          ) : filtered.length === 0 ? (
-            <div className="apple-card p-20 text-center">
-              <div className="w-16 h-16 bg-[#F2F2F7] rounded-full flex items-center justify-center mx-auto mb-6 text-[#86868B]">
-                <FileText size={32} />
+            
+            <div className="flex items-center gap-4">
+              <div className="relative group min-w-[300px]">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#008cff]" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search records..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-3 text-[14px] font-bold focus:border-[#008cff] outline-none transition-all"
+                />
               </div>
-              <h3 className="text-[20px] font-semibold mb-2">No Reports Found</h3>
-              <p className="text-[#86868B]">Try adjusting your search or filters.</p>
-            </div>
-          ) : (
-            filtered.map((report) => (
-              <div
-                key={report._id}
-                className="apple-card overflow-hidden border border-black/5"
+              <button 
+                onClick={() => setIsUploadOpen(true)}
+                className="btn-search !text-[12px] px-8 py-3 flex items-center gap-2"
               >
-                <button
-                  onClick={() => setExpandedReport(expandedReport === report._id ? null : report._id)}
-                  className="w-full p-6 flex items-center gap-6 text-left hover:bg-[#F9F9FB] transition-colors"
+                <Plus size={16} /> ADD RECORD
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            {loading ? (
+              <div className="py-32 flex flex-col items-center">
+                <Loader2 size={40} className="animate-spin text-[#008cff] mb-4" />
+                <p className="text-gray-400 font-black uppercase tracking-widest text-[12px]">Retrieving Secure Dossiers...</p>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="py-32 text-center bg-gray-50 rounded-[24px] border-2 border-dashed border-gray-100">
+                <FileText size={48} className="mx-auto text-gray-200 mb-6" />
+                <h3 className="text-[24px] font-black tracking-tight mb-2">No Records Found</h3>
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[11px]">Your health archive is currently empty or filtered.</p>
+              </div>
+            ) : (
+              filtered.map((report) => (
+                <div
+                  key={report._id}
+                  className="section-card !p-0 overflow-hidden border-2 border-gray-100 hover:border-[#008cff] transition-all"
                 >
-                  <div className="w-12 h-12 rounded-full bg-[#F2F2F7] flex items-center justify-center text-[#0071E3] shrink-0">
-                    <FileText size={22} />
-                  </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-[17px] font-semibold">{report.title}</h3>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        report.status === 'normal' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#FFF3E0] text-[#EF6C00]'
-                      }`}>
-                        {report.status}
-                      </span>
+                  <button
+                    onClick={() => setExpandedReport(expandedReport === report._id ? null : report._id)}
+                    className="w-full p-8 flex items-center gap-8 text-left group"
+                  >
+                    <div className="w-16 h-16 rounded-[16px] bg-blue-50 flex items-center justify-center text-[#008cff] shrink-0 group-hover:scale-110 transition-transform">
+                      <FileText size={28} />
                     </div>
-                    <div className="flex items-center gap-4 text-[13px] text-[#86868B]">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar size={14} />
-                        {new Date(report.recordDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </span>
-                      <span className="w-1 h-1 bg-[#D2D2D7] rounded-full" />
-                      <span>{report.recordType}</span>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-2">
+                        <h3 className="text-[20px] font-black tracking-tight group-hover:text-[#008cff] transition-colors">{report.title}</h3>
+                        <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                          report.status === 'normal' ? 'bg-green-50 text-green-600' : 'bg-orange-50 text-orange-600'
+                        }`}>
+                          {report.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-6 text-[12px] font-bold text-gray-400 uppercase tracking-widest">
+                        <span className="flex items-center gap-2"><Calendar size={14} /> {report.recordDate}</span>
+                        <span className="w-1.5 h-1.5 bg-gray-200 rounded-full" />
+                        <span>{report.recordType}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className={`p-2 rounded-full transition-transform ${expandedReport === report._id ? 'rotate-180 bg-[#F2F2F7]' : ''}`}>
-                    <ChevronDown size={20} className="text-[#86868B]" />
-                  </div>
-                </button>
+                    <div className={`p-2 rounded-full transition-all ${expandedReport === report._id ? 'rotate-180 bg-blue-50 text-[#008cff]' : 'text-gray-300'}`}>
+                      <ChevronDown size={24} />
+                    </div>
+                  </button>
 
-                {expandedReport === report._id && (
-                  <div className="px-6 pb-8 animate-fade-in">
-                    <div className="h-[1px] bg-[#F2F2F7] mb-8" />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                      <div className="md:col-span-2">
-                        <h4 className="text-[12px] font-bold text-[#86868B] uppercase tracking-wider mb-3">Analysis Result</h4>
-                        <p className="text-[16px] text-[#1D1D1F] leading-relaxed">
-                          {report.description}
-                        </p>
-                        
-                        <div className="mt-8 pt-8 border-t border-[#F2F2F7] flex gap-8">
-                          <div>
-                            <p className="text-[11px] text-[#86868B] uppercase font-bold mb-1">Status</p>
-                            <p className="text-[14px] font-medium text-[#2E7D32] flex items-center gap-1">
-                              <CheckCircle2 size={14} /> Verified
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-[11px] text-[#86868B] uppercase font-bold mb-1">Trend</p>
-                            <p className="text-[14px] font-medium text-[#1D1D1F]">Stable</p>
+                  {expandedReport === report._id && (
+                    <div className="px-12 pb-10 animate-slide-up">
+                      <div className="h-[1px] bg-gray-100 mb-10" />
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                        <div className="lg:col-span-2">
+                          <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Clinical Insight</h4>
+                          <p className="text-[16px] text-gray-700 font-bold leading-relaxed italic">
+                            "{report.description}"
+                          </p>
+                          
+                          <div className="mt-10 pt-10 border-t border-gray-50 flex gap-12">
+                            <div>
+                              <p className="text-[10px] font-black text-gray-300 uppercase mb-2">Verification</p>
+                              <p className="text-[14px] font-black text-green-600 flex items-center gap-2 italic">
+                                <CheckCircle2 size={16} /> CERTIFIED
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-black text-gray-300 uppercase mb-2">Health Trend</p>
+                              <p className="text-[14px] font-black text-gray-800 uppercase italic">STABLE</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="space-y-3">
-                        <button className="w-full apple-button apple-button-secondary text-[14px] flex items-center justify-center gap-2">
-                          <Eye size={16} /> View Full PDF
-                        </button>
-                        <button className="w-full apple-button bg-white border border-black/5 text-[14px] flex items-center justify-center gap-2 hover:bg-[#F2F2F7]">
-                          <Download size={16} /> Download
-                        </button>
-                        <button className="w-full py-3 text-[14px] text-[#FF3B30] font-medium hover:bg-[#FFF2F2] rounded-full transition-all flex items-center justify-center gap-2">
-                          <Trash2 size={16} /> Delete Record
-                        </button>
+                        <div className="space-y-4">
+                          <button className="btn-search w-full !text-[13px] py-4 flex items-center justify-center gap-3">
+                            <Eye size={18} /> PREVIEW ARTIFACT
+                          </button>
+                          <button className="w-full py-4 border-2 border-gray-100 rounded-full text-[13px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all flex items-center justify-center gap-3">
+                            <Download size={18} /> EXPORT PDF
+                          </button>
+                          <button className="w-full py-4 text-[13px] text-red-500 font-black uppercase tracking-widest hover:bg-red-50 rounded-full transition-all flex items-center justify-center gap-3">
+                            <Trash2 size={18} /> DELETE RECORD
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
+                  )}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </main>
 
       {/* Upload Modal */}
       {isUploadOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={() => !uploading && setIsUploadOpen(false)}></div>
-          <div className="bg-white rounded-[32px] w-full max-w-[500px] relative z-10 overflow-hidden shadow-2xl animate-fade-in">
-            <div className="p-8 border-b border-[#F2F2F7] flex items-center justify-between">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md animate-fade-in" onClick={() => !uploading && setIsUploadOpen(false)}></div>
+          <div className="main-floating-card w-full max-w-[600px] relative z-10 animate-slide-up !p-0 overflow-hidden">
+            <div className="p-10 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
               <div>
-                <h3 className="text-[22px] font-semibold">Add New Report</h3>
-                <p className="text-[14px] text-[#86868B]">Upload your medical records securely.</p>
+                <h3 className="text-[28px] font-black tracking-tighter italic">Upload Record</h3>
+                <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mt-1">Add clinical artifacts to your vault</p>
               </div>
               <button 
                 onClick={() => setIsUploadOpen(false)}
-                className="w-10 h-10 bg-[#F2F2F7] hover:bg-[#E5E5EA] rounded-full text-[#86868B] transition-all flex items-center justify-center"
+                className="w-12 h-12 bg-white hover:bg-gray-100 rounded-full text-gray-400 transition-all flex items-center justify-center shadow-md"
               >
-                <X size={20} />
+                <X size={24} />
               </button>
             </div>
             
-            <form onSubmit={handleUpload} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Report Title</label>
+            <form onSubmit={handleUpload} className="p-10 space-y-8">
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Record Title</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Annual Blood Work"
-                  className="apple-input"
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   value={formData.title}
                   onChange={e => setFormData({...formData, title: e.target.value})}
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-[13px] font-semibold ml-1">Type</label>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Type</label>
                   <select 
-                    className="apple-input appearance-none cursor-pointer"
+                    className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[14px] font-black uppercase tracking-widest outline-none appearance-none cursor-pointer focus:border-[#008cff]"
                     value={formData.recordType}
                     onChange={e => setFormData({...formData, recordType: e.target.value})}
                   >
                     {recordTypes.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[13px] font-semibold ml-1">Date</label>
+                <div className="space-y-3">
+                  <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Date</label>
                   <input
                     type="date"
                     required
-                    className="apple-input"
+                    className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[14px] font-black outline-none focus:border-[#008cff]"
                     value={formData.recordDate}
                     onChange={e => setFormData({...formData, recordDate: e.target.value})}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[13px] font-semibold ml-1">Notes (Optional)</label>
+              <div className="space-y-3">
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Clinical Notes</label>
                 <textarea
-                  placeholder="Additional context..."
-                  className="apple-input min-h-[100px] py-3 resize-none"
+                  placeholder="Summarize the findings..."
+                  className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all min-h-[120px] resize-none"
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                 ></textarea>
               </div>
 
-              <div className="space-y-2">
-                <div className="relative group">
-                  <input
-                    type="file"
-                    required
-                    onChange={e => setFormData({...formData, file: e.target.files[0]})}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                  />
-                  <div className="bg-[#F5F5F7] border-2 border-dashed border-[#D2D2D7] rounded-[20px] p-8 text-center group-hover:bg-[#E5E5EA] transition-all">
-                    <Upload className="mx-auto text-[#86868B] mb-2" size={32} />
-                    <p className="text-[14px] text-[#86868B] font-medium">
-                      {formData.file ? formData.file.name : 'Tap to upload file'}
-                    </p>
-                    <p className="text-[11px] text-[#86868B] mt-1">PDF, JPG, or PNG (Max 10MB)</p>
-                  </div>
+              <div className="relative group">
+                <input
+                  type="file"
+                  required
+                  onChange={e => setFormData({...formData, file: e.target.files[0]})}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                />
+                <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-[20px] p-10 text-center group-hover:bg-blue-50 group-hover:border-[#008cff] transition-all">
+                  <Upload className="mx-auto text-gray-300 mb-4 group-hover:text-[#008cff] transition-colors" size={40} />
+                  <p className="text-[14px] font-black uppercase tracking-widest text-gray-500">
+                    {formData.file ? formData.file.name : 'Link Artifact File'}
+                  </p>
+                  <p className="text-[10px] font-bold text-gray-300 mt-2 uppercase">PDF, JPG, OR PNG (MAX 10MB)</p>
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={uploading}
-                className="w-full apple-button apple-button-primary flex items-center justify-center gap-2 disabled:opacity-50"
+                className="btn-search w-full py-5 !text-[16px] flex items-center justify-center gap-3 disabled:opacity-50"
               >
-                {uploading ? <Loader2 size={20} className="animate-spin" /> : 'Save Report'}
+                {uploading ? <Loader2 size={24} className="animate-spin" /> : 'SECURE IN VAULT'}
               </button>
             </form>
           </div>

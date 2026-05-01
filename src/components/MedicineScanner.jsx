@@ -15,7 +15,8 @@ import {
   FileText,
   Users,
   AlertCircle,
-  Shield
+  Shield,
+  Zap
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -85,19 +86,28 @@ const MedicineScanner = () => {
   };
 
   const handleCapture = () => {
+    console.log("Capture initiated");
     setIsScanning(true);
     setScanProgress(0);
     
     let progress = 0;
     const interval = setInterval(() => {
-      progress += 5;
+      progress += 10;
       setScanProgress(progress);
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
-          setDetectedMedicine(MEDICINE_DATABASE[0]);
-          setShowResult(true);
-          setIsScanning(false);
+          console.log("Scan complete, setting results");
+          const med = MEDICINE_DATABASE[0];
+          if (med) {
+            setDetectedMedicine(med);
+            setShowResult(true);
+            setIsScanning(false);
+          } else {
+            console.error("No medicine found in database");
+            setError("Internal Error: Medicine database is empty.");
+            setIsScanning(false);
+          }
         }, 500);
       }
     }, 50);
@@ -200,7 +210,7 @@ const MedicineScanner = () => {
                     </div>
                   </div>
                 </div>
-              ) : (
+              ) : detectedMedicine ? (
                 <div className="animate-slide-up space-y-8">
                   <div className="flex items-center gap-6 mb-8">
                     <div className="w-20 h-20 bg-[#008cff] rounded-[16px] flex items-center justify-center text-white shadow-xl shadow-blue-200">
@@ -246,6 +256,11 @@ const MedicineScanner = () => {
                   >
                     SCAN NEW MEDICINE
                   </button>
+                </div>
+              ) : (
+                <div className="text-center p-12">
+                  <AlertCircle size={48} className="mx-auto text-gray-300 mb-4" />
+                  <p className="text-gray-500 font-bold uppercase tracking-widest">No data available</p>
                 </div>
               )}
             </div>
