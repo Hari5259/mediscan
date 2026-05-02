@@ -46,7 +46,7 @@ const EMPTY_FORM = {
 function StatusBadge({ active }) {
   return active
     ? <span className="flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full bg-green-100 text-green-700 border border-green-200"><AlarmCheck size={11}/> ACTIVE</span>
-    : <span className="flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200"><AlarmOff size={11}/> PAUSED</span>;
+    : <span className="flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200"><AlarmClockOff size={11}/> PAUSED</span>;
 }
 
 export default function MedicineReminder() {
@@ -256,7 +256,7 @@ export default function MedicineReminder() {
                       </button>
                       <button onClick={() => toggleActive(r.id)}
                         className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${r.active ? 'bg-gray-100 text-gray-500 hover:bg-orange-100 hover:text-orange-500' : 'bg-green-100 text-green-500 hover:bg-green-200'}`}>
-                        {r.active ? <AlarmOff size={15}/> : <AlarmCheck size={15}/>}
+                        {r.active ? <AlarmClockOff size={15}/> : <AlarmCheck size={15}/>}
                       </button>
                       <button onClick={() => deleteReminder(r.id)}
                         className="w-9 h-9 bg-red-50 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all">
