@@ -14,7 +14,8 @@ import {
   Zap,
   Star,
   Users,
-  Scale
+  Scale,
+  UtensilsCrossed
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -28,6 +29,7 @@ const Dashboard = () => {
     { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
     { id: 'bmi-calculator', label: 'BMI Index', icon: Scale, path: '/bmi-calculator' },
     { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
+    { id: 'food-tracker', icon: UtensilsCrossed, label: 'Food Tracker', path: '/food-tracker' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
   ];
@@ -148,6 +150,18 @@ const Dashboard = () => {
             <div>
               <h4 className="text-[18px] font-extrabold mb-1">Digital Vault</h4>
               <p className="text-[13px] text-gray-500 font-medium">All your reports in one secure place.</p>
+            </div>
+          </div>
+          <div 
+            onClick={() => navigate('/food-tracker')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform">
+              <UtensilsCrossed size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">Food Tracker</h4>
+              <p className="text-[13px] text-gray-500 font-medium">Log meals & track your nutrition.</p>
             </div>
           </div>
         </section>
