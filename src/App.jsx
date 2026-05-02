@@ -16,6 +16,7 @@ import SymptomChecker from './components/SymptomChecker';
 import MedicineScanner from './components/MedicineScanner';
 import Chatbot from './components/Chatbot';
 import FoodTracker from './components/FoodTracker';
+import MedicineReminder from './components/MedicineReminder';
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/medicine-scanner" element={<MedicineScanner />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/food-tracker" element={<FoodTracker />} />
+        <Route path="/medicine-reminder" element={<MedicineReminder />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
