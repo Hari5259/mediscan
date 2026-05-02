@@ -54,7 +54,7 @@ body {
 }
 
 .module-tab-item span {
-  @apply text-[12px] font-semibold text-gray-500 uppercase tracking-tight;
+  @apply text-[12px] font-semibold text-gray-500 uppercase tracking-tight text-center whitespace-nowrap;
 }
 
 .module-tab-item.active .icon {
