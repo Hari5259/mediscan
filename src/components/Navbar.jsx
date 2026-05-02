@@ -39,10 +39,10 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg text-[12px] font-black uppercase tracking-wider flex items-center gap-2 shadow-lg">
+        <Link to="/login" className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg text-[12px] font-black uppercase tracking-wider flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
           <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center"><User size={14} /></div>
           Login or Create Account
-        </button>
+        </Link>
 
         <div className="flex items-center gap-2 text-white/60 text-[11px] font-bold">
           <span>INR</span>
