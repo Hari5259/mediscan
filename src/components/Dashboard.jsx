@@ -12,12 +12,15 @@ import {
   Pill,
   Microscope,
   Zap,
-  Star,
   Users,
   Scale,
   UtensilsCrossed,
   Bell,
-  Video
+  Video,
+  Download,
+  Watch,
+  RefreshCw,
+  User
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -26,6 +29,9 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [checkType, setCheckType] = useState('General Checkup');
   const [isScanning, setIsScanning] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const tabs = [
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
@@ -120,30 +126,52 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-4 relative z-10 pb-6">
-            <span className="text-[14px] font-bold text-gray-500 uppercase flex items-center pt-2">Quick Access Modules:</span>
+            <span className="text-[14px] font-bold text-gray-500 uppercase flex items-center pt-2">Command Actions:</span>
+            
             <button 
-              onClick={() => navigate('/chatbot')}
-              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+              onClick={() => {
+                setIsSyncing(true);
+                setTimeout(() => setIsSyncing(false), 2000);
+              }}
+              className={`px-5 py-2 border rounded-[6px] text-[13px] font-bold transition-all flex items-center gap-2 ${
+                isSyncing ? 'border-[#008cff] bg-blue-50 text-[#008cff]' : 'border-gray-200 hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff]'
+              }`}
             >
-              <MessageCircle size={14} /> AI Diagnostics
+              <Watch size={14} className={isSyncing ? 'animate-pulse' : ''} /> 
+              {isSyncing ? 'Syncing...' : 'Sync Wearables'}
             </button>
+            
             <button 
-              onClick={() => navigate('/doctors')}
-              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+              onClick={() => {
+                setIsExporting(true);
+                setTimeout(() => setIsExporting(false), 1500);
+              }}
+              className={`px-5 py-2 border rounded-[6px] text-[13px] font-bold transition-all flex items-center gap-2 ${
+                isExporting ? 'border-[#008cff] bg-blue-50 text-[#008cff]' : 'border-gray-200 hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff]'
+              }`}
             >
-              <Users size={14} /> Tele-Consult
+              <Download size={14} className={isExporting ? 'animate-bounce' : ''} /> 
+              {isExporting ? 'Exporting...' : 'Export Core Data'}
             </button>
-            <button 
-              onClick={() => navigate('/medicine-scanner')}
-              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
-            >
-              <Pill size={14} /> Digital Pharmacy
-            </button>
+
             <button 
               onClick={() => navigate('/health-reports')}
               className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
             >
-              <FileText size={14} /> Health Wallet
+              <User size={14} /> Update Profile
+            </button>
+
+            <button 
+              onClick={() => {
+                setIsRefreshing(true);
+                setTimeout(() => setIsRefreshing(false), 1000);
+              }}
+              className={`px-5 py-2 border rounded-[6px] text-[13px] font-bold transition-all flex items-center gap-2 ${
+                isRefreshing ? 'border-[#008cff] bg-blue-50 text-[#008cff]' : 'border-gray-200 hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff]'
+              }`}
+            >
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} /> 
+              {isRefreshing ? 'Refreshing...' : 'Refresh Network'}
             </button>
           </div>
 
