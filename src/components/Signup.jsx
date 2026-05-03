@@ -13,6 +13,8 @@ export default function Signup() {
     confirmPassword: '',
     userType: 'patient',
     specialization: '',
+    aadhaarNumber: '',
+    termsAccepted: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +28,8 @@ export default function Signup() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
   return (
@@ -142,6 +145,20 @@ export default function Signup() {
               </div>
             )}
 
+            <div className="space-y-3">
+              <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Government ID (Aadhaar / SSN)</label>
+              <input
+                type="text"
+                name="aadhaarNumber"
+                value={formData.aadhaarNumber}
+                onChange={handleChange}
+                placeholder="0000 0000 0000"
+                className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] px-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
+                required
+              />
+              <p className="text-[10px] text-gray-400 ml-1 italic font-bold uppercase">Required to prevent fraudulent identities.</p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Neural Key</label>
@@ -169,10 +186,34 @@ export default function Signup() {
               </div>
             </div>
 
+            <div className="flex items-start gap-4 mt-6 bg-blue-50/50 p-5 rounded-xl border border-blue-100">
+              <input
+                type="checkbox"
+                name="termsAccepted"
+                id="terms"
+                checked={formData.termsAccepted}
+                onChange={handleChange}
+                className="mt-0.5 w-5 h-5 rounded border-gray-300 text-[#008cff] focus:ring-[#008cff] cursor-pointer"
+                required
+              />
+              <label htmlFor="terms" className="text-[13px] font-bold text-gray-600 leading-tight">
+                I acknowledge the Identity Verification protocol (providing valid government ID to prevent fake accounts) and agree to the{' '}
+                <button
+                  type="button"
+                  onClick={() => window.open('/terms', '_blank')}
+                  className="text-[#008cff] hover:underline uppercase tracking-wider"
+                >
+                  Terms of Operation
+                </button>
+              </label>
+            </div>
+
             <button
               type="submit"
-              disabled={loading}
-              className="w-full btn-search !text-[18px] py-4 mt-6 flex items-center justify-center gap-3"
+              disabled={loading || !formData.termsAccepted}
+              className={`w-full !text-[18px] py-4 mt-6 flex items-center justify-center gap-3 ${
+                loading || !formData.termsAccepted ? 'opacity-50 cursor-not-allowed bg-gray-300 text-gray-500 rounded-full font-black' : 'btn-search'
+              }`}
             >
               {loading ? (
                 <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
