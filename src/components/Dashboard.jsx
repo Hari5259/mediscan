@@ -60,20 +60,37 @@ const Dashboard = () => {
         {/* Main Floating Card */}
         <div className="main-floating-card p-12 mt-4">
           <div className="flex items-center justify-between mb-8">
-            <div className="flex bg-gray-100 p-1.5 rounded-full border border-gray-200 shadow-inner">
-              {['General Checkup', 'Specialized Consultation', 'Emergency Review'].map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setCheckType(type)}
-                  className={`px-6 py-2.5 rounded-full text-[13px] font-black tracking-tight transition-all duration-300 flex items-center justify-center ${
-                    checkType === type 
-                    ? 'bg-white text-[#008cff] shadow-md transform scale-105 border border-gray-100' 
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-200/50'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
+            <div className="radio-group">
+              <label className="radio-item group">
+                <input 
+                  type="radio" 
+                  name="checkType" 
+                  checked={checkType === 'General Checkup'}
+                  onChange={() => setCheckType('General Checkup')}
+                />
+                <Stethoscope size={18} className={`transition-colors ${checkType === 'General Checkup' ? 'text-[#008cff]' : 'text-gray-400 group-hover:text-[#008cff]/70'}`} />
+                <span className={`transition-colors ${checkType === 'General Checkup' ? 'text-[#008cff]' : 'group-hover:text-[#008cff]/70'}`}>General Checkup</span>
+              </label>
+              <label className="radio-item group">
+                <input 
+                  type="radio" 
+                  name="checkType" 
+                  checked={checkType === 'Specialized Consultation'}
+                  onChange={() => setCheckType('Specialized Consultation')}
+                />
+                <Microscope size={18} className={`transition-colors ${checkType === 'Specialized Consultation' ? 'text-[#008cff]' : 'text-gray-400 group-hover:text-[#008cff]/70'}`} />
+                <span className={`transition-colors ${checkType === 'Specialized Consultation' ? 'text-[#008cff]' : 'group-hover:text-[#008cff]/70'}`}>Specialized Consultation</span>
+              </label>
+              <label className="radio-item group">
+                <input 
+                  type="radio" 
+                  name="checkType" 
+                  checked={checkType === 'Emergency Review'}
+                  onChange={() => setCheckType('Emergency Review')}
+                />
+                <AlertCircle size={18} className={`transition-colors ${checkType === 'Emergency Review' ? 'text-[#008cff]' : 'text-gray-400 group-hover:text-[#008cff]/70'}`} />
+                <span className={`transition-colors ${checkType === 'Emergency Review' ? 'text-[#008cff]' : 'group-hover:text-[#008cff]/70'}`}>Emergency Review</span>
+              </label>
             </div>
             <p className="text-[14px] font-bold text-gray-500">Fast & Accurate Health Diagnostics</p>
           </div>
