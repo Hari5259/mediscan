@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Activity, 
@@ -33,6 +33,18 @@ const Dashboard = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@abdm'
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('userProfile');
+    if (saved) {
+      setUserProfile(JSON.parse(saved));
+    }
+  }, []);
 
   const tabs = [
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
@@ -106,12 +118,16 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden">
             <div className="section-card border-r rounded-none">
               <span className="section-label">Identity Core</span>
-              <span className="section-value text-[24px]">John Doe</span>
+              <span className="section-value text-[24px] truncate" title={`${userProfile.firstName} ${userProfile.lastName}`}>
+                {userProfile.firstName} {userProfile.lastName}
+              </span>
               <span className="section-sub font-bold text-green-600">Verified Citizen Node</span>
             </div>
             <div className="section-card border-r rounded-none">
               <span className="section-label">ABHA Address</span>
-              <span className="section-value text-[24px]">john.doe@abdm</span>
+              <span className="section-value text-[24px] truncate" title={userProfile.email}>
+                {userProfile.email}
+              </span>
               <span className="section-sub font-bold">National Health ID Active</span>
             </div>
             <div className="section-card border-r rounded-none">

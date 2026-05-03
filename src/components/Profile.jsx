@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Shield, Save, Camera, ArrowLeft } from 'lucide-react';
 import Navbar from './Navbar';
@@ -6,10 +6,29 @@ import Navbar from './Navbar';
 export default function Profile() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@abdm',
+    phone: '+91 98765 43210',
+    location: 'Bengaluru, KA, India'
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('userProfile');
+    if (saved) {
+      setFormData(JSON.parse(saved));
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
     setLoading(true);
+    localStorage.setItem('userProfile', JSON.stringify(formData));
     setTimeout(() => {
       setLoading(false);
       navigate('/dashboard');
@@ -46,10 +65,10 @@ export default function Profile() {
                 </div>
               </div>
               <div>
-                <h3 className="text-[24px] font-extrabold">John Doe</h3>
+                <h3 className="text-[24px] font-extrabold">{formData.firstName} {formData.lastName}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                    <Shield size={12} /> Verified ABHA: john.doe@abdm
+                    <Shield size={12} /> Verified ABHA: {formData.email}
                   </span>
                 </div>
               </div>
@@ -62,7 +81,9 @@ export default function Profile() {
                   <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    defaultValue="John"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
                     className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   />
                 </div>
@@ -73,7 +94,9 @@ export default function Profile() {
                   <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    defaultValue="Doe"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
                     className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   />
                 </div>
@@ -87,7 +110,9 @@ export default function Profile() {
                   <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="email"
-                    defaultValue="john.doe@nexus.med"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   />
                 </div>
@@ -98,7 +123,9 @@ export default function Profile() {
                   <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="tel"
-                    defaultValue="+91 98765 43210"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                     className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                   />
                 </div>
@@ -111,7 +138,9 @@ export default function Profile() {
                 <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  defaultValue="Bengaluru, KA, India"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
                   className="w-full bg-gray-50 border-2 border-gray-100 rounded-[12px] pl-12 pr-6 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none transition-all"
                 />
               </div>
