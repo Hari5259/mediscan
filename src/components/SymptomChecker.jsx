@@ -17,7 +17,7 @@ import {
   Users,
   Scale
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const SYMPTOMS_DATA = [
@@ -55,11 +55,14 @@ const CONDITIONS_DATA = [
 ];
 
 export default function SymptomChecker() {
+  const location = useLocation();
+  const checkType = location.state?.checkType || 'General Checkup';
+
   const [messages, setMessages] = useState([
     { 
       id: 1, 
       type: 'bot', 
-      text: "HELLO. I AM READY TO ANALYZE YOUR HEALTH VECTORS. DESCRIBE YOUR CURRENT SYMPTOMS BELOW.",
+      text: `HELLO. INITIALIZING NEURAL DIAGNOSTICS FOR ${checkType.toUpperCase()}. PLEASE DESCRIBE YOUR SYMPTOMS OR USE THE QUICK SELECTORS BELOW.`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -180,6 +183,20 @@ export default function SymptomChecker() {
               </div>
 
               <div className="p-6 bg-white border-t border-gray-200">
+                <div className="mb-4">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Common Symptom Quick-Select</p>
+                  <div className="flex flex-wrap gap-2">
+                    {['Fever', 'Cough', 'Headache', 'Fatigue', 'Sore throat', 'Chest pain', 'Rash', 'Dizziness', 'Nausea'].map(symp => (
+                      <button 
+                        key={symp}
+                        onClick={() => setInput(prev => prev ? `${prev}, ${symp}` : symp)}
+                        className="px-3 py-1.5 bg-blue-50 border border-blue-100 hover:bg-[#008cff] hover:border-[#008cff] hover:text-white rounded-full text-[12px] font-bold text-blue-600 transition-colors"
+                      >
+                        + {symp}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <form onSubmit={handleSend} className="relative">
                   <input 
                     type="text"

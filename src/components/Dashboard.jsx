@@ -25,6 +25,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [checkType, setCheckType] = useState('General Checkup');
+  const [isScanning, setIsScanning] = useState(false);
 
   const tabs = [
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
@@ -128,10 +129,26 @@ const Dashboard = () => {
 
           <div className="absolute left-1/2 -bottom-6 -translate-x-1/2">
             <button 
-              onClick={() => navigate('/symptom-checker')}
-              className="btn-search"
+              disabled={isScanning}
+              onClick={() => {
+                setIsScanning(true);
+                setTimeout(() => {
+                  navigate('/symptom-checker', { state: { checkType } });
+                }, 1500);
+              }}
+              className="btn-search flex items-center justify-center gap-3 min-w-[320px]"
             >
-              RUN DIAGNOSTICS
+              {isScanning ? (
+                <>
+                  <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>INITIALIZING SCAN...</span>
+                </>
+              ) : (
+                <>
+                  <Activity size={24} />
+                  <span>RUN DIAGNOSTICS</span>
+                </>
+              )}
             </button>
           </div>
         </div>
