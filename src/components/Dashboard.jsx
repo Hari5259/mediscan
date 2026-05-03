@@ -156,7 +156,7 @@ const Dashboard = () => {
             </button>
 
             <button 
-              onClick={() => navigate('/health-reports')}
+              onClick={() => navigate('/profile')}
               className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
             >
               <User size={14} /> Update Profile
