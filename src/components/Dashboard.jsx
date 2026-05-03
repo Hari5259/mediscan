@@ -24,6 +24,7 @@ import Navbar from './Navbar';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [checkType, setCheckType] = useState('General Checkup');
 
   const tabs = [
     { id: 'symptom-checker', label: 'Symptom Checker', icon: Activity, path: '/symptom-checker' },
@@ -59,19 +60,20 @@ const Dashboard = () => {
         {/* Main Floating Card */}
         <div className="main-floating-card p-12 mt-4">
           <div className="flex items-center justify-between mb-8">
-            <div className="radio-group">
-              <label className="radio-item">
-                <input type="radio" name="checkType" defaultChecked />
-                <span>General Checkup</span>
-              </label>
-              <label className="radio-item">
-                <input type="radio" name="checkType" />
-                <span>Specialized Consultation</span>
-              </label>
-              <label className="radio-item">
-                <input type="radio" name="checkType" />
-                <span>Emergency Review</span>
-              </label>
+            <div className="flex bg-gray-100 p-1.5 rounded-full border border-gray-200 shadow-inner">
+              {['General Checkup', 'Specialized Consultation', 'Emergency Review'].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setCheckType(type)}
+                  className={`px-6 py-2.5 rounded-full text-[13px] font-black tracking-tight transition-all duration-300 flex items-center justify-center ${
+                    checkType === type 
+                    ? 'bg-white text-[#008cff] shadow-md transform scale-105 border border-gray-100' 
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-200/50'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
             </div>
             <p className="text-[14px] font-bold text-gray-500">Fast & Accurate Health Diagnostics</p>
           </div>
