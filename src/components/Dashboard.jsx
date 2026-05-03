@@ -119,12 +119,32 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <span className="text-[14px] font-bold text-gray-500 uppercase flex items-center pt-2">Special Filters:</span>
-            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">AI Diagnostics</button>
-            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Tele-Consult</button>
-            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Digital Pharmacy</button>
-            <button className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 transition-colors">Health Wallet</button>
+          <div className="mt-8 flex flex-wrap gap-4 relative z-10 pb-6">
+            <span className="text-[14px] font-bold text-gray-500 uppercase flex items-center pt-2">Quick Access Modules:</span>
+            <button 
+              onClick={() => navigate('/chatbot')}
+              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+            >
+              <MessageCircle size={14} /> AI Diagnostics
+            </button>
+            <button 
+              onClick={() => navigate('/doctors')}
+              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+            >
+              <Users size={14} /> Tele-Consult
+            </button>
+            <button 
+              onClick={() => navigate('/medicine-scanner')}
+              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+            >
+              <Pill size={14} /> Digital Pharmacy
+            </button>
+            <button 
+              onClick={() => navigate('/health-reports')}
+              className="px-5 py-2 border border-gray-200 rounded-[6px] text-[13px] font-bold hover:bg-blue-50 hover:text-[#008cff] hover:border-[#008cff] transition-all flex items-center gap-2"
+            >
+              <FileText size={14} /> Health Wallet
+            </button>
           </div>
 
           <div className="absolute left-1/2 -bottom-6 -translate-x-1/2">
