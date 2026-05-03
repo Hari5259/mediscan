@@ -17,6 +17,7 @@ import MedicineScanner from './components/MedicineScanner';
 import Chatbot from './components/Chatbot';
 import FoodTracker from './components/FoodTracker';
 import MedicineReminder from './components/MedicineReminder';
+import Webinars from './components/Webinars';
 import './App.css';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/food-tracker" element={<FoodTracker />} />
         <Route path="/medicine-reminder" element={<MedicineReminder />} />
+        <Route path="/webinars" element={<Webinars />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />

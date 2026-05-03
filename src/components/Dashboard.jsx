@@ -16,7 +16,8 @@ import {
   Users,
   Scale,
   UtensilsCrossed,
-  Bell
+  Bell,
+  Video
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -34,6 +35,7 @@ const Dashboard = () => {
     { id: 'medicine-reminder', icon: Bell, label: 'Reminders', path: '/medicine-reminder' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
+    { id: 'webinars', icon: Video, label: 'Live Sessions', path: '/webinars' },
   ];
 
   return (
@@ -176,6 +178,18 @@ const Dashboard = () => {
             <div>
               <h4 className="text-[18px] font-extrabold mb-1">Med Reminders</h4>
               <p className="text-[13px] text-gray-500 font-medium">Never miss a dose again.</p>
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/webinars')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
+            <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+              <Video size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">Live Sessions</h4>
+              <p className="text-[13px] text-gray-500 font-medium">Join free webinars by top doctors.</p>
             </div>
           </div>
         </section>
