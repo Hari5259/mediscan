@@ -35,7 +35,6 @@ const Dashboard = () => {
     { id: 'medicine-reminder', icon: Bell, label: 'Reminders', path: '/medicine-reminder' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
-    { id: 'webinars', icon: Video, label: 'Live Sessions', path: '/webinars' },
   ];
 
   return (
