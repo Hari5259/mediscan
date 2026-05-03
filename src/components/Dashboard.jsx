@@ -4,7 +4,8 @@ import {
   Activity, 
   MessageCircle, 
   Camera, 
-  FileText, 
+  FileText,
+  ClipboardList, 
   AlertCircle, 
   ChevronRight, 
   Search,
@@ -38,7 +39,7 @@ const Dashboard = () => {
     { id: 'chatbot', label: 'Health AI', icon: MessageCircle, path: '/chatbot' },
     { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
     { id: 'bmi-calculator', label: 'BMI Index', icon: Scale, path: '/bmi-calculator' },
-    { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
+    { id: 'health-reports', icon: ClipboardList, label: 'Health Report', path: '/health-reports' },
     { id: 'food-tracker', icon: UtensilsCrossed, label: 'Food Tracker', path: '/food-tracker' },
     { id: 'medicine-reminder', icon: Bell, label: 'Reminders', path: '/medicine-reminder' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
@@ -104,24 +105,24 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden">
             <div className="section-card border-r rounded-none">
-              <span className="section-label">Your Current Location</span>
-              <span className="section-value">Bengaluru</span>
-              <span className="section-sub">KA, India - Reliable Connectivity</span>
+              <span className="section-label">Identity Core</span>
+              <span className="section-value text-[24px]">John Doe</span>
+              <span className="section-sub font-bold text-green-600">Verified Citizen Node</span>
             </div>
             <div className="section-card border-r rounded-none">
-              <span className="section-label">Health Priority</span>
-              <span className="section-value">Urgent</span>
-              <span className="section-sub">Analyze symptoms immediately</span>
+              <span className="section-label">ABHA Address</span>
+              <span className="section-value text-[24px]">john.doe@abdm</span>
+              <span className="section-sub font-bold">National Health ID Active</span>
             </div>
             <div className="section-card border-r rounded-none">
-              <span className="section-label">Last Sync Date</span>
-              <span className="section-value">01 May'26</span>
-              <span className="section-sub">Friday - 12:30 PM</span>
+              <span className="section-label">Government ID (Aadhaar)</span>
+              <span className="section-value text-[24px]">•••• 4567</span>
+              <span className="section-sub font-bold text-blue-600">Biometrics Synced</span>
             </div>
             <div className="section-card rounded-none">
-              <span className="section-label">Connected Device</span>
-              <span className="section-value">MediScan Pro</span>
-              <span className="section-sub">Optical Core v4.2 Active</span>
+              <span className="section-label">Biological Profile</span>
+              <span className="section-value text-[24px]">O+ (Pos)</span>
+              <span className="section-sub font-bold">Universal Donor</span>
             </div>
           </div>
 
@@ -232,7 +233,7 @@ const Dashboard = () => {
             className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
           >
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
-              <FileText size={32} />
+              <ClipboardList size={32} />
             </div>
             <div>
               <h4 className="text-[18px] font-extrabold mb-1">Digital Vault</h4>
