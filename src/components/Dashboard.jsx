@@ -124,11 +124,11 @@ const Dashboard = () => {
               <span className="section-sub font-bold text-green-600">Verified Citizen Node</span>
             </div>
             <div className="section-card border-r rounded-none">
-              <span className="section-label">ABHA Address</span>
+              <span className="section-label">Primary Email</span>
               <span className="section-value text-[24px] truncate" title={userProfile.email}>
                 {userProfile.email}
               </span>
-              <span className="section-sub font-bold">National Health ID Active</span>
+              <span className="section-sub font-bold">Communication Link Active</span>
             </div>
             <div className="section-card border-r rounded-none">
               <span className="section-label">Government ID (Aadhaar)</span>

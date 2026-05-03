@@ -9,7 +9,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     firstName: 'John',
     lastName: 'Doe',
-    email: 'john.doe@abdm',
+    email: 'user@gmail.com',
     phone: '+91 98765 43210',
     location: 'Bengaluru, KA, India'
   });
@@ -68,7 +68,7 @@ export default function Profile() {
                 <h3 className="text-[24px] font-extrabold">{formData.firstName} {formData.lastName}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                    <Shield size={12} /> Verified ABHA: {formData.email}
+                    <Shield size={12} /> Verified Email: {formData.email}
                   </span>
                 </div>
               </div>
