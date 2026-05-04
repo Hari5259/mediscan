@@ -20,6 +20,7 @@ import MedicineReminder from './components/MedicineReminder';
 import Webinars from './components/Webinars';
 import Profile from './components/Profile';
 import ExerciseModule from './components/ExerciseModule';
+import BreathingExercise from './components/BreathingExercise';
 import './App.css';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path="/webinars" element={<Webinars />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/exercise" element={<ExerciseModule />} />
+        <Route path="/breathing" element={<BreathingExercise />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />

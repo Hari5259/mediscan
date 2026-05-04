@@ -62,7 +62,11 @@ export default function ExerciseModule() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {categories.map((category) => (
-              <div key={category.id} className="bg-white border border-gray-100 rounded-[16px] overflow-hidden shadow-lg hover:shadow-xl transition-all group cursor-pointer">
+              <div 
+                key={category.id} 
+                onClick={() => category.id === 'breathing' && navigate('/breathing')}
+                className="bg-white border border-gray-100 rounded-[16px] overflow-hidden shadow-lg hover:shadow-xl transition-all group cursor-pointer"
+              >
                 <div className={`h-32 bg-gradient-to-r ${category.gradient} relative p-6 flex flex-col justify-between`}>
                   <div className="flex justify-between items-start">
                     <span className="bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-sm">
