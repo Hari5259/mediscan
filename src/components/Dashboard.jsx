@@ -21,7 +21,8 @@ import {
   Download,
   Watch,
   RefreshCw,
-  User
+  User,
+  Dumbbell
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -54,6 +55,7 @@ const Dashboard = () => {
     { id: 'health-reports', icon: ClipboardList, label: 'Health Report', path: '/health-reports' },
     { id: 'food-tracker', icon: UtensilsCrossed, label: 'Food Tracker', path: '/food-tracker' },
     { id: 'medicine-reminder', icon: Bell, label: 'Reminders', path: '/medicine-reminder' },
+    { id: 'exercise', icon: Dumbbell, label: 'Exercise', path: '/exercise' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
   ];
@@ -290,6 +292,18 @@ const Dashboard = () => {
             <div>
               <h4 className="text-[18px] font-extrabold mb-1">Live Sessions</h4>
               <p className="text-[13px] text-gray-500 font-medium">Join free webinars by top doctors.</p>
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/exercise')}
+            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
+          >
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
+              <Dumbbell size={32} />
+            </div>
+            <div>
+              <h4 className="text-[18px] font-extrabold mb-1">Activity & Yoga</h4>
+              <p className="text-[13px] text-gray-500 font-medium">Breathing, Exercise, and Yoga.</p>
             </div>
           </div>
         </section>
