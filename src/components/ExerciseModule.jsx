@@ -67,6 +67,7 @@ export default function ExerciseModule() {
                 onClick={() => {
                   if (category.id === 'breathing') navigate('/breathing');
                   if (category.id === 'physical') navigate('/physical');
+                  if (category.id === 'yoga') navigate('/yoga');
                 }}
                 className="bg-white border border-gray-100 rounded-[16px] overflow-hidden shadow-lg hover:shadow-xl transition-all group cursor-pointer"
               >

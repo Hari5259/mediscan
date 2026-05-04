@@ -22,6 +22,7 @@ import Profile from './components/Profile';
 import ExerciseModule from './components/ExerciseModule';
 import BreathingExercise from './components/BreathingExercise';
 import PhysicalTraining from './components/PhysicalTraining';
+import YogaMeditation from './components/YogaMeditation';
 import './App.css';
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
         <Route path="/exercise" element={<ExerciseModule />} />
         <Route path="/breathing" element={<BreathingExercise />} />
         <Route path="/physical" element={<PhysicalTraining />} />
+        <Route path="/yoga" element={<YogaMeditation />} />
 
         {/* Default redirect to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
