@@ -64,7 +64,10 @@ export default function ExerciseModule() {
             {categories.map((category) => (
               <div 
                 key={category.id} 
-                onClick={() => category.id === 'breathing' && navigate('/breathing')}
+                onClick={() => {
+                  if (category.id === 'breathing') navigate('/breathing');
+                  if (category.id === 'physical') navigate('/physical');
+                }}
                 className="bg-white border border-gray-100 rounded-[16px] overflow-hidden shadow-lg hover:shadow-xl transition-all group cursor-pointer"
               >
                 <div className={`h-32 bg-gradient-to-r ${category.gradient} relative p-6 flex flex-col justify-between`}>
