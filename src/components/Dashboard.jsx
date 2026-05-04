@@ -22,7 +22,9 @@ import {
   Watch,
   RefreshCw,
   User,
-  Dumbbell
+  Dumbbell,
+  Wind,
+  Heart
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -55,7 +57,6 @@ const Dashboard = () => {
     { id: 'health-reports', icon: ClipboardList, label: 'Health Report', path: '/health-reports' },
     { id: 'food-tracker', icon: UtensilsCrossed, label: 'Food Tracker', path: '/food-tracker' },
     { id: 'medicine-reminder', icon: Bell, label: 'Reminders', path: '/medicine-reminder' },
-    { id: 'exercise', icon: Dumbbell, label: 'Exercise', path: '/exercise' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
     { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
   ];
@@ -220,6 +221,53 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Unique Exercise Module Banner */}
+        <div 
+          onClick={() => navigate('/exercise')}
+          className="mt-8 bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-[24px] overflow-hidden relative cursor-pointer group shadow-2xl border border-gray-800"
+        >
+          {/* Background decorations */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 group-hover:bg-green-500/20 transition-all duration-500"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 group-hover:bg-blue-500/20 transition-all duration-500"></div>
+          
+          <div className="relative p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-8 z-10 flex-col md:flex-row text-center md:text-left">
+              {/* Great Unique Logo */}
+              <div className="relative shrink-0">
+                <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center transform rotate-3 group-hover:rotate-6 transition-transform duration-300 shadow-lg shadow-green-500/30">
+                  <Dumbbell size={48} className="text-white transform -rotate-3 group-hover:-rotate-6 transition-transform duration-300" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <Wind size={20} className="text-cyan-500" />
+                </div>
+                <div className="absolute -top-2 -left-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <Heart size={16} className="text-rose-500" />
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex items-center gap-3 mb-2 justify-center md:justify-start">
+                  <span className="px-3 py-1 bg-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-full backdrop-blur-sm border border-white/20">
+                    Premium Module
+                  </span>
+                </div>
+                <h3 className="text-white text-[32px] font-black tracking-tight leading-none mb-3">
+                  Wellness & Activity Hub
+                </h3>
+                <p className="text-gray-400 text-[15px] font-medium max-w-md">
+                  Elevate your physical and mental health with guided breathing, structured workouts, and mindfulness yoga.
+                </p>
+              </div>
+            </div>
+            
+            <div className="z-10 shrink-0">
+              <button className="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-[15px] flex items-center gap-3 group-hover:bg-green-50 transition-colors">
+                Enter Hub <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Feature Highlights Section */}
         <section className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div 
@@ -292,18 +340,6 @@ const Dashboard = () => {
             <div>
               <h4 className="text-[18px] font-extrabold mb-1">Live Sessions</h4>
               <p className="text-[13px] text-gray-500 font-medium">Join free webinars by top doctors.</p>
-            </div>
-          </div>
-          <div
-            onClick={() => navigate('/exercise')}
-            className="bg-white/95 backdrop-blur px-8 py-6 rounded-[12px] shadow-xl border border-white/20 flex items-center gap-6 group hover:bg-white transition-colors cursor-pointer"
-          >
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
-              <Dumbbell size={32} />
-            </div>
-            <div>
-              <h4 className="text-[18px] font-extrabold mb-1">Activity & Yoga</h4>
-              <p className="text-[13px] text-gray-500 font-medium">Breathing, Exercise, and Yoga.</p>
             </div>
           </div>
         </section>
