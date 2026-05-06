@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Bot, RotateCcw, X, Plus, Paperclip, Smile, Activity, MessageCircle, Camera, FileText, Users, AlertCircle, Shield } from 'lucide-react';
+import { Send, Bot, RotateCcw, Plus, Activity, MessageCircle, Camera, FileText, Users, AlertCircle, Shield, Sparkles, Clock, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
@@ -8,7 +8,7 @@ const Chatbot = () => {
     { 
       id: 1, 
       type: 'bot', 
-      text: "HELLO. I AM YOUR MEDISCAN NEURAL ASSISTANT. HOW CAN I AID YOUR CLINICAL INQUIRY TODAY?",
+      text: "Greetings. I am your MediScan AI Health Assistant. How may I support your medical inquiries or wellness goals today?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -23,7 +23,7 @@ const Chatbot = () => {
     { id: 'medicine-scanner', label: 'Medicine Scan', icon: Camera, path: '/medicine-scanner' },
     { id: 'health-reports', icon: FileText, label: 'Health Report', path: '/health-reports' },
     { id: 'doctors', icon: Users, label: 'Find Doctors', path: '/doctors' },
-    { id: 'emergency', icon: AlertCircle, label: 'Emergency', path: '/emergency' },
+    { id: 'emergency', icon: AlertCircle, label: 'Emergency Response', path: '/emergency' },
   ];
 
   const scrollToBottom = () => {
@@ -58,16 +58,16 @@ const Chatbot = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, botResponse]);
-    }, 1200);
+    }, 1500);
   };
 
   const getResponse = (query) => {
     const q = query.toLowerCase();
-    if (q.includes('hello') || q.includes('hi')) return "Greetings. I am online and ready to assist with your medical questions or portal navigation.";
-    if (q.includes('fever')) return "A fever is a systemic inflammatory response. I recommend using our Symptom Checker for a detailed diagnostic estimation.";
-    if (q.includes('report')) return "Your clinical dossiers are stored securely in the 'Health Reports' vault.";
-    if (q.includes('doctor')) return "You can access the specialist registry to book secure consultations.";
-    return "Understood. Please provide more clinical context or select a module from the dashboard for specialized analysis.";
+    if (q.includes('hello') || q.includes('hi')) return "Greetings. I am online and ready to provide medically-informed guidance or assist with your portal navigation.";
+    if (q.includes('fever')) return "A fever is a clinical indication of an immune response. For a more comprehensive evaluation, please utilize our Symptom Checker module.";
+    if (q.includes('report')) return "Your secure clinical documentation is stored within the 'Health Reports' section of your dashboard.";
+    if (q.includes('doctor')) return "You can browse the specialist directory to schedule a consultation with a certified medical professional.";
+    return "I have received your query. Please provide additional clinical context, or I can direct you to one of our specialized diagnostic modules for a more detailed analysis.";
   };
 
   return (
@@ -75,38 +75,51 @@ const Chatbot = () => {
       <Navbar />
       
       <main className="floating-container animate-slide-up">
-        <div className="module-tabs">
+        <div className="module-tabs bg-white/80 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-white/40">
           {tabs.map((tab) => (
             <div
               key={tab.id}
               onClick={() => navigate(tab.path)}
-              className={`module-tab-item ${tab.id === 'chatbot' ? 'active' : ''}`}
+              className={`module-tab-item group ${tab.id === 'chatbot' ? 'active' : ''}`}
             >
-              <tab.icon size={24} className="icon" />
-              <span>{tab.label}</span>
+              <tab.icon size={22} className={`transition-colors duration-300 ${tab.id === 'chatbot' ? 'text-[#1e40af]' : 'text-slate-400 group-hover:text-slate-600'}`} />
+              <span className={`text-[11px] font-bold uppercase tracking-widest ${tab.id === 'chatbot' ? 'text-[#1e40af]' : 'text-slate-400 group-hover:text-slate-600'}`}>
+                {tab.label}
+              </span>
             </div>
           ))}
         </div>
 
-        <div className="main-floating-card mt-4 overflow-hidden flex flex-col h-[700px]">
+        <div className="main-floating-card mt-6 overflow-hidden flex flex-col h-[750px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)] border border-slate-100 rounded-[32px] bg-white/95 backdrop-blur-xl transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.2)]">
           {/* Chat Header */}
-          <div className="p-8 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="w-14 h-14 rounded-[16px] bg-[#008cff] flex items-center justify-center text-white shadow-lg">
-                <Bot size={28} />
+          <div className="p-8 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between backdrop-blur-sm">
+            <div className="flex items-center gap-6">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] flex items-center justify-center text-white shadow-xl transform transition-transform hover:scale-105">
+                  <Bot size={32} />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-4 border-white rounded-full"></div>
               </div>
               <div>
-                <h2 className="text-[22px] font-black tracking-tighter italic">NEURAL ASSISTANT</h2>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Core Online</span>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-[24px] font-black tracking-tight text-slate-800">AI Health Assistant</h2>
+                  <Sparkles size={18} className="text-blue-500 animate-pulse" />
+                </div>
+                <div className="flex items-center gap-2 mt-1">
+                  <Shield size={12} className="text-[#1e40af]" />
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">End-to-End Encrypted Session</span>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex flex-col items-end">
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">System Status</span>
+                <span className="text-[12px] font-bold text-green-600 uppercase tracking-tight">Optimal Performance</span>
+              </div>
               <button 
                 onClick={() => setMessages([messages[0]])}
-                className="w-10 h-10 bg-white hover:bg-gray-100 rounded-full flex items-center justify-center text-gray-400 transition-all shadow-sm"
+                className="w-12 h-12 bg-white hover:bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 transition-all shadow-sm border border-slate-100"
+                title="Clear Session"
               >
                 <RotateCcw size={20} />
               </button>
@@ -114,30 +127,34 @@ const Chatbot = () => {
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-10 space-y-8 bg-white">
+          <div className="flex-1 overflow-y-auto p-10 space-y-10 bg-slate-50/30">
             {messages.map((msg) => (
               <div 
                 key={msg.id} 
-                className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}
               >
-                <div className={`max-w-[70%] px-6 py-4 rounded-[18px] text-[16px] font-bold leading-relaxed shadow-sm ${
-                  msg.type === 'user' 
-                  ? 'bg-[#008cff] text-white rounded-tr-none' 
-                  : 'bg-gray-50 text-gray-800 rounded-tl-none border border-gray-100'
-                }`}>
-                  {msg.text}
-                  <div className={`text-[10px] mt-2 opacity-50 font-black uppercase tracking-widest ${msg.type === 'user' ? 'text-right' : 'text-left'}`}>
-                    {msg.timestamp}
+                <div className={`max-w-[75%] relative ${msg.type === 'user' ? 'order-1' : 'order-2'}`}>
+                  <div className={`px-8 py-5 rounded-[24px] text-[15px] font-medium leading-relaxed shadow-lg transition-all duration-300 ${
+                    msg.type === 'user' 
+                    ? 'bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white rounded-tr-none' 
+                    : 'bg-white text-slate-700 rounded-tl-none border border-slate-100'
+                  }`}>
+                    {msg.text}
+                  </div>
+                  <div className={`flex items-center gap-2 mt-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    {msg.type === 'bot' && <CheckCircle size={10} className="text-blue-500" />}
+                    <Clock size={10} />
+                    <span>{msg.timestamp}</span>
                   </div>
                 </div>
               </div>
             ))}
             {isTyping && (
-              <div className="flex justify-start">
-                <div className="bg-gray-50 rounded-[18px] rounded-tl-none px-6 py-5 flex gap-1.5 animate-pulse">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                  <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+              <div className="flex justify-start animate-pulse">
+                <div className="bg-white border border-slate-100 rounded-[24px] rounded-tl-none px-8 py-6 flex gap-2 shadow-md">
+                  <div className="w-2.5 h-2.5 bg-blue-400/50 rounded-full animate-bounce"></div>
+                  <div className="w-2.5 h-2.5 bg-blue-400/50 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-2.5 h-2.5 bg-blue-400/50 rounded-full animate-bounce [animation-delay:0.4s]"></div>
                 </div>
               </div>
             )}
@@ -145,9 +162,9 @@ const Chatbot = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-8 bg-gray-50 border-t border-gray-100">
-            <form onSubmit={handleSend} className="relative flex items-center gap-4">
-              <button type="button" className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-300 hover:text-[#008cff] transition-all shadow-sm">
+          <div className="p-8 bg-white border-t border-slate-100">
+            <form onSubmit={handleSend} className="relative flex items-center gap-5 max-w-[900px] mx-auto">
+              <button type="button" className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 hover:text-[#1e40af] hover:bg-slate-100 transition-all shadow-sm border border-slate-100">
                 <Plus size={24} />
               </button>
               <div className="flex-1 relative">
@@ -155,18 +172,21 @@ const Chatbot = () => {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="TRANSMIT MESSAGE..."
-                  className="w-full bg-white border-2 border-gray-100 rounded-full px-8 py-4 text-[16px] font-bold focus:border-[#008cff] outline-none shadow-sm transition-all"
+                  placeholder="Ask a medical question or describe symptoms..."
+                  className="w-full bg-slate-50/50 border-2 border-slate-100 rounded-2xl px-8 py-5 text-[16px] font-semibold text-slate-700 focus:border-[#3b82f6] focus:bg-white focus:shadow-[0_10px_30px_rgba(59,130,246,0.1)] outline-none transition-all placeholder:text-slate-300"
                 />
               </div>
               <button 
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="w-14 h-14 bg-[#008cff] text-white rounded-full flex items-center justify-center disabled:opacity-30 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-200"
+                className="w-16 h-16 bg-[#1e40af] hover:bg-[#1e3a8a] text-white rounded-2xl flex items-center justify-center disabled:opacity-30 transition-all hover:scale-105 active:scale-95 shadow-[0_15px_30px_-10px_rgba(30,64,175,0.4)]"
               >
-                <Send size={24} />
+                <Send size={28} />
               </button>
             </form>
+            <div className="mt-4 text-center">
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">Medical Guidance Powered by MediScan AI Core v4.2</p>
+            </div>
           </div>
         </div>
       </main>
@@ -175,3 +195,4 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
+
