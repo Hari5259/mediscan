@@ -274,6 +274,115 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderEPharmaModule = () => (
+    <div className="animate-slide-up space-y-10">
+      <div className="bg-gradient-to-br from-purple-900 via-slate-900 to-indigo-950 rounded-[32px] p-12 relative overflow-hidden shadow-2xl border border-white/5">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] -mr-48 -mt-48"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-6 mb-8">
+              <div className="w-20 h-20 bg-purple-600 rounded-[24px] flex items-center justify-center text-white shadow-2xl shadow-purple-600/40">
+                <Pill size={40} />
+              </div>
+              <div>
+                <h2 className="text-[36px] font-black text-white uppercase italic tracking-tighter leading-none mb-1">E-Pharma Network</h2>
+                <p className="text-purple-300 font-bold uppercase tracking-[0.2em] text-[12px]">Digital Prescription Protocol • Global Node Sync</p>
+              </div>
+            </div>
+            <p className="text-slate-300 text-[18px] font-medium leading-relaxed mb-10">
+              Manage pharmaceutical authorizations and synchronize digital prescriptions with the global pharmacy network in real-time.
+            </p>
+            <div className="flex gap-4">
+              <button className="px-10 py-5 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black uppercase tracking-widest text-[13px] transition-all flex items-center gap-3 shadow-xl hover:-translate-y-1">
+                <FileText size={20} /> Issue Digital Script
+              </button>
+              <button className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-2xl font-black uppercase tracking-widest text-[13px] transition-all flex items-center gap-3">
+                <Search size={20} /> Inventory Search
+              </button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 text-center">
+              <span className="text-purple-400 font-black text-[28px] block">1,402</span>
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Active Pharmacies</span>
+            </div>
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 text-center">
+              <span className="text-emerald-400 font-black text-[28px] block">99.9%</span>
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Stock Uptime</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-2 bg-white rounded-[32px] border border-slate-100 p-10 shadow-sm">
+          <div className="flex items-center justify-between mb-10">
+            <h3 className="text-[24px] font-black uppercase italic tracking-tighter text-slate-800 flex items-center gap-3">
+              <Globe size={26} className="text-purple-600" /> Global Medicine Registry
+            </h3>
+            <div className="flex gap-2">
+              <span className="px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-black uppercase tracking-widest">Filter: Critical</span>
+            </div>
+          </div>
+          <div className="space-y-4">
+            {[
+              { name: 'Amoxicillin Beta-Core', stock: 'High Stock', level: 92, id: 'PHR-992-A', color: 'text-emerald-500' },
+              { name: 'Insulin Neural-Sync', stock: 'Low Stock', level: 14, id: 'PHR-102-I', color: 'text-rose-500' },
+              { name: 'Atorvastatin Alpha', stock: 'Optimal', level: 76, id: 'PHR-551-S', color: 'text-blue-500' },
+              { name: 'Metformin Global', stock: 'High Stock', level: 88, id: 'PHR-334-M', color: 'text-emerald-500' },
+            ].map((med, i) => (
+              <div key={i} className="p-6 border border-slate-50 bg-slate-50/50 rounded-2xl flex items-center justify-between group hover:bg-white hover:border-purple-200 hover:shadow-xl transition-all cursor-pointer">
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-purple-600 group-hover:text-white transition-all">
+                    <Pill size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-[18px] leading-tight">{med.name}</h4>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Registry ID: {med.id}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-10">
+                  <div className="text-right">
+                    <span className={`text-[12px] font-black uppercase tracking-tighter ${med.color}`}>{med.stock}</span>
+                    <div className="w-32 h-1.5 bg-slate-200 rounded-full mt-2 overflow-hidden">
+                      <div className={`h-full ${med.level < 20 ? 'bg-rose-500' : 'bg-purple-600'}`} style={{ width: `${med.level}%` }}></div>
+                    </div>
+                  </div>
+                  <ChevronRight size={20} className="text-slate-300 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white rounded-[32px] border border-slate-100 p-10 shadow-sm">
+          <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 text-slate-800">Linked Pharmacy Nodes</h3>
+          <div className="space-y-8">
+            {[
+              { name: 'Central Pharma 01', status: 'Online', distance: '0.4km' },
+              { name: 'Nexus Medical Bay', status: 'Online', distance: '1.2km' },
+              { name: 'Bio-Sync Dispensary', status: 'Offline', distance: '2.5km' },
+            ].map((node, i) => (
+              <div key={i} className="flex items-center justify-between group cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                  <div>
+                    <h5 className="font-black text-slate-900 text-[14px]">{node.name}</h5>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{node.distance} • Sync Active</p>
+                  </div>
+                </div>
+                <button className="text-[10px] font-black uppercase tracking-widest text-purple-600 hover:underline">Connect</button>
+              </div>
+            ))}
+            <div className="pt-6 border-t border-slate-50 mt-6">
+              <button className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-purple-600 transition-all shadow-lg">
+                View Global Network Map
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -366,6 +475,8 @@ const DoctorDashboard = () => {
             renderEmergencyModule()
           ) : activeTab === 'diagnosis' ? (
             renderAISupportModule()
+          ) : activeTab === 'pharma' ? (
+            renderEPharmaModule()
           ) : (
             <div className="animate-slide-up">
               <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
