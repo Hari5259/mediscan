@@ -112,8 +112,8 @@ export default function Login() {
 
               <div className="space-y-3 group/field">
                 <div className="flex justify-between items-center px-1">
-                  <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest transition-colors group-focus-within/field:text-[#008cff]">Neural Key</label>
-                  <button type="button" className="text-[11px] text-[#008cff] font-black uppercase hover:underline tracking-tighter">Recover Access</button>
+                  <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest transition-colors group-focus-within/field:text-[#008cff]">Secure Password</label>
+                  <button type="button" className="text-[11px] text-[#008cff] font-black uppercase hover:underline tracking-tighter">Reset Password</button>
                 </div>
                 <div className="relative">
                   <input

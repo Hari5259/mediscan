@@ -25,7 +25,7 @@ export default function Terms() {
       desc: "Maintain strict security of your credentials and operate within clinical guidelines. Failure to comply will result in immediate network ejection.",
       list: [
         'Provide accurate biometric information',
-        'Maintain neural key confidentiality',
+        'Maintain password confidentiality',
         'Authorized clinical use only',
         'No third-party node sharing',
         'Compliance with global bio-laws',

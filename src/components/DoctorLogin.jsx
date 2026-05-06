@@ -47,7 +47,7 @@ export default function DoctorLogin() {
     const newErrors = {};
     if (!formData.doctorId.trim()) newErrors.doctorId = 'Registry ID required';
     if (!formData.email.trim()) newErrors.email = 'Secure email required';
-    if (!formData.password) newErrors.password = 'Neural passcode required';
+    if (!formData.password) newErrors.password = 'Secure password required';
     if (!formData.idProofFile) newErrors.idProofFile = 'Identity proof mandatory';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -155,7 +155,7 @@ export default function DoctorLogin() {
               </div>
 
               <div className="space-y-3">
-                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Neural Key</label>
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Clinical Password</label>
                 <div className="relative">
                   <input
                     type="password"

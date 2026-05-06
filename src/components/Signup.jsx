@@ -161,7 +161,7 @@ export default function Signup() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Neural Key</label>
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Create Password</label>
                 <input
                   type="password"
                   name="password"
@@ -173,7 +173,7 @@ export default function Signup() {
                 />
               </div>
               <div className="space-y-3">
-                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Verify Key</label>
+                <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Confirm Password</label>
                 <input
                   type="password"
                   name="confirmPassword"
