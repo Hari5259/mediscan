@@ -28,7 +28,11 @@ import {
   Globe,
   ArrowRight,
   Pill,
-  RefreshCw
+  RefreshCw,
+  Lock,
+  Database,
+  FileSearch,
+  Key
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -383,6 +387,134 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderDossiersModule = () => (
+    <div className="animate-slide-up space-y-10">
+      <div className="bg-gradient-to-br from-emerald-900 via-slate-900 to-teal-950 rounded-[40px] p-16 relative overflow-hidden shadow-2xl border border-white/5">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,#10b9811a_0%,transparent_50%)]"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-8 mb-8">
+              <div className="w-24 h-24 bg-emerald-600 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-emerald-600/40 transform rotate-3">
+                <ShieldCheck size={48} />
+              </div>
+              <div>
+                <h2 className="text-[42px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Secure Dossier Vault</h2>
+                <div className="flex items-center gap-4">
+                  <span className="px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-[11px] font-black uppercase tracking-widest rounded-full border border-emerald-500/30">AES-256 Quantum Encrypted</span>
+                  <div className="flex items-center gap-2 text-white/40 text-[11px] font-black uppercase tracking-widest">
+                    <Lock size={14} /> Level 5 Clearance
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="text-slate-300 text-[20px] font-medium leading-relaxed mb-12 max-w-xl">
+              Access the high-integrity clinical archives. Each dossier is a neural-synced medical history, verified through decentralized clinical consensus.
+            </p>
+            <div className="flex gap-6">
+              <button className="px-12 py-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 active:scale-95 group">
+                <Database size={22} className="group-hover:animate-bounce" /> Access Archives
+              </button>
+              <div className="relative group">
+                <input 
+                  type="text" 
+                  placeholder="Sync Patient Node ID..." 
+                  className="bg-white/5 border border-white/10 rounded-[24px] py-6 px-10 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-black uppercase tracking-widest text-[12px] w-80"
+                />
+                <FileSearch className="absolute right-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-emerald-500 transition-colors" size={20} />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full md:w-96 space-y-6">
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8">
+              <h4 className="text-white text-[13px] font-black uppercase tracking-widest mb-6 flex items-center gap-2">
+                <RefreshCw size={16} className="text-emerald-500 animate-spin-slow" /> Recent Vault Syncs
+              </h4>
+              <div className="space-y-6">
+                {[
+                  { node: 'PAT-9921-X', time: '12s ago', action: 'Biometric Update' },
+                  { node: 'PAT-1022-Y', time: '5m ago', action: 'Neural Scan Sync' },
+                  { node: 'PAT-5531-Z', time: '22m ago', action: 'Archive Export' }
+                ].map((sync, i) => (
+                  <div key={i} className="flex justify-between items-center border-b border-white/5 pb-4 last:border-0 last:pb-0">
+                    <div>
+                      <span className="text-white font-black text-[13px] block">{sync.node}</span>
+                      <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{sync.action}</span>
+                    </div>
+                    <span className="text-white/20 text-[10px] font-bold italic">{sync.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-emerald-600/10 border border-emerald-500/20 rounded-[24px] p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Key size={24} className="text-emerald-500" />
+                <span className="text-white font-black uppercase tracking-widest text-[11px]">Integrity Audit: Passed</span>
+              </div>
+              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+          <div className="flex items-center justify-between mb-12">
+            <h3 className="text-[26px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4">
+              <Database size={32} className="text-emerald-600" /> Clinical Data Nodes
+            </h3>
+            <button className="text-[12px] font-black uppercase tracking-widest text-emerald-600 hover:underline">Batch Sync</button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              { label: 'Total Dossiers', count: '12,402', growth: '+142', sub: 'Verified Archives' },
+              { label: 'Active Syncs', count: '24 Nodes', growth: 'Live', sub: 'Biometric Stream' },
+              { label: 'Data Integrity', count: '99.99%', growth: 'Max', sub: 'Blockchain Verified' },
+              { label: 'Storage Load', count: '42.8 TB', growth: '34%', sub: 'Global Cluster 09' },
+            ].map((node, i) => (
+              <div key={i} className="p-8 border border-slate-50 bg-slate-50/50 rounded-[32px] group hover:bg-white hover:border-emerald-200 hover:shadow-2xl transition-all cursor-pointer text-center md:text-left">
+                <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">{node.label}</span>
+                <div className="flex items-baseline justify-center md:justify-start gap-4 mb-2">
+                  <span className="text-[36px] font-black text-slate-900 leading-none">{node.count}</span>
+                  <span className="text-[12px] font-black text-emerald-500 uppercase tracking-tighter">{node.growth}</span>
+                </div>
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest italic">{node.sub}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-slate-900 rounded-[40px] p-12 text-white relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,#10b9811a_0%,transparent_50%)]"></div>
+          <h3 className="text-[24px] font-black uppercase italic tracking-tighter mb-10 flex items-center gap-4">
+            <FileSearch size={28} className="text-emerald-500" /> Intelligence Feed
+          </h3>
+          <div className="space-y-8">
+            {[
+              { title: 'Node Consistency Audit', status: 'Completed', details: 'Sector 04-A data redundancy check finished without anomalies.', color: 'text-emerald-400' },
+              { title: 'Archive Decentralization', status: 'In Progress', details: 'Syncing clinical dossiers with global node mesh 09.', color: 'text-blue-400' },
+              { title: 'Unauthorized Sync Attempt', status: 'Blocked', details: 'IP-Node 192.x.x.x denied access to patient registry PAT-001.', color: 'text-rose-500' }
+            ].map((feed, i) => (
+              <div key={i} className="group cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`text-[12px] font-black uppercase tracking-widest ${feed.color}`}>{feed.status}</span>
+                  <ChevronRight size={16} className="text-white/20 group-hover:text-emerald-500 group-hover:translate-x-2 transition-all" />
+                </div>
+                <h4 className="text-[18px] font-black uppercase tracking-tight mb-2">{feed.title}</h4>
+                <p className="text-slate-400 text-[14px] font-medium leading-relaxed italic">{feed.details}</p>
+              </div>
+            ))}
+            <div className="pt-8 mt-4 border-t border-white/5">
+              <button className="w-full py-5 bg-white text-slate-900 rounded-[24px] font-black uppercase tracking-widest text-[12px] hover:bg-emerald-500 hover:text-white transition-all shadow-xl">
+                Generate Network Integrity Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -477,6 +609,8 @@ const DoctorDashboard = () => {
             renderAISupportModule()
           ) : activeTab === 'pharma' ? (
             renderEPharmaModule()
+          ) : activeTab === 'dossiers' ? (
+            renderDossiersModule()
           ) : (
             <div className="animate-slide-up">
               <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
