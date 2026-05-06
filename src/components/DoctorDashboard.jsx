@@ -40,7 +40,10 @@ import {
   UserPlus,
   MoreVertical,
   Mail,
-  Phone
+  Phone,
+  Plus,
+  MapPin,
+  MessageSquare
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -49,6 +52,7 @@ const DoctorDashboard = () => {
   const [activeTab, setActiveTab] = useState('patients');
   const [viewType, setViewType] = useState('All Nodes');
   const [isInitializing, setIsInitializing] = useState(false);
+  const [dutyStatus, setDutyStatus] = useState('On Duty');
 
   useEffect(() => {
     const doctorData = sessionStorage.getItem('doctorLogged');
@@ -784,6 +788,156 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderScheduleModule = () => (
+    <div className="animate-slide-up space-y-10">
+      <div className="bg-gradient-to-br from-amber-900 via-slate-900 to-orange-950 rounded-[40px] p-16 relative overflow-hidden shadow-2xl border border-white/5">
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_20%,#f59e0b1a_0%,transparent_50%)]"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-8 mb-8">
+              <div className="w-24 h-24 bg-amber-500 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-amber-500/40">
+                <Calendar size={48} />
+              </div>
+              <div>
+                <h2 className="text-[42px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Operations Timeline</h2>
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => setDutyStatus(dutyStatus === 'On Duty' ? 'Standby' : 'On Duty')}
+                    className={`px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest border transition-all ${
+                      dutyStatus === 'On Duty' 
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
+                        : 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+                    }`}
+                  >
+                    {dutyStatus} Mode
+                  </button>
+                  <span className="text-white/40 text-[11px] font-black uppercase tracking-widest italic">Sector 09 Clinical Lead</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-slate-300 text-[20px] font-medium leading-relaxed mb-12">
+              Synchronize clinical interventions and virtual consults across the neural mesh. Real-time slot management for high-priority cases.
+            </p>
+            <div className="flex gap-6">
+              <button className="px-12 py-6 bg-amber-500 hover:bg-amber-600 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 active:scale-95 group">
+                <Plus size={22} className="group-hover:rotate-90 transition-transform" /> Initialize Intervention
+              </button>
+              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4">
+                <Clock size={22} /> View Full Week
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full md:w-80 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 text-center">
+            <h4 className="text-amber-500 text-[11px] font-black uppercase tracking-widest mb-4">Current Node Time</h4>
+            <div className="text-white text-[48px] font-black tracking-tighter mb-2 tabular-nums">09:42</div>
+            <span className="text-white/40 text-[10px] font-bold uppercase tracking-[0.3em]">GMT +05:30 • SYNC OK</span>
+            <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-white font-black text-[18px] block">04</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Today</span>
+              </div>
+              <div>
+                <span className="text-white font-black text-[18px] block">12</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Waitlist</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+          <div className="flex items-center justify-between mb-12">
+            <h3 className="text-[26px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4">
+              <Activity size={32} className="text-amber-500" /> Daily Intervention Flow
+            </h3>
+            <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Wednesday, May 06</span>
+          </div>
+
+          <div className="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-50">
+            {[
+              { time: '09:00', patient: 'Alex Rivera', id: 'PAT-9921', type: 'Neural Sync', status: 'Completed', color: 'bg-emerald-500' },
+              { time: '10:30', patient: 'Sarah Johnson', id: 'PAT-1022', type: 'Clinical Consult', status: 'Ongoing', color: 'bg-blue-500 animate-pulse' },
+              { time: '12:00', patient: 'Michael Chen', id: 'PAT-5531', type: 'Diagnostic Audit', status: 'Pending', color: 'bg-amber-500' },
+              { time: '14:30', patient: 'Emma Davis', id: 'PAT-2291', type: 'Biometric Update', status: 'Confirmed', color: 'bg-slate-300' },
+            ].map((op, i) => (
+              <div key={i} className="flex items-start gap-12 group">
+                <span className="text-[12px] font-black text-slate-400 tabular-nums w-10 shrink-0 pt-1">{op.time}</span>
+                <div className="relative z-10 w-6 h-6 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center -ml-[55px] mt-1 group-hover:border-amber-100 transition-all">
+                  <div className={`w-2 h-2 rounded-full ${op.color}`}></div>
+                </div>
+                <div className="flex-1 bg-slate-50/50 border border-slate-50 rounded-[24px] p-8 group-hover:bg-white group-hover:border-amber-200 group-hover:shadow-2xl transition-all cursor-pointer">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="text-[20px] font-black text-slate-900 leading-none mb-2">{op.patient}</h4>
+                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{op.id} • {op.type}</p>
+                    </div>
+                    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                      op.status === 'Completed' ? 'bg-emerald-100 text-emerald-600' : 
+                      op.status === 'Ongoing' ? 'bg-blue-100 text-blue-600' : 'bg-white border border-slate-200 text-slate-400'
+                    }`}>
+                      {op.status}
+                    </span>
+                  </div>
+                  <div className="flex gap-4">
+                    <button className="text-[11px] font-black uppercase tracking-widest text-amber-600 hover:underline">Start Session</button>
+                    <button className="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600">Postpone</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-10">
+          <div className="bg-white rounded-[40px] border border-slate-100 p-10 shadow-sm">
+            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 text-slate-800">Operational Zones</h3>
+            <div className="space-y-6">
+              {[
+                { zone: 'Main Clinical Bay', load: '84%', status: 'Active' },
+                { zone: 'Neural Sync Lab 04', load: '12%', status: 'Available' },
+                { zone: 'Virtual Consult Hub', load: '95%', status: 'Critical' },
+              ].map((zone, i) => (
+                <div key={i} className="p-6 bg-slate-50 rounded-2xl group hover:bg-amber-50 transition-all cursor-pointer">
+                  <div className="flex items-center justify-between mb-4">
+                    <h5 className="font-black text-slate-900 text-[14px] uppercase tracking-tight">{zone.zone}</h5>
+                    <span className="text-[11px] font-black text-amber-500">{zone.status}</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-white rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500" style={{ width: zone.load }}></div>
+                  </div>
+                  <div className="mt-2 text-right">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Load: {zone.load}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-slate-900 rounded-[40px] p-10 text-white relative overflow-hidden group shadow-2xl">
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,#f59e0b1a_0%,transparent_50%)]"></div>
+            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 flex items-center gap-3">
+              <MessageSquare size={24} className="text-amber-500" /> Team Coordination
+            </h3>
+            <div className="space-y-6">
+              <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
+                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-black">H</div>
+                <div>
+                  <p className="text-[12px] font-bold leading-tight">Handover protocol initiated for Night Shift Core.</p>
+                  <span className="text-[10px] text-white/40 uppercase font-bold">12m ago</span>
+                </div>
+              </div>
+              <button className="w-full py-5 bg-white text-slate-900 rounded-[20px] font-black uppercase tracking-widest text-[11px] hover:bg-amber-500 hover:text-white transition-all shadow-xl">
+                Open Mission Control
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -884,9 +1038,10 @@ const DoctorDashboard = () => {
             renderAnalyticsModule()
           ) : activeTab === 'patients' ? (
             renderPatientListModule()
+          ) : activeTab === 'schedule' ? (
+            renderScheduleModule()
           ) : (
             <div className="animate-slide-up">
-              {/* Default View if no tab matches */}
               <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
                 <div className="flex items-center justify-between mb-12">
                   <div>
@@ -896,7 +1051,6 @@ const DoctorDashboard = () => {
                     </p>
                   </div>
                 </div>
-                {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                   {[
                     { label: 'Patient Nodes', value: '24 Active', sub: 'Verified Clinical Registry', color: 'text-blue-600', bg: 'bg-blue-50' },
