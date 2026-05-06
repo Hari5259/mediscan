@@ -36,14 +36,18 @@ import {
   BarChart3,
   PieChart,
   LineChart,
-  Target
+  Target,
+  UserPlus,
+  MoreVertical,
+  Mail,
+  Phone
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
   const [doctorInfo, setDoctorInfo] = useState(null);
   const [activeTab, setActiveTab] = useState('patients');
-  const [viewType, setViewType] = useState('Critical Operations');
+  const [viewType, setViewType] = useState('All Nodes');
   const [isInitializing, setIsInitializing] = useState(false);
 
   useEffect(() => {
@@ -642,6 +646,144 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderPatientListModule = () => (
+    <div className="animate-slide-up space-y-10">
+      <div className="bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+          <div>
+            <h2 className="text-[36px] font-black text-slate-900 uppercase italic tracking-tighter leading-none mb-2">Patient Node Registry</h2>
+            <p className="text-slate-400 font-bold uppercase tracking-widest text-[12px] flex items-center gap-2">
+              <Globe size={16} className="text-blue-500" /> Authorized Clinical Database • Sector 09-Alpha
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <button className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black uppercase tracking-widest text-[12px] transition-all flex items-center gap-3 shadow-xl hover:-translate-y-1">
+              <UserPlus size={18} /> Register New Node
+            </button>
+            <button className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 hover:text-blue-600 transition-all">
+              <Filter size={24} />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative mb-10">
+          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={22} />
+          <input 
+            type="text" 
+            placeholder="Search patient name, biometric ID, or clinical node..." 
+            className="w-full bg-slate-50 border border-slate-100 rounded-[24px] py-6 px-16 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+          />
+        </div>
+
+        <div className="flex items-center gap-4 mb-8 overflow-x-auto no-scrollbar pb-2">
+          {['All Nodes', 'Critical', 'Stable', 'In-Process', 'Archived'].map((type) => (
+            <button
+              key={type}
+              onClick={() => setViewType(type)}
+              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                viewType === type 
+                  ? 'bg-slate-900 text-white shadow-xl' 
+                  : 'bg-white border border-slate-100 text-slate-400 hover:border-blue-200 hover:text-blue-600'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+
+        <div className="overflow-x-auto no-scrollbar">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="border-b border-slate-50 text-left">
+                <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-widest">Patient Node</th>
+                <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-widest">Last Sync</th>
+                <th className="pb-6 text-[11px] font-black text-slate-400 uppercase tracking-widest">Biometric Flow</th>
+                <th className="pb-6"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {[
+                { name: 'Alex Rivera', id: 'PAT-9921-X', status: 'Stable', sync: '2m ago', flow: 94, type: 'stable' },
+                { name: 'Sarah Johnson', id: 'PAT-1022-Y', status: 'Critical', sync: 'Live', flow: 12, type: 'critical' },
+                { name: 'Michael Chen', id: 'PAT-5531-Z', status: 'Stable', sync: '15m ago', flow: 88, type: 'stable' },
+                { name: 'Emma Davis', id: 'PAT-2291-K', status: 'In-Process', sync: '1h ago', flow: 64, type: 'pending' },
+                { name: 'David Wilson', id: 'PAT-3382-L', status: 'Stable', sync: '4h ago', flow: 82, type: 'stable' },
+              ].map((patient, i) => (
+                <tr key={i} className="group hover:bg-slate-50/50 transition-colors cursor-pointer">
+                  <td className="py-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center font-black text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        {patient.name.charAt(0)}
+                      </div>
+                      <div>
+                        <span className="font-black text-slate-900 block group-hover:text-blue-600 transition-colors">{patient.name}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{patient.id}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-6">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${patient.type === 'critical' ? 'bg-rose-500 animate-pulse' : patient.type === 'pending' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+                      <span className={`text-[11px] font-black uppercase tracking-tighter ${patient.type === 'critical' ? 'text-rose-500' : patient.type === 'pending' ? 'text-amber-500' : 'text-emerald-500'}`}>
+                        {patient.status}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-6 text-[12px] font-bold text-slate-500 italic">{patient.sync}</td>
+                  <td className="py-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className={`h-full ${patient.flow < 20 ? 'bg-rose-500' : 'bg-blue-600'}`} style={{ width: `${patient.flow}%` }}></div>
+                      </div>
+                      <span className="text-[11px] font-black text-slate-900">{patient.flow}%</span>
+                    </div>
+                  </td>
+                  <td className="py-6 text-right">
+                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="p-2 hover:bg-blue-100 text-blue-600 rounded-lg transition-all" title="Remote Sync"><RefreshCw size={16} /></button>
+                      <button className="p-2 hover:bg-emerald-100 text-emerald-600 rounded-lg transition-all" title="View Dossier"><ShieldCheck size={16} /></button>
+                      <button className="p-2 hover:bg-slate-200 text-slate-600 rounded-lg transition-all"><MoreVertical size={16} /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-12 flex items-center justify-between border-t border-slate-50 pt-8">
+          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest italic">Showing 05 of 24 Active Patient Nodes</p>
+          <div className="flex gap-2">
+            {[1, 2, 3].map((p) => (
+              <button key={p} className={`w-10 h-10 rounded-xl font-black text-[12px] flex items-center justify-center transition-all ${p === 1 ? 'bg-blue-600 text-white' : 'hover:bg-slate-50 text-slate-400'}`}>
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {[
+          { label: 'Patient Support', desc: 'Direct neural communication channel.', icon: Mail, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+          { label: 'Family Connect', desc: 'Authorized family node dashboard.', icon: Users, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'Emergency Contact', desc: 'Primary trauma intervention line.', icon: Phone, color: 'text-rose-600', bg: 'bg-rose-50' },
+        ].map((tool, i) => (
+          <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-100 flex items-center gap-6 group hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer">
+            <div className={`w-16 h-16 ${tool.bg} rounded-2xl flex items-center justify-center ${tool.color} group-hover:scale-110 transition-transform`}>
+              <tool.icon size={28} />
+            </div>
+            <div>
+              <h4 className="font-black text-slate-900 uppercase tracking-tight">{tool.label}</h4>
+              <p className="text-[12px] text-slate-400 font-bold leading-tight uppercase tracking-widest italic">{tool.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -740,8 +882,11 @@ const DoctorDashboard = () => {
             renderDossiersModule()
           ) : activeTab === 'analytics' ? (
             renderAnalyticsModule()
+          ) : activeTab === 'patients' ? (
+            renderPatientListModule()
           ) : (
             <div className="animate-slide-up">
+              {/* Default View if no tab matches */}
               <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
                 <div className="flex items-center justify-between mb-12">
                   <div>
@@ -750,23 +895,8 @@ const DoctorDashboard = () => {
                       <ShieldCheck size={16} className="text-blue-500" /> Chief Clinical Node • Multi-Modal Operations Active
                     </p>
                   </div>
-                  <div className="flex items-center gap-6 bg-slate-50 p-2 rounded-2xl">
-                    {['Critical Operations', 'Routine Consults'].map((type) => (
-                      <button
-                        key={type}
-                        onClick={() => setViewType(type)}
-                        className={`px-8 py-3 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all ${
-                          viewType === type 
-                            ? 'bg-white text-blue-600 shadow-lg' 
-                            : 'text-slate-400 hover:text-slate-600'
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
                 </div>
-
+                {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                   {[
                     { label: 'Patient Nodes', value: '24 Active', sub: 'Verified Clinical Registry', color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -780,60 +910,6 @@ const DoctorDashboard = () => {
                       <span className={`text-[11px] font-bold ${stat.color} uppercase tracking-tighter`}>{stat.sub}</span>
                     </div>
                   ))}
-                </div>
-
-                <div className="flex items-center justify-between pt-10 border-t border-slate-50">
-                  <div className="flex items-center gap-6">
-                    <span className="text-[13px] font-black text-slate-900 uppercase tracking-widest italic">Command Tools:</span>
-                    <div className="flex gap-4">
-                      {[
-                        { icon: Zap, label: 'Sync Wearables' },
-                        { icon: FileText, label: 'Export Dossiers' },
-                        { icon: RefreshCw, label: 'Refresh Core' }
-                      ].map((btn, i) => (
-                        <button key={i} className="flex items-center gap-3 px-6 py-3 border border-slate-200 rounded-xl text-[12px] font-black text-slate-600 uppercase tracking-widest hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all">
-                          <btn.icon size={16} /> {btn.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <button 
-                    disabled={isInitializing}
-                    onClick={() => { setIsInitializing(true); setTimeout(() => setIsInitializing(false), 2000); }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white min-w-[300px] py-5 rounded-2xl shadow-xl shadow-blue-900/20 flex items-center justify-center gap-4 transition-all hover:-translate-y-1 active:scale-95 group font-black uppercase tracking-widest text-[14px]"
-                  >
-                    {isInitializing ? (
-                      <><div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div><span>Synchronizing...</span></>
-                    ) : (
-                      <><Zap size={24} className="group-hover:animate-pulse" /> Initialize Operations</>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 rounded-[40px] overflow-hidden relative cursor-pointer group shadow-2xl border border-white/5 p-16">
-                <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,#3b82f61a_0%,transparent_70%)]"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
-                  <div className="flex items-center gap-12">
-                    <div className="relative">
-                      <div className="w-32 h-32 bg-blue-600 rounded-[32px] flex items-center justify-center transform rotate-6 group-hover:rotate-12 transition-transform duration-700 shadow-2xl shadow-blue-500/40">
-                        <Cpu size={64} className="text-white transform -rotate-6 group-hover:-rotate-12 transition-transform duration-700" />
-                      </div>
-                      <div className="absolute -bottom-4 -right-4 w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-xl border-8 border-slate-900">
-                        <Activity size={24} className="text-blue-600" />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-4 mb-4">
-                        <span className="px-5 py-1.5 bg-blue-500/20 text-blue-400 text-[12px] font-black uppercase tracking-widest rounded-full border border-blue-500/30">Advanced Clinical Vault</span>
-                      </div>
-                      <h3 className="text-white text-[48px] font-black tracking-tighter leading-none mb-4 uppercase italic">Tele-Diagnostics Hub</h3>
-                      <p className="text-slate-400 text-[18px] font-medium max-w-xl leading-relaxed">Secure neural synchronization for high-precision virtual diagnostics and intervention protocols.</p>
-                    </div>
-                  </div>
-                  <button className="px-12 py-6 bg-white text-slate-900 rounded-2xl font-black text-[16px] flex items-center gap-4 hover:bg-blue-50 transition-all shadow-2xl hover:-translate-y-2 active:scale-95 uppercase tracking-widest shrink-0">
-                    Access System <ChevronRight size={24} className="text-blue-600 group-hover:translate-x-2 transition-transform" />
-                  </button>
                 </div>
               </div>
             </div>
