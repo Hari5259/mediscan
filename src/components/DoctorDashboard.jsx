@@ -32,7 +32,11 @@ import {
   Lock,
   Database,
   FileSearch,
-  Key
+  Key,
+  BarChart3,
+  PieChart,
+  LineChart,
+  Target
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
@@ -515,6 +519,129 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderAnalyticsModule = () => (
+    <div className="animate-slide-up space-y-10">
+      <div className="bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-950 rounded-[40px] p-16 relative overflow-hidden shadow-2xl border border-white/5">
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#3b82f61a_0%,transparent_50%)]"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-8 mb-8">
+              <div className="w-24 h-24 bg-blue-600 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-blue-600/40">
+                <TrendingUp size={48} />
+              </div>
+              <div>
+                <h2 className="text-[42px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Predictive Analytics</h2>
+                <p className="text-blue-300 font-bold uppercase tracking-[0.2em] text-[12px]">Population Health Intelligence • Neural Projection Engine</p>
+              </div>
+            </div>
+            <p className="text-slate-300 text-[20px] font-medium leading-relaxed mb-12">
+              Synthesize multi-modal health data to project demographic trends and identify high-risk clinical clusters before incidents occur.
+            </p>
+            <div className="flex gap-6">
+              <button className="px-12 py-6 bg-blue-600 hover:bg-blue-700 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 active:scale-95 group">
+                <Zap size={22} className="group-hover:animate-pulse" /> Generate Projection
+              </button>
+              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4">
+                <PieChart size={22} /> Demographic Risk
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full md:w-80 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8">
+            <h4 className="text-white text-[13px] font-black uppercase tracking-widest mb-8 border-b border-white/10 pb-4">Real-Time Metrics</h4>
+            <div className="space-y-10">
+              {[
+                { label: 'Cluster Accuracy', value: '98.4%', color: 'bg-blue-500' },
+                { label: 'Risk Mitigation', value: '72%', color: 'bg-emerald-500' },
+                { label: 'Neural Load', value: '14%', color: 'bg-indigo-500' }
+              ].map((metric, i) => (
+                <div key={i}>
+                  <div className="flex justify-between text-[11px] font-black text-white/60 mb-3 uppercase tracking-widest">
+                    <span>{metric.label}</span>
+                    <span className="text-white">{metric.value}</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className={`h-full ${metric.color}`} style={{ width: metric.value }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+          <div className="flex items-center justify-between mb-12">
+            <h3 className="text-[26px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4">
+              <LineChart size={32} className="text-blue-600" /> Trend Correlation Matrix
+            </h3>
+            <div className="flex gap-4">
+              <span className="px-4 py-2 bg-slate-50 text-slate-400 rounded-xl text-[11px] font-black uppercase tracking-widest border border-slate-100 italic">Phase: 09-Beta</span>
+            </div>
+          </div>
+          
+          <div className="h-64 flex items-end gap-4 px-4 mb-10">
+            {[45, 78, 52, 91, 63, 85, 94, 67, 88, 72, 95, 82].map((height, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
+                <div className="w-full bg-blue-50 group-hover:bg-blue-600 rounded-t-xl transition-all duration-500 relative" style={{ height: `${height}%` }}>
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity font-black">
+                    {height}%
+                  </div>
+                </div>
+                <span className="text-[9px] font-black text-slate-400 uppercase">{['J','F','M','A','M','J','J','A','S','O','N','D'][i]}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { label: 'Epidemic Risk', value: 'Low', color: 'text-emerald-500' },
+              { label: 'Resource Load', value: 'High', color: 'text-rose-500' },
+              { label: 'Clinical Efficacy', value: '94%', color: 'text-blue-500' }
+            ].map((kpi, i) => (
+              <div key={i} className="p-6 bg-slate-50/50 border border-slate-50 rounded-[24px] text-center">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">{kpi.label}</span>
+                <span className={`text-[24px] font-black uppercase tracking-tighter ${kpi.color}`}>{kpi.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+          <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-10 text-slate-800 flex items-center gap-3">
+            <Target size={24} className="text-blue-600" /> KPI Targets
+          </h3>
+          <div className="space-y-10">
+            {[
+              { label: 'Patient Node Latency', current: 42, target: 50, unit: 'ms' },
+              { label: 'Diagnostic Throughput', current: 880, target: 1000, unit: 'p/h' },
+              { label: 'Neural Model Drift', current: 0.2, target: 0.5, unit: '%' }
+            ].map((kpi, i) => (
+              <div key={i}>
+                <div className="flex justify-between items-end mb-4">
+                  <div>
+                    <h5 className="font-black text-slate-900 text-[14px] uppercase tracking-tight">{kpi.label}</h5>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest italic">Target: {kpi.target}{kpi.unit}</p>
+                  </div>
+                  <span className="text-[20px] font-black text-blue-600">{kpi.current}<span className="text-[12px] ml-1">{kpi.unit}</span></span>
+                </div>
+                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-600" style={{ width: `${(kpi.current / kpi.target) * 100}%` }}></div>
+                </div>
+              </div>
+            ))}
+            <div className="pt-8 mt-2 border-t border-slate-50">
+              <button className="w-full py-5 bg-slate-900 text-white rounded-[24px] font-black uppercase tracking-widest text-[12px] hover:bg-blue-600 transition-all shadow-xl">
+                Refresh Analytical Node
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -611,6 +738,8 @@ const DoctorDashboard = () => {
             renderEPharmaModule()
           ) : activeTab === 'dossiers' ? (
             renderDossiersModule()
+          ) : activeTab === 'analytics' ? (
+            renderAnalyticsModule()
           ) : (
             <div className="animate-slide-up">
               <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
