@@ -24,7 +24,9 @@ import {
   Zap,
   Star,
   Cpu,
-  AlertCircle
+  AlertCircle,
+  Globe,
+  ArrowRight
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
