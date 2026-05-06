@@ -46,15 +46,15 @@ import {
   MessageSquare,
   Download,
   Share2,
-  Check
+  Check,
+  LayoutDashboard
 } from 'lucide-react';
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
   const [doctorInfo, setDoctorInfo] = useState(null);
-  const [activeTab, setActiveTab] = useState('patients');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [viewType, setViewType] = useState('All Nodes');
-  const [isInitializing, setIsInitializing] = useState(false);
   const [dutyStatus, setDutyStatus] = useState('On Duty');
 
   useEffect(() => {
@@ -72,6 +72,7 @@ const DoctorDashboard = () => {
   };
 
   const tabs = [
+    { id: 'dashboard', label: 'DASHBOARD', icon: LayoutDashboard },
     { id: 'diagnosis', label: 'AI SUPPORT', icon: Cpu },
     { id: 'dossiers', label: 'HEALTH DOSSIERS', icon: ShieldCheck },
     { id: 'pharma', label: 'E-PHARMA', icon: Pill },
@@ -1093,6 +1094,63 @@ const DoctorDashboard = () => {
     </div>
   );
 
+  const renderDashboardModule = () => (
+    <div className="animate-slide-up space-y-12">
+      <div className="bg-white rounded-[40px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16 relative z-10">
+          <div>
+            <h1 className="text-[48px] font-black text-slate-900 tracking-tighter leading-none mb-3 uppercase italic">Clinical Command Hub</h1>
+            <p className="text-slate-400 font-bold uppercase tracking-widest text-[13px] flex items-center gap-3">
+              <ShieldCheck size={18} className="text-blue-500" /> Authorized Chief Clinical Node • Multi-Modal Operations Active
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <div className="px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-[11px] font-black uppercase tracking-widest text-emerald-600">Network Optimal</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+          {[
+            { label: 'Active Patients', value: '24 Nodes', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+            { label: 'Emergency Alerts', value: '08 Urgent', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-50' },
+            { label: 'Neural Accuracy', value: '99.8%', icon: Cpu, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+            { label: 'Reports Pending', value: '12 Vault', icon: FileText, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          ].map((stat, i) => (
+            <div key={i} className="p-8 border border-slate-100 rounded-[32px] bg-white group hover:border-blue-200 hover:shadow-2xl transition-all cursor-pointer">
+              <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                <stat.icon size={28} />
+              </div>
+              <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest block mb-2">{stat.label}</span>
+              <span className="text-[32px] font-black text-slate-900 block leading-none">{stat.value}</span>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8 block border-b border-slate-50 pb-4">Tactical Operational Hubs</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {tabs.filter(t => t.id !== 'dashboard').map((tab, i) => (
+              <div 
+                key={i} 
+                onClick={() => setActiveTab(tab.id)}
+                className="p-8 bg-slate-50 rounded-[32px] border border-slate-100 flex flex-col items-center justify-center text-center group hover:bg-white hover:border-blue-500/30 hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
+              >
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all mb-4 shadow-sm">
+                  <tab.icon size={28} />
+                </div>
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500 group-hover:text-blue-600">{tab.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
       {/* Premium Cyber-Sidebar */}
@@ -1181,7 +1239,9 @@ const DoctorDashboard = () => {
         </header>
 
         <main className="flex-1 p-12">
-          {activeTab === 'emergency' ? (
+          {activeTab === 'dashboard' ? (
+            renderDashboardModule()
+          ) : activeTab === 'emergency' ? (
             renderEmergencyModule()
           ) : activeTab === 'diagnosis' ? (
             renderAISupportModule()
@@ -1198,18 +1258,7 @@ const DoctorDashboard = () => {
           ) : activeTab === 'reports' ? (
             renderReportsModule()
           ) : (
-            <div className="animate-slide-up">
-              <div className="bg-white rounded-[32px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative mb-20">
-                <div className="flex items-center justify-between mb-12">
-                  <div>
-                    <h1 className="text-[42px] font-black text-slate-900 tracking-tighter leading-none mb-3 uppercase italic">Clinical Command Hub</h1>
-                    <p className="text-slate-400 font-bold uppercase tracking-widest text-[12px] flex items-center gap-2">
-                      <ShieldCheck size={16} className="text-blue-500" /> Chief Clinical Node • Multi-Modal Operations Active
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            renderDashboardModule()
           )}
         </main>
       </div>
