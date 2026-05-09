@@ -179,115 +179,158 @@ const DoctorDashboard = () => {
   );
 
   const renderAISupportModule = () => (
-    <div className="animate-slide-up space-y-10">
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-[32px] p-12 relative overflow-hidden shadow-2xl border border-white/5">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#3b82f6_0%,transparent_50%)] animate-pulse"></div>
-          <div className="grid grid-cols-10 gap-4 p-4">
-            {Array(50).fill(0).map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: `${i * 100}ms` }}></div>
+    <div className="animate-slide-up space-y-12">
+      {/* AI Intelligence Hero */}
+      <div className="bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-950 rounded-[48px] p-16 relative overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.5)] border border-white/10">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#3b82f6_0%,transparent_70%)] animate-pulse"></div>
+          <div className="grid grid-cols-12 gap-6 p-10">
+            {Array(72).fill(0).map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 bg-blue-400 rounded-full opacity-20 animate-pulse" style={{ animationDelay: `${i * 150}ms` }}></div>
             ))}
           </div>
         </div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/40">
-                <Cpu size={36} />
+        
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
+          <div className="flex-1">
+            <div className="flex items-center gap-10 mb-10">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[32px] flex items-center justify-center text-white shadow-[0_20px_40px_rgba(59,130,246,0.5)] transform hover:rotate-12 transition-transform duration-500">
+                <Cpu size={48} />
               </div>
               <div>
-                <h2 className="text-[36px] font-black text-white uppercase italic tracking-tighter leading-none mb-1">Neural Diagnostic Engine</h2>
-                <p className="text-blue-300 font-bold uppercase tracking-[0.2em] text-[12px]">Clinical Intelligence v9.4 • Sync Active</p>
+                <h2 className="text-[48px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Neural Diagnostic Suite</h2>
+                <div className="flex items-center gap-4">
+                  <span className="px-4 py-1.5 bg-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-blue-500/30">Clinical Core v9.4</span>
+                  <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] italic">Mesh-Connected • Sector 09 Active</span>
+                </div>
               </div>
             </div>
-            <p className="text-slate-300 text-[18px] font-medium leading-relaxed mb-8">
-              Analyze complex patient data nodes using high-precision neural models for differential diagnosis and personalized treatment protocols.
+            <p className="text-slate-300 text-[22px] font-medium leading-relaxed mb-12 italic max-w-2xl">
+              Cross-reference real-time patient biometrics against the global clinical dataset. Accelerated differential diagnosis with 99.8% node confidence.
             </p>
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Enter clinical query or patient ID for deep analysis..." 
-                className="w-full bg-white/10 border border-white/20 rounded-2xl py-5 px-8 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
-              />
-              <button className="absolute right-3 top-3 bottom-3 px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black uppercase tracking-widest text-[12px] transition-all flex items-center gap-2">
-                Analyze <Zap size={16} />
-              </button>
+            <div className="relative group max-w-3xl">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[28px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative flex items-center bg-white/10 backdrop-blur-3xl border border-white/20 rounded-[24px] p-2">
+                <Search className="ml-6 text-blue-400" size={24} />
+                <input 
+                  type="text" 
+                  placeholder="Initiate deep-mesh query for patient ID or clinical symptom..." 
+                  className="flex-1 bg-transparent py-6 px-6 text-white placeholder:text-white/30 focus:outline-none font-bold text-[16px]"
+                />
+                <button className="px-12 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[18px] font-black uppercase tracking-widest text-[13px] transition-all flex items-center gap-3 shadow-2xl">
+                  Analyze <Zap size={18} />
+                </button>
+              </div>
             </div>
           </div>
-          <div className="w-full md:w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-8">
-            <h4 className="text-white text-[12px] font-black uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Engine Metrics</h4>
-            <div className="space-y-6">
+
+          <div className="w-full lg:w-96 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-[40px] p-10 shadow-2xl">
+            <h4 className="text-white text-[13px] font-black uppercase tracking-widest mb-10 border-b border-white/10 pb-6 italic text-center">Engine Performance</h4>
+            <div className="space-y-10">
               <div>
-                <div className="flex justify-between text-[11px] font-bold text-blue-300 mb-2 uppercase">
-                  <span>Accuracy Confidence</span>
+                <div className="flex justify-between text-[11px] font-black text-blue-300 mb-4 uppercase tracking-[0.2em]">
+                  <span>Pattern Recognition</span>
                   <span>99.8%</span>
                 </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="w-[99.8%] h-full bg-blue-500"></div>
+                <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div className="w-[99.8%] h-full bg-blue-500 shadow-[0_0_15px_#3b82f6]"></div>
                 </div>
               </div>
               <div>
-                <div className="flex justify-between text-[11px] font-bold text-indigo-300 mb-2 uppercase">
-                  <span>Processing Latency</span>
-                  <span>42ms</span>
+                <div className="flex justify-between text-[11px] font-black text-indigo-300 mb-4 uppercase tracking-[0.2em]">
+                  <span>Mesh Latency</span>
+                  <span>14ms</span>
                 </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="w-[15%] h-full bg-indigo-500"></div>
+                <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div className="w-[12%] h-full bg-indigo-500 shadow-[0_0_15px_#6366f1]"></div>
                 </div>
               </div>
+              <button className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest transition-all">Recalibrate Neural Core</button>
             </div>
           </div>
         </div>
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-10">
-          <div className="bg-white rounded-[32px] border border-slate-100 p-10 shadow-sm">
-            <h3 className="text-[24px] font-black uppercase italic tracking-tighter text-slate-800 mb-10 flex items-center gap-3">
-              <Star size={26} className="text-blue-600" /> AI-Generated Differential Diagnosis
-            </h3>
-            <div className="space-y-6">
+          <div className="bg-white rounded-[48px] border border-slate-100 p-12 shadow-sm relative overflow-hidden">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h3 className="text-[28px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4 leading-none">
+                  <Activity size={32} className="text-blue-600" /> Active Differential Analysis
+                </h3>
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mt-2 italic">Real-time projection from patient node: PAT-9921-X</p>
+              </div>
+              <button className="px-6 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-blue-500 hover:text-blue-600 transition-all">Refine Parameters</button>
+            </div>
+
+            <div className="space-y-8">
               {[
-                { title: 'Pathological Anomaly Detected', confidence: '94%', details: 'Neural scan indicates atypical protein structures in Sector-7.', tag: 'Priority' },
-                { title: 'Metabolic Trend Analysis', confidence: '82%', details: 'Projected glucose fluctuation suggests proactive insulin adjustment.', tag: 'Observation' },
-                { title: 'Genetic Marker Screening', confidence: '76%', details: 'High correlation with hereditary cardiac risk profiles identified.', tag: 'Screening' },
+                { title: 'Neural Baseline Anomaly', confidence: '94%', details: 'Atypical protein structures detected in Sector-7 cortex sync. High correlation with early-stage neuro-drift.', type: 'Critical', color: 'bg-rose-500' },
+                { title: 'Vascular Turbulence', confidence: '82%', details: 'Micro-fluctuations in blood flow velocity within carotid junction. Recommended monitoring of vascular mesh.', type: 'Observation', color: 'bg-amber-500' },
+                { title: 'Metabolic Optimization', confidence: '99%', details: 'Baseline metabolism is operating within optimal parameters. Systemic health node is performing at peak efficiency.', type: 'Stable', color: 'bg-emerald-500' }
               ].map((diag, i) => (
-                <div key={i} className="p-8 border border-slate-50 bg-slate-50/50 rounded-[24px] group hover:bg-white hover:border-blue-200 hover:shadow-xl transition-all cursor-pointer">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">{diag.tag}</span>
-                    <span className="text-blue-600 font-black text-[20px]">{diag.confidence}</span>
+                <div key={i} className="p-8 bg-slate-50/50 rounded-[32px] border border-slate-100 group hover:bg-white hover:border-blue-500 hover:shadow-2xl transition-all cursor-pointer">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-3 h-3 rounded-full ${diag.color} animate-pulse`}></div>
+                      <h4 className="text-[20px] font-black text-slate-900 uppercase italic tracking-tight">{diag.title}</h4>
+                    </div>
+                    <span className="text-[12px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-4 py-1.5 rounded-xl border border-blue-100">Confidence: {diag.confidence}</span>
                   </div>
-                  <h4 className="text-[20px] font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{diag.title}</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed">{diag.details}</p>
+                  <p className="text-slate-500 font-medium leading-relaxed mb-8 italic text-[15px]">{diag.details}</p>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-3">
+                      <span className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400">{diag.type}</span>
+                      <span className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400">Node Sync: OK</span>
+                    </div>
+                    <button className="text-[11px] font-black uppercase tracking-widest text-blue-600 hover:underline">Request Deep-Scan</button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
         <div className="space-y-10">
-          <div className="bg-white rounded-[32px] border border-slate-100 p-10 shadow-sm">
-            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 text-slate-800">Analytical Insights</h3>
-            <div className="space-y-8">
-              <div className="flex gap-5">
-                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
-                  <TrendingUp size={24} />
+          <div className="bg-slate-900 rounded-[48px] p-12 text-white shadow-2xl relative overflow-hidden group border border-white/5">
+            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#3b82f61a_0%,transparent_50%)]"></div>
+            <h3 className="text-[24px] font-black uppercase italic tracking-tighter mb-10 flex items-center gap-4 relative z-10">
+              <Globe size={28} className="text-blue-500" /> Research Uplink
+            </h3>
+            <div className="space-y-8 relative z-10">
+              {[
+                { title: 'Neuro-Mesh Advances', source: 'Clinical Journal Alpha', date: '6h ago' },
+                { title: 'Vascular Reconstruction', source: 'Bio-Tech Registry', date: '1d ago' },
+                { title: 'AI-Guided Trauma Care', source: 'Sector 09 Archives', date: '3d ago' }
+              ].map((news, i) => (
+                <div key={i} className="pb-8 border-b border-white/5 last:border-0 group cursor-pointer">
+                  <h5 className="text-[15px] font-bold text-white mb-2 group-hover:text-blue-400 transition-colors uppercase tracking-tight">{news.title}</h5>
+                  <div className="flex justify-between items-center text-[10px] font-black text-white/40 uppercase tracking-widest">
+                    <span>{news.source}</span>
+                    <span>{news.date}</span>
+                  </div>
                 </div>
-                <div>
-                  <h5 className="font-black text-slate-900 text-[15px] mb-1">Global Health Trends</h5>
-                  <p className="text-[13px] text-slate-500 leading-tight">Spike in viral patterns detected across Sector 04-F.</p>
-                </div>
+              ))}
+            </div>
+            <button className="w-full py-6 bg-white text-slate-900 hover:bg-blue-600 hover:text-white rounded-[28px] font-black uppercase tracking-[0.2em] text-[12px] mt-12 transition-all shadow-2xl">
+              Launch Intelligence Mesh
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[48px] p-12 text-white shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <h3 className="text-[24px] font-black uppercase italic tracking-tighter mb-6 relative z-10 flex items-center gap-4">
+              <ShieldCheck size={28} /> Authorized Core
+            </h3>
+            <p className="text-white/80 text-[15px] font-medium leading-relaxed mb-10 italic relative z-10">
+              Your session is protected by end-to-end neural encryption. All AI interactions are logged for clinical accountability.
+            </p>
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/20">
+                <Lock size={20} />
               </div>
-              <div className="flex gap-5">
-                <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
-                  <CheckCircle size={24} />
-                </div>
-                <div>
-                  <h5 className="font-black text-slate-900 text-[15px] mb-1">Protocol Optimization</h5>
-                  <p className="text-[13px] text-slate-500 leading-tight">New FDA-approved diagnostic sequence available for download.</p>
-                </div>
-              </div>
-              <button className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[12px] hover:bg-blue-600 transition-all shadow-lg hover:-translate-y-1">
-                Download Global Insights
-              </button>
+              <span className="text-[11px] font-black uppercase tracking-widest">AES-512 Secure Node</span>
             </div>
           </div>
         </div>
