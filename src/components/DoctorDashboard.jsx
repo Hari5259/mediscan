@@ -656,7 +656,7 @@ const DoctorDashboard = () => {
 
   const renderPatientListModule = () => (
     <div className="animate-slide-up space-y-10">
-      <div className="bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
+      <div className="border border-slate-100 p-10 rounded-[32px] relative bg-slate-50/20">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
           <div>
             <h2 className="text-[36px] font-black text-slate-900 uppercase italic tracking-tighter leading-none mb-2">Patient Node Registry</h2>
@@ -1096,8 +1096,7 @@ const DoctorDashboard = () => {
 
   const renderDashboardModule = () => (
     <div className="animate-slide-up space-y-12">
-      <div className="bg-white rounded-[40px] shadow-[0_40px_80px_rgba(0,0,0,0.03)] border border-slate-100 p-12 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+      <div className="relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16 relative z-10">
           <div>
             <h1 className="text-[48px] font-black text-slate-900 tracking-tighter leading-none mb-3 uppercase italic">Clinical Command Hub</h1>
@@ -1152,116 +1151,144 @@ const DoctorDashboard = () => {
   );
 
   return (
-    <div className="bg-[#f1f5f9] min-h-screen flex overflow-hidden">
-      {/* Premium Cyber-Sidebar */}
-      <aside className="w-80 bg-slate-900 flex flex-col relative z-50 shadow-[10px_0_40px_rgba(0,0,0,0.2)]">
-        <div className="p-10">
-          <div className="flex items-center gap-4 mb-16 cursor-pointer group" onClick={() => navigate('/')}>
-            <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-2xl group-hover:rotate-6 transition-transform duration-500">
-              <Stethoscope size={32} className="text-blue-600" />
+    <div className="bg-immersive pb-24 min-h-screen">
+      {/* Premium Doctor Navbar */}
+      <nav className="nav-top">
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+              <Shield size={24} className="text-[#008cff]" />
             </div>
-            <div>
-              <span className="font-black text-[24px] italic tracking-tighter uppercase text-white block leading-none">Clinical<span className="text-blue-400">Core</span></span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500/60">Node v9.2.4</span>
+            <span className="text-white font-black text-2xl italic tracking-tighter uppercase">MEDI<span className="text-blue-400">SCAN</span></span>
+          </div>
+          <div className="hidden lg:flex items-center gap-6 border-l border-white/20 pl-6">
+            <div className="nav-link">
+              <div className="p-1.5 bg-blue-600 rounded-lg"><Stethoscope size={14} /></div>
+              <span>Clinical Core Pro</span>
             </div>
           </div>
-
-          <nav className="space-y-3">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6 block">Main Operational Hub</span>
-            {tabs.map((tab) => (
-              <div
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-4 px-6 py-5 rounded-2xl cursor-pointer transition-all duration-300 group relative ${
-                  activeTab === tab.id 
-                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-900/40' 
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                {activeTab === tab.id && (
-                  <div className="absolute left-0 w-1 h-8 bg-white rounded-full"></div>
-                )}
-                <tab.icon size={22} className={activeTab === tab.id ? 'animate-pulse' : 'group-hover:scale-110 transition-transform'} />
-                <span className="text-[13px] font-black uppercase tracking-widest">{tab.label}</span>
-              </div>
-            ))}
-          </nav>
         </div>
 
-        <div className="mt-auto p-10 space-y-8">
-          <div className="bg-white/5 rounded-3xl p-6 border border-white/5">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                <User size={24} className="text-blue-400" />
-              </div>
-              <div>
-                <h4 className="text-white font-black text-[14px] uppercase tracking-tighter">{doctorInfo.doctorId}</h4>
-                <p className="text-blue-400 text-[10px] font-bold uppercase tracking-widest italic">Authorized Access</p>
-              </div>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 border-r border-white/20 pr-6">
+            <div className="flex flex-col items-end mr-2">
+              <span className="text-white font-black text-[14px] uppercase italic tracking-tighter leading-none">{doctorInfo.doctorId}</span>
+              <span className="text-blue-400 text-[9px] font-black uppercase tracking-[0.2em]">Authorized Lead Node</span>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-3 py-3 bg-white/5 hover:bg-rose-500/10 text-slate-400 hover:text-rose-500 rounded-xl transition-all font-black text-[11px] uppercase tracking-widest border border-white/5 hover:border-rose-500/20"
+            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+              <User size={20} className="text-blue-400" />
+            </div>
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="bg-white/10 hover:bg-rose-500/20 text-white px-4 py-2 rounded-lg text-[12px] font-black uppercase tracking-wider flex items-center gap-2 border border-white/20 hover:border-rose-500/50 transition-all shadow-lg"
+          >
+            <LogOut size={14} /> Terminate Session
+          </button>
+        </div>
+      </nav>
+
+      <main className="floating-container animate-slide-up">
+        {/* Module Selection Tabs - Doctor Version */}
+        <div className="module-tabs !max-w-none !w-full !justify-start overflow-x-auto no-scrollbar py-4 px-6">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`module-tab-item ${activeTab === tab.id ? 'active' : ''}`}
             >
-              <LogOut size={16} /> Logout Node
-            </button>
+              <tab.icon size={24} className="icon" />
+              <span>{tab.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="main-floating-card p-12 mt-4">
+          <div className="flex items-center justify-between mb-8">
+            <div className="radio-group">
+              <label className="radio-item group">
+                <input 
+                  type="radio" 
+                  name="dutyStatus" 
+                  checked={dutyStatus === 'On Duty'}
+                  onChange={() => setDutyStatus('On Duty')}
+                />
+                <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'On Duty' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981] scale-110' : 'bg-gray-300'}`}></div>
+                <span className={`transition-colors ${dutyStatus === 'On Duty' ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-600/70'}`}>Active Duty</span>
+              </label>
+              <label className="radio-item group">
+                <input 
+                  type="radio" 
+                  name="dutyStatus" 
+                  checked={dutyStatus === 'Standby'}
+                  onChange={() => setDutyStatus('Standby')}
+                />
+                <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'Standby' ? 'bg-amber-500 shadow-[0_0_10px_#f59e0b] scale-110' : 'bg-gray-300'}`}></div>
+                <span className={`transition-colors ${dutyStatus === 'Standby' ? 'text-amber-600' : 'text-gray-400 group-hover:text-amber-600/70'}`}>Standby Mode</span>
+              </label>
+            </div>
+            <div className="hidden md:flex items-center gap-6">
+              <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                <ShieldCheck size={14} className="text-blue-500" />
+                Neural Encryption Protocol: Active
+              </p>
+              <div className="h-4 w-[1px] bg-gray-200"></div>
+              <div className="flex items-center gap-3">
+                <Clock size={14} className="text-gray-400" />
+                <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Sync: 42ms Latency</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden mb-12">
+            <div className="section-card border-r rounded-none bg-transparent">
+              <span className="section-label">Registry Node</span>
+              <span className="section-value text-[24px] truncate" title={doctorInfo.doctorId}>{doctorInfo.doctorId}</span>
+              <span className="section-sub font-bold text-blue-600 uppercase text-[10px]">Verified Specialist Node</span>
+            </div>
+            <div className="section-card border-r rounded-none bg-transparent">
+              <span className="section-label">Secure Uplink</span>
+              <span className="section-value text-[24px] truncate" title={doctorInfo.email}>{doctorInfo.email}</span>
+              <span className="section-sub font-bold uppercase text-[10px]">Communication Link Live</span>
+            </div>
+            <div className="section-card border-r rounded-none bg-transparent">
+              <span className="section-label">System Role</span>
+              <span className="section-value text-[24px]">Chief Surgeon</span>
+              <span className="section-sub font-bold text-purple-600 uppercase text-[10px]">Level 5 Clearance</span>
+            </div>
+            <div className="section-card rounded-none bg-transparent">
+              <span className="section-label">Operational Sync</span>
+              <span className="section-value text-[24px]">42ms Latency</span>
+              <span className="section-sub font-bold text-green-600 uppercase text-[10px]">Global Mesh Sync OK</span>
+            </div>
+          </div>
+
+          {/* Render Active Module */}
+          <div className="mt-8">
+            {activeTab === 'dashboard' ? (
+              renderDashboardModule()
+            ) : activeTab === 'emergency' ? (
+              renderEmergencyModule()
+            ) : activeTab === 'diagnosis' ? (
+              renderAISupportModule()
+            ) : activeTab === 'pharma' ? (
+              renderEPharmaModule()
+            ) : activeTab === 'dossiers' ? (
+              renderDossiersModule()
+            ) : activeTab === 'analytics' ? (
+              renderAnalyticsModule()
+            ) : activeTab === 'patients' ? (
+              renderPatientListModule()
+            ) : activeTab === 'schedule' ? (
+              renderScheduleModule()
+            ) : activeTab === 'reports' ? (
+              renderReportsModule()
+            ) : (
+              renderDashboardModule()
+            )}
           </div>
         </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-y-auto no-scrollbar relative">
-        <header className="sticky top-0 z-40 bg-[#f1f5f9]/80 backdrop-blur-xl px-12 py-6 flex justify-between items-center border-b border-slate-200">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">System Integrity: Verified</span>
-            </div>
-            <div className="h-4 w-[1px] bg-slate-300"></div>
-            <div className="flex items-center gap-3">
-              <Clock size={16} className="text-slate-400" />
-              <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">Node Sync: 42ms Latency</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-[11px] font-black uppercase tracking-widest text-slate-600 shadow-sm">
-              <Activity size={14} className="text-blue-500" />
-              <span>Operational Phase: Active</span>
-            </div>
-            <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm">
-              <Bell size={20} />
-            </button>
-            <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm">
-              <Settings size={20} />
-            </button>
-          </div>
-        </header>
-
-        <main className="flex-1 p-12">
-          {activeTab === 'dashboard' ? (
-            renderDashboardModule()
-          ) : activeTab === 'emergency' ? (
-            renderEmergencyModule()
-          ) : activeTab === 'diagnosis' ? (
-            renderAISupportModule()
-          ) : activeTab === 'pharma' ? (
-            renderEPharmaModule()
-          ) : activeTab === 'dossiers' ? (
-            renderDossiersModule()
-          ) : activeTab === 'analytics' ? (
-            renderAnalyticsModule()
-          ) : activeTab === 'patients' ? (
-            renderPatientListModule()
-          ) : activeTab === 'schedule' ? (
-            renderScheduleModule()
-          ) : activeTab === 'reports' ? (
-            renderReportsModule()
-          ) : (
-            renderDashboardModule()
-          )}
-        </main>
-      </div>
+      </main>
     </div>
   );
 };
