@@ -820,109 +820,121 @@ const DoctorDashboard = () => {
             </div>
             <div>
               <h4 className="font-black text-slate-900 uppercase tracking-tight">{tool.label}</h4>
-              <p className="text-[12px] text-slate-400 font-bold leading-tight uppercase tracking-widest italic">{tool.desc}</p>
+                <span className="text-[12px] text-slate-400 font-bold leading-tight uppercase tracking-widest italic">{tool.desc}</span>
             </div>
           </div>
         ))}
       </div>
-    </div>
-  );
 
   const renderScheduleModule = () => (
-    <div className="animate-slide-up space-y-10">
-      <div className="bg-gradient-to-br from-amber-900 via-slate-900 to-orange-950 rounded-[40px] p-16 relative overflow-hidden shadow-2xl border border-white/5">
-        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_20%,#f59e0b1a_0%,transparent_50%)]"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-8 mb-8">
-              <div className="w-24 h-24 bg-amber-500 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-amber-500/40">
+    <div className="animate-slide-up space-y-12">
+      {/* Schedule Hero Section */}
+      <div className="bg-gradient-to-br from-amber-900 via-slate-900 to-amber-950 rounded-[48px] p-16 relative overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.4)] border border-white/10">
+        <div className="absolute top-0 right-0 w-full h-full opacity-20">
+          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-amber-500 rounded-full blur-[120px] animate-pulse"></div>
+        </div>
+        
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
+          <div className="flex-1">
+            <div className="flex items-center gap-8 mb-10">
+              <div className="w-24 h-24 bg-gradient-to-br from-amber-500 to-orange-600 rounded-[32px] flex items-center justify-center text-white shadow-[0_20px_40px_rgba(245,158,11,0.5)] transform hover:scale-105 transition-transform">
                 <Calendar size={48} />
               </div>
               <div>
-                <h2 className="text-[42px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Operations Timeline</h2>
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={() => setDutyStatus(dutyStatus === 'On Duty' ? 'Standby' : 'On Duty')}
-                    className={`px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest border transition-all ${
-                      dutyStatus === 'On Duty' 
-                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' 
-                        : 'bg-rose-500/20 text-rose-400 border-rose-500/30'
-                    }`}
-                  >
-                    {dutyStatus} Mode
-                  </button>
-                  <span className="text-white/40 text-[11px] font-black uppercase tracking-widest italic">Sector 09 Clinical Lead</span>
-                </div>
+                <h2 className="text-[48px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Operation Timeline</h2>
+                <p className="text-amber-400 font-black uppercase tracking-[0.4em] text-[12px] flex items-center gap-3">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full animate-ping"></div> Mission Date: {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                </p>
               </div>
             </div>
-            <p className="text-slate-300 text-[20px] font-medium leading-relaxed mb-12">
-              Synchronize clinical interventions and virtual consults across the neural mesh. Real-time slot management for high-priority cases.
+            <p className="text-slate-400 text-[22px] font-medium leading-relaxed mb-12 italic max-w-2xl">
+              Synchronize clinical interventions and neural sync sessions. Real-time patient flow management for the authorized lead node.
             </p>
-            <div className="flex gap-6">
-              <button className="px-12 py-6 bg-amber-500 hover:bg-amber-600 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 active:scale-95 group">
-                <Plus size={22} className="group-hover:rotate-90 transition-transform" /> Initialize Intervention
+            <div className="flex flex-wrap gap-6">
+              <button className="px-12 py-6 bg-white text-slate-900 hover:bg-amber-500 hover:text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 group">
+                <Plus size={22} /> Add Intervention
               </button>
-              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4">
-                <Clock size={22} /> View Full Week
+              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 backdrop-blur-xl">
+                <Activity size={22} /> View Efficiency Matrix
               </button>
             </div>
           </div>
 
-          <div className="w-full md:w-80 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 text-center">
-            <h4 className="text-amber-500 text-[11px] font-black uppercase tracking-widest mb-4">Current Node Time</h4>
-            <div className="text-white text-[48px] font-black tracking-tighter mb-2 tabular-nums">09:42</div>
-            <span className="text-white/40 text-[10px] font-bold uppercase tracking-[0.3em]">GMT +05:30 • SYNC OK</span>
-            <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
+          <div className="w-full lg:w-96 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-[40px] p-10 shadow-2xl">
+            <div className="flex items-center justify-between mb-10 border-b border-white/10 pb-6">
+              <h4 className="text-white text-[14px] font-black uppercase tracking-widest italic">Timeline Metrics</h4>
+              <span className="text-[11px] font-black text-amber-500">Live Node</span>
+            </div>
+            <div className="grid grid-cols-2 gap-10 text-center">
               <div>
-                <span className="text-white font-black text-[18px] block">04</span>
-                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Today</span>
+                <span className="text-white font-black text-[32px] block leading-none mb-2">14</span>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Slots</span>
               </div>
               <div>
-                <span className="text-white font-black text-[18px] block">12</span>
-                <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Waitlist</span>
+                <span className="text-amber-500 font-black text-[32px] block leading-none mb-2">04</span>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Available</span>
+              </div>
+              <div className="col-span-2 pt-6 border-t border-white/5">
+                <span className="text-white font-black text-[24px] block leading-none mb-2">12m</span>
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Avg Session Latency</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Main Schedule Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
-          <div className="flex items-center justify-between mb-12">
-            <h3 className="text-[26px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4">
-              <Activity size={32} className="text-amber-500" /> Daily Intervention Flow
-            </h3>
-            <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Wednesday, May 06</span>
+        <div className="lg:col-span-2 bg-slate-50/50 backdrop-blur-xl rounded-[48px] border border-slate-100 p-12 relative">
+          <div className="flex items-center justify-between mb-16">
+            <div>
+              <h3 className="text-[32px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4 leading-none">
+                <Activity size={36} className="text-amber-500" /> Daily Intervention Flow
+              </h3>
+              <p className="text-[12px] font-bold text-slate-400 uppercase tracking-widest mt-2">Active Mission Log • Sector 09-Alpha</p>
+            </div>
+            <button className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:border-amber-500 transition-all shadow-sm">Filter Timeline</button>
           </div>
 
-          <div className="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-50">
+          <div className="space-y-10 relative before:absolute before:left-[11px] before:top-4 before:bottom-4 before:w-[2px] before:bg-slate-200">
             {[
-              { time: '09:00', patient: 'Alex Rivera', id: 'PAT-9921', type: 'Neural Sync', status: 'Completed', color: 'bg-emerald-500' },
-              { time: '10:30', patient: 'Sarah Johnson', id: 'PAT-1022', type: 'Clinical Consult', status: 'Ongoing', color: 'bg-blue-500 animate-pulse' },
-              { time: '12:00', patient: 'Michael Chen', id: 'PAT-5531', type: 'Diagnostic Audit', status: 'Pending', color: 'bg-amber-500' },
-              { time: '14:30', patient: 'Emma Davis', id: 'PAT-2291', type: 'Biometric Update', status: 'Confirmed', color: 'bg-slate-300' },
+              { time: '09:00', patient: 'Alex Rivera', id: 'PAT-9921', type: 'Neural Sync', status: 'Completed', color: 'bg-emerald-500', icon: ShieldCheck },
+              { time: '10:30', patient: 'Sarah Johnson', id: 'PAT-1022', type: 'Clinical Consult', status: 'In Progress', color: 'bg-blue-500 animate-pulse', icon: Activity },
+              { time: '12:00', patient: 'Michael Chen', id: 'PAT-5531', type: 'Diagnostic Audit', status: 'Pending', color: 'bg-amber-500', icon: FileSearch },
+              { time: '14:30', patient: 'Emma Davis', id: 'PAT-2291', type: 'Biometric Update', status: 'Confirmed', color: 'bg-slate-300', icon: RefreshCw },
             ].map((op, i) => (
-              <div key={i} className="flex items-start gap-12 group">
-                <span className="text-[12px] font-black text-slate-400 tabular-nums w-10 shrink-0 pt-1">{op.time}</span>
-                <div className="relative z-10 w-6 h-6 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center -ml-[55px] mt-1 group-hover:border-amber-100 transition-all">
-                  <div className={`w-2 h-2 rounded-full ${op.color}`}></div>
+              <div key={i} className="flex items-start gap-12 group relative">
+                <span className="text-[12px] font-black text-slate-400 tabular-nums w-12 shrink-0 pt-2">{op.time}</span>
+                <div className="relative z-10 w-6 h-6 bg-white border-4 border-slate-50 rounded-full flex items-center justify-center -ml-[61px] mt-2 group-hover:border-amber-100 transition-all shadow-sm">
+                  <div className={`w-2.5 h-2.5 rounded-full ${op.color}`}></div>
                 </div>
-                <div className="flex-1 bg-slate-50/50 border border-slate-50 rounded-[24px] p-8 group-hover:bg-white group-hover:border-amber-200 group-hover:shadow-2xl transition-all cursor-pointer">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h4 className="text-[20px] font-black text-slate-900 leading-none mb-2">{op.patient}</h4>
-                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{op.id} • {op.type}</p>
+                <div className="flex-1 bg-white border border-slate-100 rounded-[32px] p-10 hover:border-amber-400 hover:shadow-2xl transition-all cursor-pointer relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all">
+                        <op.icon size={28} />
+                      </div>
+                      <div>
+                        <h4 className="text-[22px] font-black text-slate-900 leading-none mb-2 uppercase italic tracking-tight">{op.patient}</h4>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{op.id}</span>
+                          <span className="text-slate-200">•</span>
+                          <span className="text-[11px] font-black text-amber-600 uppercase tracking-widest">{op.type}</span>
+                        </div>
+                      </div>
                     </div>
-                    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      op.status === 'Completed' ? 'bg-emerald-100 text-emerald-600' : 
-                      op.status === 'Ongoing' ? 'bg-blue-100 text-blue-600' : 'bg-white border border-slate-200 text-slate-400'
-                    }`}>
-                      {op.status}
-                    </span>
-                  </div>
-                  <div className="flex gap-4">
-                    <button className="text-[11px] font-black uppercase tracking-widest text-amber-600 hover:underline">Start Session</button>
-                    <button className="text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600">Postpone</button>
+                    <div className="flex flex-col items-end gap-3">
+                      <span className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
+                        op.status === 'Completed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                        op.status === 'In Progress' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-slate-50 text-slate-400 border-slate-100'
+                      }`}>
+                        {op.status}
+                      </span>
+                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                        <button className="px-6 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition-all">Launch</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -931,47 +943,46 @@ const DoctorDashboard = () => {
         </div>
 
         <div className="space-y-10">
-          <div className="bg-white rounded-[40px] border border-slate-100 p-10 shadow-sm">
-            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 text-slate-800">Operational Zones</h3>
-            <div className="space-y-6">
+          <div className="bg-slate-900 rounded-[48px] p-12 text-white relative overflow-hidden shadow-2xl border border-white/5">
+            <h3 className="text-[24px] font-black uppercase italic tracking-tighter mb-12 flex items-center gap-4">
+              <Database size={28} className="text-amber-500" /> Operational Zones
+            </h3>
+            <div className="space-y-10">
               {[
-                { zone: 'Main Clinical Bay', load: '84%', status: 'Active' },
-                { zone: 'Neural Sync Lab 04', load: '12%', status: 'Available' },
-                { zone: 'Virtual Consult Hub', load: '95%', status: 'Critical' },
+                { zone: 'Main Clinical Bay', load: 84, status: 'Active', color: 'bg-amber-500' },
+                { zone: 'Neural Sync Lab 04', load: 12, status: 'Available', color: 'bg-emerald-500' },
+                { zone: 'Virtual Consult Hub', load: 95, status: 'Critical', color: 'bg-rose-500' },
               ].map((zone, i) => (
-                <div key={i} className="p-6 bg-slate-50 rounded-2xl group hover:bg-amber-50 transition-all cursor-pointer">
+                <div key={i} className="group cursor-default">
                   <div className="flex items-center justify-between mb-4">
-                    <h5 className="font-black text-slate-900 text-[14px] uppercase tracking-tight">{zone.zone}</h5>
-                    <span className="text-[11px] font-black text-amber-500">{zone.status}</span>
+                    <div>
+                      <h5 className="font-black text-white text-[15px] uppercase tracking-tight leading-none mb-1">{zone.zone}</h5>
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">{zone.status}</span>
+                    </div>
+                    <span className="text-[20px] font-black text-white">{zone.load}<span className="text-[12px] opacity-40 ml-1">%</span></span>
                   </div>
-                  <div className="w-full h-1.5 bg-white rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500" style={{ width: zone.load }}></div>
-                  </div>
-                  <div className="mt-2 text-right">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Load: {zone.load}</span>
+                  <div className="w-full h-2.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                    <div className={`h-full ${zone.color} shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-1000`} style={{ width: `${zone.load}%` }}></div>
                   </div>
                 </div>
               ))}
             </div>
+            <button className="w-full py-6 bg-white text-slate-900 hover:bg-amber-500 hover:text-white rounded-[28px] font-black uppercase tracking-[0.2em] text-[13px] mt-16 transition-all shadow-2xl transform active:scale-95">
+              Redistribute Nodes
+            </button>
           </div>
           
-          <div className="bg-slate-900 rounded-[40px] p-10 text-white relative overflow-hidden group shadow-2xl">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,#f59e0b1a_0%,transparent_50%)]"></div>
-            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 flex items-center gap-3">
-              <MessageSquare size={24} className="text-amber-500" /> Team Coordination
+          <div className="bg-gradient-to-br from-amber-600 to-orange-700 rounded-[48px] p-12 text-white shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <h3 className="text-[24px] font-black uppercase italic tracking-tighter mb-6 relative z-10 flex items-center gap-4">
+              <MessageSquare size={28} /> Mission Control
             </h3>
-            <div className="space-y-6">
-              <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
-                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center font-black">H</div>
-                <div>
-                  <p className="text-[12px] font-bold leading-tight">Handover protocol initiated for Night Shift Core.</p>
-                  <span className="text-[10px] text-white/40 uppercase font-bold">12m ago</span>
-                </div>
-              </div>
-              <button className="w-full py-5 bg-white text-slate-900 rounded-[20px] font-black uppercase tracking-widest text-[11px] hover:bg-amber-500 hover:text-white transition-all shadow-xl">
-                Open Mission Control
-              </button>
-            </div>
+            <p className="text-white/80 text-[15px] font-medium leading-relaxed mb-10 italic relative z-10">
+              Coordinated handover protocols and team sync active. sector-wide communications are encrypted.
+            </p>
+            <button className="px-8 py-4 bg-black/20 hover:bg-black/40 rounded-2xl font-black uppercase tracking-widest text-[12px] transition-all border border-white/20 relative z-10">
+              Enter Secure Comms
+            </button>
           </div>
         </div>
       </div>
@@ -980,8 +991,6 @@ const DoctorDashboard = () => {
 
   const renderReportsModule = () => (
     <div className="animate-slide-up space-y-12">
-      {/* Premium Report Hero */}
-      <div className="bg-gradient-to-br from-sky-900 via-slate-900 to-blue-950 rounded-[48px] p-16 relative overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10">
         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#0ea5e91a_0%,transparent_50%)]"></div>
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
           <div className="max-w-3xl">
