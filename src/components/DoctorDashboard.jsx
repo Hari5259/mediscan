@@ -16,6 +16,7 @@ import {
   Stethoscope, 
   Clock, 
   ShieldCheck,
+  Shield,
   ChevronLeft,
   Briefcase,
   Heart,
