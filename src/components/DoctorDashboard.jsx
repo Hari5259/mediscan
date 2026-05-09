@@ -1133,6 +1133,69 @@ const DoctorDashboard = () => {
   const renderDashboardModule = () => (
     <div className="animate-slide-up space-y-12">
       <div className="relative overflow-hidden">
+        {/* Clinical Availability & Operational Hub */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          <div className="p-10 bg-gradient-to-br from-slate-900 to-blue-950 rounded-[40px] text-white shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#3b82f61a_0%,transparent_50%)]"></div>
+            <div className="flex items-center justify-between mb-10 relative z-10">
+              <div>
+                <h3 className="text-[22px] font-black uppercase italic tracking-tighter leading-none mb-2 text-white">Doctor Availability</h3>
+                <p className="text-blue-400 font-bold uppercase tracking-widest text-[11px]">Public Status Sync</p>
+              </div>
+              <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border ${dutyStatus === 'On Duty' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'}`}>
+                Node: {dutyStatus === 'On Duty' ? 'ACTIVE' : 'OFFLINE'}
+              </div>
+            </div>
+            
+            <div className="flex gap-6 relative z-10 mb-8">
+              <button 
+                onClick={() => setDutyStatus('On Duty')}
+                className={`flex-1 py-6 rounded-3xl font-black uppercase tracking-widest text-[12px] transition-all flex flex-col items-center justify-center gap-3 border ${dutyStatus === 'On Duty' ? 'bg-blue-600 border-blue-500 text-white shadow-[0_20px_40px_rgba(37,99,235,0.4)]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+              >
+                <div className={`w-3 h-3 rounded-full ${dutyStatus === 'On Duty' ? 'bg-white animate-pulse shadow-[0_0_10px_white]' : 'bg-slate-700'}`}></div>
+                Available
+              </button>
+              <button 
+                onClick={() => setDutyStatus('Standby')}
+                className={`flex-1 py-6 rounded-3xl font-black uppercase tracking-widest text-[12px] transition-all flex flex-col items-center justify-center gap-3 border ${dutyStatus === 'Standby' ? 'bg-rose-600 border-rose-500 text-white shadow-[0_20px_40px_rgba(225,29,72,0.4)]' : 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'}`}
+              >
+                <div className={`w-3 h-3 rounded-full ${dutyStatus === 'Standby' ? 'bg-white animate-pulse shadow-[0_0_10px_white]' : 'bg-slate-700'}`}></div>
+                Not Available
+              </button>
+            </div>
+            <div className="p-6 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-sm">
+              <p className="text-slate-400 text-[13px] font-medium leading-relaxed italic">
+                Changing your status will instantly update the regional medical directory. Patients will see you as {dutyStatus === 'On Duty' ? 'Available for consultation' : 'Currently Unavailable'}.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-10 bg-white border border-slate-100 rounded-[40px] shadow-sm flex flex-col justify-between group hover:border-blue-200 transition-all">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-[22px] font-black uppercase italic tracking-tighter text-slate-900 leading-none mb-2">Clinic Operational Hub</h3>
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[11px]">Infrastructure Control</p>
+              </div>
+              <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-900 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                <MapPin size={32} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-8">
+               <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-2">Patient Wait-Time</span>
+                  <span className="text-[20px] font-black uppercase text-blue-600">~15 Mins</span>
+               </div>
+               <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-2">Clinic Visibility</span>
+                  <span className="text-[20px] font-black uppercase text-emerald-600">Online</span>
+               </div>
+            </div>
+            <button className="w-full py-5 bg-slate-900 text-white rounded-3xl font-black uppercase tracking-widest text-[12px] hover:bg-blue-600 transition-all shadow-xl hover:-translate-y-1 transform">
+              Modify Operational Parameters
+            </button>
+          </div>
+        </div>
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16 relative z-10">
           <div>
             <h1 className="text-[48px] font-black text-slate-900 tracking-tighter leading-none mb-3 uppercase italic">Clinical Command Hub</h1>
