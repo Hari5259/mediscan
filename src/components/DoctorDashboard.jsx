@@ -1129,24 +1129,6 @@ const DoctorDashboard = () => {
             </div>
           ))}
         </div>
-
-        <div>
-          <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8 block border-b border-slate-50 pb-4">Tactical Operational Hubs</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {tabs.filter(t => t.id !== 'dashboard').map((tab, i) => (
-              <div 
-                key={i} 
-                onClick={() => setActiveTab(tab.id)}
-                className="p-8 bg-slate-50 rounded-[32px] border border-slate-100 flex flex-col items-center justify-center text-center group hover:bg-white hover:border-blue-500/30 hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
-              >
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all mb-4 shadow-sm">
-                  <tab.icon size={28} />
-                </div>
-                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500 group-hover:text-blue-600">{tab.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
