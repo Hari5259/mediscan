@@ -979,106 +979,116 @@ const DoctorDashboard = () => {
   );
 
   const renderReportsModule = () => (
-    <div className="animate-slide-up space-y-10">
-      <div className="bg-gradient-to-br from-sky-900 via-slate-900 to-blue-950 rounded-[40px] p-16 relative overflow-hidden shadow-2xl border border-white/5">
-        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,#0ea5e91a_0%,transparent_50%)]"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-16">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-8 mb-8">
-              <div className="w-24 h-24 bg-sky-500 rounded-[32px] flex items-center justify-center text-white shadow-2xl shadow-sky-500/40">
+    <div className="animate-slide-up space-y-12">
+      {/* Premium Report Hero */}
+      <div className="bg-gradient-to-br from-sky-900 via-slate-900 to-blue-950 rounded-[48px] p-16 relative overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10">
+        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#0ea5e91a_0%,transparent_50%)]"></div>
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-8 mb-10">
+              <div className="w-24 h-24 bg-sky-500 rounded-[32px] flex items-center justify-center text-white shadow-[0_20px_40px_rgba(14,165,233,0.4)]">
                 <FileText size={48} />
               </div>
               <div>
-                <h2 className="text-[42px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Clinical Report Archive</h2>
-                <div className="flex items-center gap-4">
-                  <span className="px-4 py-1.5 bg-sky-500/20 text-sky-400 text-[11px] font-black uppercase tracking-widest rounded-full border border-sky-500/30">Verified Clinical Data</span>
-                  <div className="flex items-center gap-2 text-white/40 text-[11px] font-black uppercase tracking-widest">
-                    <ShieldCheck size={14} /> Encrypted Node Sync
+                <h2 className="text-[48px] font-black text-white uppercase italic tracking-tighter leading-none mb-2">Clinical Document Vault</h2>
+                <div className="flex items-center gap-6">
+                  <span className="px-6 py-2 bg-sky-500/20 text-sky-400 text-[11px] font-black uppercase tracking-widest rounded-full border border-sky-500/30">Verified Ledger v9.4</span>
+                  <div className="flex items-center gap-3 text-white/50 text-[11px] font-black uppercase tracking-widest italic">
+                    <ShieldCheck size={16} /> End-to-End Encryption Active
                   </div>
                 </div>
               </div>
             </div>
-            <p className="text-slate-300 text-[20px] font-medium leading-relaxed mb-12">
-              Generate and manage high-precision clinical reports. All records are cryptographically signed and synchronized across the healthcare mesh.
+            <p className="text-slate-300 text-[22px] font-medium leading-relaxed mb-12 italic">
+              Access and manage high-precision clinical documentation. All reports are cryptographically signed and verified against the regional healthcare mesh.
             </p>
-            <div className="flex gap-6">
-              <button className="px-12 py-6 bg-sky-500 hover:bg-sky-600 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 active:scale-95 group">
-                <Plus size={22} /> Generate New Report
+            <div className="flex flex-wrap gap-6">
+              <button className="px-12 py-6 bg-sky-500 hover:bg-sky-600 text-white rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 shadow-2xl hover:-translate-y-2 group">
+                <Plus size={22} /> Initialize New Report
               </button>
-              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4">
-                <Download size={22} /> Batch Export
+              <button className="px-12 py-6 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-[24px] font-black uppercase tracking-widest text-[14px] transition-all flex items-center gap-4 backdrop-blur-xl">
+                <Download size={22} /> Global Batch Export
               </button>
             </div>
           </div>
 
-          <div className="w-full md:w-80 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8">
-            <h4 className="text-sky-400 text-[11px] font-black uppercase tracking-widest mb-6 pb-4 border-b border-white/10">Archive Metrics</h4>
-            <div className="space-y-6">
-              <div>
-                <div className="flex justify-between text-[11px] font-black text-white/60 mb-2 uppercase tracking-widest">
-                  <span>Vault Integrity</span>
-                  <span className="text-emerald-400">Stable</span>
+          <div className="w-full lg:w-96 bg-black/30 backdrop-blur-3xl border border-white/10 rounded-[40px] p-10 shadow-2xl">
+            <h4 className="text-sky-400 text-[12px] font-black uppercase tracking-[0.3em] mb-10 pb-4 border-b border-white/10 italic text-center">Archive Integrity</h4>
+            <div className="space-y-8">
+              {[
+                { label: 'Blockchain Sync', status: 'Optimal', color: 'bg-emerald-500' },
+                { label: 'Data Latency', status: '12ms', color: 'bg-sky-500' },
+                { label: 'Record Count', status: '2,482', color: 'bg-indigo-500' }
+              ].map((metric, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <span className="text-[11px] font-black text-white/60 uppercase tracking-widest">{metric.label}</span>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${metric.color} animate-pulse`}></div>
+                    <span className="text-white font-black text-[12px] uppercase">{metric.status}</span>
+                  </div>
                 </div>
-                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-emerald-500"></div>
-                </div>
-              </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Total Records</span>
-                <span className="text-white font-black">2,482</span>
-              </div>
-              <div className="flex justify-between items-center py-2">
-                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Sync Nodes</span>
-                <span className="text-white font-black">12 Live</span>
-              </div>
+              ))}
+            </div>
+            <div className="mt-12 pt-8 border-t border-white/10">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center leading-relaxed italic">
+                Last System Audit: 42 Seconds Ago<br/>Node Location: Regional Sector 09
+              </p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Repository Main View */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 bg-white rounded-[40px] border border-slate-100 p-12 shadow-sm">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-            <h3 className="text-[26px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4">
-              <FileSearch size={32} className="text-sky-500" /> Document Repository
-            </h3>
-            <div className="flex gap-4">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                <input 
-                  type="text" 
-                  placeholder="Filter Reports..." 
-                  className="bg-slate-50 border border-slate-100 rounded-xl py-3 px-12 text-[12px] font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 w-64"
-                />
-              </div>
+        <div className="lg:col-span-2 bg-slate-50/50 backdrop-blur-xl rounded-[48px] border border-slate-100 p-12 relative shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
+            <div>
+              <h3 className="text-[32px] font-black uppercase italic tracking-tighter text-slate-900 flex items-center gap-4 leading-none">
+                <FileSearch size={36} className="text-sky-500" /> Clinical Repository
+              </h3>
+              <p className="text-[12px] font-bold text-slate-400 uppercase tracking-widest mt-2">Accessing Local Node Document Registry</p>
+            </div>
+            <div className="relative">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+              <input 
+                type="text" 
+                placeholder="Search Biometric ID or Record Name..." 
+                className="bg-white border border-slate-100 rounded-[20px] py-4 px-14 text-[13px] font-bold focus:outline-none focus:ring-2 focus:ring-sky-500 w-80 shadow-sm placeholder:text-slate-300"
+              />
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[
-              { name: 'Full Neural Scan v4', patient: 'Alex Rivera', date: 'May 06, 2026', status: 'Verified', color: 'text-emerald-500' },
-              { name: 'Cardio-Flow Analysis', patient: 'Sarah Johnson', date: 'May 05, 2026', status: 'Pending', color: 'text-amber-500' },
-              { name: 'Metabolic Audit Log', patient: 'Michael Chen', date: 'May 04, 2026', status: 'Verified', color: 'text-emerald-500' },
-              { name: 'Biometric Drift Report', patient: 'Emma Davis', date: 'May 02, 2026', status: 'Draft', color: 'text-slate-400' },
+              { name: 'Neural Scan v4', type: 'Full Brain Diagnostic', patient: 'Alex Rivera', date: 'May 06, 2026', status: 'Physician Signed', color: 'text-emerald-500', icon: Zap },
+              { name: 'Cardio-Flow Profile', type: 'Vascular Analysis', patient: 'Sarah Johnson', date: 'May 05, 2026', status: 'Awaiting Signature', color: 'text-amber-500', icon: Activity },
+              { name: 'Metabolic Audit', type: 'Systemic Screening', patient: 'Michael Chen', date: 'May 04, 2026', status: 'Finalized', color: 'text-emerald-500', icon: ShieldCheck },
+              { name: 'Biometric Drift', type: 'Baseline Correlation', patient: 'Emma Davis', date: 'May 02, 2026', status: 'Draft Phase', color: 'text-slate-400', icon: RefreshCw },
             ].map((report, i) => (
-              <div key={i} className="p-6 border border-slate-50 bg-slate-50/30 rounded-[24px] flex items-center justify-between group hover:bg-white hover:border-sky-200 hover:shadow-2xl transition-all cursor-pointer">
-                <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-sky-500 shadow-sm group-hover:bg-sky-500 group-hover:text-white transition-all">
-                    <FileText size={24} />
+              <div key={i} className="p-8 bg-white border border-slate-100 rounded-[32px] flex items-center justify-between group hover:border-sky-400 hover:shadow-2xl transition-all cursor-pointer relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-sky-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="flex items-center gap-8">
+                  <div className="w-16 h-16 bg-slate-50 rounded-[20px] flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-inner">
+                    <report.icon size={28} />
                   </div>
                   <div>
-                    <h4 className="text-[18px] font-black text-slate-900 leading-none mb-2">{report.name}</h4>
-                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{report.patient} • {report.date}</p>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h4 className="text-[20px] font-black text-slate-900 tracking-tight leading-none uppercase italic">{report.name}</h4>
+                      <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase tracking-widest">{report.type}</span>
+                    </div>
+                    <p className="text-[12px] font-bold text-slate-400 flex items-center gap-3 uppercase tracking-widest">
+                      <User size={14} className="text-sky-500" /> {report.patient} <span className="text-slate-200">•</span> <Clock size={14} /> {report.date}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-8">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${report.status === 'Verified' ? 'bg-emerald-500' : report.status === 'Pending' ? 'bg-amber-500' : 'bg-slate-300'}`}></div>
-                    <span className={`text-[11px] font-black uppercase tracking-tighter ${report.color}`}>{report.status}</span>
+                <div className="flex items-center gap-10">
+                  <div className="text-right">
+                    <span className={`text-[12px] font-black uppercase tracking-tighter block ${report.color}`}>{report.status}</span>
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1 block">Clinical Integrity: OK</span>
                   </div>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 hover:bg-sky-50 text-sky-600 rounded-lg transition-all"><Download size={16} /></button>
-                    <button className="p-2 hover:bg-sky-50 text-sky-600 rounded-lg transition-all"><Share2 size={16} /></button>
+                  <div className="flex gap-2">
+                    <button className="p-3 bg-slate-50 text-slate-400 hover:bg-sky-500 hover:text-white rounded-xl transition-all shadow-sm"><Download size={18} /></button>
+                    <button className="p-3 bg-slate-50 text-slate-400 hover:bg-sky-500 hover:text-white rounded-xl transition-all shadow-sm"><Share2 size={18} /></button>
                   </div>
                 </div>
               </div>
@@ -1087,42 +1097,38 @@ const DoctorDashboard = () => {
         </div>
 
         <div className="space-y-10">
-          <div className="bg-white rounded-[40px] border border-slate-100 p-10 shadow-sm">
-            <h3 className="text-[20px] font-black uppercase italic tracking-tighter mb-8 text-slate-800">Archive Compliance</h3>
-            <div className="space-y-8">
+          <div className="bg-slate-900 rounded-[48px] p-12 text-white relative overflow-hidden shadow-2xl border border-white/5">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-sky-500/10 rounded-full blur-3xl -mr-24 -mt-24"></div>
+            <h3 className="text-[22px] font-black uppercase italic tracking-tighter mb-10 text-white flex items-center gap-4 relative z-10">
+              <ShieldCheck size={28} className="text-sky-400" /> Registry Compliance
+            </h3>
+            <div className="space-y-10 relative z-10">
               {[
-                { label: 'Data Encryption', status: 'Optimal', icon: ShieldCheck, color: 'text-emerald-500' },
-                { label: 'Network Sync', status: 'Active', icon: RefreshCw, color: 'text-sky-500' },
-                { label: 'Legal Validation', status: 'Verified', icon: Check, color: 'text-blue-500' },
-              ].map((comp, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center ${comp.color}`}>
-                      <comp.icon size={20} />
-                    </div>
-                    <span className="text-[13px] font-black text-slate-900 uppercase tracking-tight">{comp.label}</span>
+                { label: 'Neural Signature', status: 'Verified', details: 'RSA-4096 Protocol', color: 'text-emerald-400' },
+                { label: 'Mesh Sync Level', status: 'Global', details: 'Full Node Replica', color: 'text-sky-400' },
+                { label: 'Clinical Standards', status: 'Compliant', details: 'ISO-9001-MD', color: 'text-emerald-400' }
+              ].map((item, i) => (
+                <div key={i} className="group">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[12px] font-black uppercase tracking-widest text-slate-400">{item.label}</span>
+                    <span className={`text-[12px] font-black uppercase italic ${item.color}`}>{item.status}</span>
                   </div>
-                  <span className={`text-[11px] font-black uppercase ${comp.color}`}>{comp.status}</span>
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-white/60 transition-colors">{item.details}</p>
                 </div>
               ))}
-              <div className="pt-6 border-t border-slate-50 mt-6">
-                <button className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-sky-500 transition-all shadow-lg">
-                  Audit Registry History
-                </button>
-              </div>
             </div>
+            <button className="w-full py-6 bg-white text-slate-900 hover:bg-sky-500 hover:text-white rounded-[28px] font-black uppercase tracking-[0.2em] text-[13px] mt-16 transition-all shadow-2xl transform active:scale-95">
+              Force Registry Audit
+            </button>
           </div>
 
-          <div className="bg-gradient-to-br from-slate-900 to-sky-950 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#0ea5e91a_0%,transparent_50%)]"></div>
-            <h3 className="text-[18px] font-black uppercase italic tracking-tighter mb-6">Global Sync Status</h3>
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></div>
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-400">Node Sync: Verified</span>
-            </div>
-            <p className="text-slate-400 text-[13px] font-medium leading-relaxed mb-8 italic">All clinical records are currently synchronized with the regional medical mesh 04-A.</p>
-            <button className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-sky-400 hover:text-white transition-colors">
-              Node Details <ArrowRight size={14} />
+          <div className="bg-gradient-to-br from-slate-100 to-white rounded-[48px] p-12 border border-slate-200 shadow-sm group hover:border-sky-400 transition-all">
+            <h4 className="text-[22px] font-black text-slate-900 uppercase italic tracking-tighter mb-6">Archive Notice</h4>
+            <p className="text-slate-500 text-[15px] font-medium leading-relaxed italic mb-10">
+              All documents older than 24 months are automatically migrated to high-density cold storage node.
+            </p>
+            <button className="text-[12px] font-black text-sky-600 uppercase tracking-widest flex items-center gap-3 group-hover:translate-x-2 transition-transform">
+              Access Cold Storage <ArrowRight size={16} />
             </button>
           </div>
         </div>
