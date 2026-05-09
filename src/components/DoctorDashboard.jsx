@@ -825,6 +825,8 @@ const DoctorDashboard = () => {
           </div>
         ))}
       </div>
+    </div>
+  );
 
   const renderScheduleModule = () => (
     <div className="animate-slide-up space-y-12">
@@ -991,6 +993,8 @@ const DoctorDashboard = () => {
 
   const renderReportsModule = () => (
     <div className="animate-slide-up space-y-12">
+      {/* Premium Report Hero */}
+      <div className="bg-gradient-to-br from-sky-900 via-slate-900 to-blue-950 rounded-[48px] p-16 relative overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10 mb-12">
         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#0ea5e91a_0%,transparent_50%)]"></div>
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-16">
           <div className="max-w-3xl">
@@ -1242,6 +1246,15 @@ const DoctorDashboard = () => {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+
+  if (!doctorInfo) return (
+    <div className="min-h-screen bg-immersive flex items-center justify-center">
+      <div className="flex flex-col items-center gap-6">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-white font-black uppercase tracking-[0.3em] animate-pulse">Initializing Neural Link...</p>
       </div>
     </div>
   );
