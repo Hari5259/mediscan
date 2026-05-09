@@ -1205,64 +1205,68 @@ const DoctorDashboard = () => {
         </div>
 
         <div className="main-floating-card p-12 mt-4">
-          <div className="flex items-center justify-between mb-8">
-            <div className="radio-group">
-              <label className="radio-item group">
-                <input 
-                  type="radio" 
-                  name="dutyStatus" 
-                  checked={dutyStatus === 'On Duty'}
-                  onChange={() => setDutyStatus('On Duty')}
-                />
-                <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'On Duty' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981] scale-110' : 'bg-gray-300'}`}></div>
-                <span className={`transition-colors ${dutyStatus === 'On Duty' ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-600/70'}`}>Active Duty</span>
-              </label>
-              <label className="radio-item group">
-                <input 
-                  type="radio" 
-                  name="dutyStatus" 
-                  checked={dutyStatus === 'Standby'}
-                  onChange={() => setDutyStatus('Standby')}
-                />
-                <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'Standby' ? 'bg-amber-500 shadow-[0_0_10px_#f59e0b] scale-110' : 'bg-gray-300'}`}></div>
-                <span className={`transition-colors ${dutyStatus === 'Standby' ? 'text-amber-600' : 'text-gray-400 group-hover:text-amber-600/70'}`}>Standby Mode</span>
-              </label>
-            </div>
-            <div className="hidden md:flex items-center gap-6">
-              <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                <ShieldCheck size={14} className="text-blue-500" />
-                Neural Encryption Protocol: Active
-              </p>
-              <div className="h-4 w-[1px] bg-gray-200"></div>
-              <div className="flex items-center gap-3">
-                <Clock size={14} className="text-gray-400" />
-                <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Sync: 42ms Latency</span>
+          {activeTab === 'dashboard' && (
+            <>
+              <div className="flex items-center justify-between mb-8">
+                <div className="radio-group">
+                  <label className="radio-item group">
+                    <input 
+                      type="radio" 
+                      name="dutyStatus" 
+                      checked={dutyStatus === 'On Duty'}
+                      onChange={() => setDutyStatus('On Duty')}
+                    />
+                    <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'On Duty' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981] scale-110' : 'bg-gray-300'}`}></div>
+                    <span className={`transition-colors ${dutyStatus === 'On Duty' ? 'text-emerald-600' : 'text-gray-400 group-hover:text-emerald-600/70'}`}>Active Duty</span>
+                  </label>
+                  <label className="radio-item group">
+                    <input 
+                      type="radio" 
+                      name="dutyStatus" 
+                      checked={dutyStatus === 'Standby'}
+                      onChange={() => setDutyStatus('Standby')}
+                    />
+                    <div className={`w-2.5 h-2.5 rounded-full transition-all ${dutyStatus === 'Standby' ? 'bg-amber-500 shadow-[0_0_10px_#f59e0b] scale-110' : 'bg-gray-300'}`}></div>
+                    <span className={`transition-colors ${dutyStatus === 'Standby' ? 'text-amber-600' : 'text-gray-400 group-hover:text-amber-600/70'}`}>Standby Mode</span>
+                  </label>
+                </div>
+                <div className="hidden md:flex items-center gap-6">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <ShieldCheck size={14} className="text-blue-500" />
+                    Neural Encryption Protocol: Active
+                  </p>
+                  <div className="h-4 w-[1px] bg-gray-200"></div>
+                  <div className="flex items-center gap-3">
+                    <Clock size={14} className="text-gray-400" />
+                    <span className="text-[11px] font-black uppercase tracking-widest text-gray-400">Sync: 42ms Latency</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden mb-12">
-            <div className="section-card border-r rounded-none bg-transparent">
-              <span className="section-label">Registry Node</span>
-              <span className="section-value text-[24px] truncate" title={doctorInfo.doctorId}>{doctorInfo.doctorId}</span>
-              <span className="section-sub font-bold text-blue-600 uppercase text-[10px]">Verified Specialist Node</span>
-            </div>
-            <div className="section-card border-r rounded-none bg-transparent">
-              <span className="section-label">Secure Uplink</span>
-              <span className="section-value text-[24px] truncate" title={doctorInfo.email}>{doctorInfo.email}</span>
-              <span className="section-sub font-bold uppercase text-[10px]">Communication Link Live</span>
-            </div>
-            <div className="section-card border-r rounded-none bg-transparent">
-              <span className="section-label">System Role</span>
-              <span className="section-value text-[24px]">Chief Surgeon</span>
-              <span className="section-sub font-bold text-purple-600 uppercase text-[10px]">Level 5 Clearance</span>
-            </div>
-            <div className="section-card rounded-none bg-transparent">
-              <span className="section-label">Operational Sync</span>
-              <span className="section-value text-[24px]">42ms Latency</span>
-              <span className="section-sub font-bold text-green-600 uppercase text-[10px]">Global Mesh Sync OK</span>
-            </div>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-0 border border-gray-200 rounded-[12px] overflow-hidden mb-12">
+                <div className="section-card border-r rounded-none bg-transparent">
+                  <span className="section-label">Registry Node</span>
+                  <span className="section-value text-[24px] truncate" title={doctorInfo.doctorId}>{doctorInfo.doctorId}</span>
+                  <span className="section-sub font-bold text-blue-600 uppercase text-[10px]">Verified Specialist Node</span>
+                </div>
+                <div className="section-card border-r rounded-none bg-transparent">
+                  <span className="section-label">Secure Uplink</span>
+                  <span className="section-value text-[24px] truncate" title={doctorInfo.email}>{doctorInfo.email}</span>
+                  <span className="section-sub font-bold uppercase text-[10px]">Communication Link Live</span>
+                </div>
+                <div className="section-card border-r rounded-none bg-transparent">
+                  <span className="section-label">System Role</span>
+                  <span className="section-value text-[24px]">Chief Surgeon</span>
+                  <span className="section-sub font-bold text-purple-600 uppercase text-[10px]">Level 5 Clearance</span>
+                </div>
+                <div className="section-card rounded-none bg-transparent">
+                  <span className="section-label">Operational Sync</span>
+                  <span className="section-value text-[24px]">42ms Latency</span>
+                  <span className="section-sub font-bold text-green-600 uppercase text-[10px]">Global Mesh Sync OK</span>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Render Active Module */}
           <div className="mt-8">
