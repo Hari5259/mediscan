@@ -1,28 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-text: #4b5563;
+  --color-text-h: #0f172a;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-muted: #6b7280;
+  --color-border: #e6eef8;
+  --color-accent: #2563eb;
+  --color-accent-600: #1d4ed8;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+
+  --shadow-custom: 0 10px 25px rgba(16,24,40,0.06);
+
+  --font-sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-heading: Inter, system-ui, -apple-system, 'Segoe UI', Roboto;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+}
 
 :root {
-  --text: #4b5563; /* slate-600 */
-  --text-h: #0f172a; /* slate-900 */
-  --bg: #f8fafc; /* neutral background */
-  --surface: #ffffff;
-  --muted: #6b7280;
-  --border: #e6eef8;
-  --accent: #2563eb; /* primary */
-  --accent-600: #1d4ed8;
-  --success: #10b981;
-  --danger: #ef4444;
-  --shadow: 0 10px 25px rgba(16,24,40,0.06);
-
-  --sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  --heading: Inter, system-ui, -apple-system, 'Segoe UI', Roboto;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
-
-  font-family: var(--sans);
+  font-family: var(--font-sans);
   font-size: 18px;
   line-height: 1.6;
-  color: var(--text);
+  color: var(--color-text);
   background: linear-gradient(180deg, rgba(249,250,252,1) 0%, rgba(241,245,249,1) 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,15 +31,14 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #d1d5db;
-    --text-h: #f8fafc;
-    --bg: #0b1220;
-    --surface: #0f1724;
-    --muted: #94a3b8;
-    --border: #1f2937;
-    --accent: #60a5fa;
-    --accent-600: #3b82f6;
-    --shadow: 0 10px 25px rgba(2,6,23,0.6);
+    --color-text: #d1d5db;
+    --color-text-h: #f8fafc;
+    --color-bg: #0b1220;
+    --color-surface: #0f1724;
+    --color-muted: #94a3b8;
+    --color-border: #1f2937;
+    --color-accent: #60a5fa;
+    --color-accent-600: #3b82f6;
   }
 }
 
@@ -52,14 +52,14 @@
 }
 
 /* Headings */
-h1 { font-size: 2.5rem; font-weight: 700; color: var(--text-h); margin: 0 0 0.5rem; }
-h2 { font-size: 1.25rem; font-weight: 600; color: var(--text-h); }
+h1 { font-size: 2.5rem; font-weight: 700; color: var(--color-text-h); margin: 0 0 0.5rem; }
+h2 { font-size: 1.25rem; font-weight: 600; color: var(--color-text-h); }
 
 /* Card */
 .card {
-  background: var(--surface);
+  background: var(--color-surface);
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-custom);
   border: 1px solid rgba(15,23,42,0.03);
   padding: 1.5rem;
 }
@@ -73,7 +73,7 @@ h2 { font-size: 1.25rem; font-weight: 600; color: var(--text-h); }
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-blue-600 bg-white border border-blue-100 hover:bg-blue-50 transition;
   }
   .btn-ghost {
-    @apply text-sm text-muted hover:text-blue-600;
+    @apply text-sm text-gray-500 hover:text-blue-600;
   }
 }
 
@@ -90,14 +90,14 @@ h2 { font-size: 1.25rem; font-weight: 600; color: var(--text-h); }
 
 /* Divider */
 .divider { position: relative; height: 1px; background: linear-gradient(90deg, transparent, rgba(203,213,225,0.6), transparent); margin: 1.25rem 0; }
-.divider span { position: absolute; left: 50%; transform: translateX(-50%); top: -0.6rem; background: var(--surface); padding: 0 0.5rem; color: var(--muted); font-size: 0.875rem; }
+.divider span { position: absolute; left: 50%; transform: translateX(-50%); top: -0.6rem; background: var(--color-surface); padding: 0 0.5rem; color: var(--color-muted); font-size: 0.875rem; }
 
 /* Nav */
-.app-nav { background: var(--surface); border-bottom: 1px solid rgba(15,23,42,0.04); }
-.app-nav .brand { display:flex; align-items:center; gap:0.75rem; font-weight:700; color:var(--text-h); }
+.app-nav { background: var(--color-surface); border-bottom: 1px solid rgba(15,23,42,0.04); }
+.app-nav .brand { display:flex; align-items:center; gap:0.75rem; font-weight:700; color:var(--color-text-h); }
 
 /* Utilities */
-.text-muted { color: var(--muted); }
+.text-muted { color: var(--color-muted); }
 .small { font-size: 0.875rem; }
 .rounded-xl { border-radius: 12px; }
 
