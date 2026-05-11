@@ -1,21 +1,34 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('patient'); // 'patient' or 'doctor'
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const result = await login(email, password, userType);
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setError(result.message || 'Authentication failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('Connection to security node lost. Please try again.');
+    } finally {
       setLoading(false);
-      navigate('/dashboard');
-    }, 800);
+    }
   };
 
   return (
@@ -59,6 +72,12 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5" />
+                  {error}
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="input-field" required />

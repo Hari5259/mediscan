@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -35,15 +37,24 @@ export default function Signup() {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
-    setTimeout(() => {
+    setError('');
+
+    try {
+      const result = await register(formData);
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setError(result.message || 'Registration failed. Please check your details.');
+      }
+    } catch (err) {
+      setError('Connection to security node lost. Please try again.');
+    } finally {
       setLoading(false);
-      sessionStorage.setItem('pendingVerification', JSON.stringify({ email: formData.email, phone: formData.phone, userType: formData.userType }));
-      navigate('/verify');
-    }, 900);
+    }
   };
 
   return (
