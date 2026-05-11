@@ -1,21 +1,34 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Shield, ArrowRight, Heart, Globe, Cpu, Zap } from 'lucide-react';
+import { Mail, Lock, Shield, ArrowRight, Heart, Globe, Cpu, Zap, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('patient');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const result = await login(email, password, userType);
+      if (result.success) {
+        navigate(userType === 'doctor' ? '/doctor-dashboard' : '/dashboard');
+      } else {
+        setError(result.message || 'Authentication failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('Connection to security node lost. Please try again.');
+    } finally {
       setLoading(false);
-      navigate(userType === 'doctor' ? '/doctor-login' : '/dashboard');
-    }, 1200);
+    }
   };
 
   return (
@@ -95,6 +108,12 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-center gap-3 animate-shake">
+                  <AlertCircle className="text-rose-500 shrink-0" size={20} />
+                  <p className="text-rose-600 text-[13px] font-bold leading-tight">{error}</p>
+                </div>
+              )}
               <div className="space-y-3 group/field">
                 <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1 transition-colors group-focus-within/field:text-[#008cff]">Registry Email</label>
                 <div className="relative">

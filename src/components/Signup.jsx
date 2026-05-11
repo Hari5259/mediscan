@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Phone, Shield, ArrowRight, UserPlus, Stethoscope, Heart } from 'lucide-react';
+import { Mail, Lock, User, Phone, Shield, ArrowRight, UserPlus, Stethoscope, Heart, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -17,14 +19,31 @@ export default function Signup() {
     termsAccepted: false,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    setError('');
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
       setLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+      return;
+    }
+
+    try {
+      const result = await register(formData);
+      if (result.success) {
+        navigate(formData.userType === 'doctor' ? '/doctor-dashboard' : '/dashboard');
+      } else {
+        setError(result.message || 'Registration failed. Please check your details.');
+      }
+    } catch (err) {
+      setError('Registry node unreachable. Please check your network.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -76,6 +95,12 @@ export default function Signup() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
+            {error && (
+              <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-center gap-3 animate-shake">
+                <AlertCircle className="text-rose-500 shrink-0" size={20} />
+                <p className="text-rose-600 text-[13px] font-bold leading-tight">{error}</p>
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-[12px] font-black text-gray-400 uppercase tracking-widest ml-1">Given Name</label>

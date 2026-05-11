@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Upload, AlertCircle, CheckCircle, ChevronLeft, ArrowRight, FileText, Lock, Mail } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function DoctorLogin() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
-    doctorId: '',
+    doctorId: '', // This might be used as an alternative to email or just extra info
     email: '',
     password: '',
     idProofFile: null
@@ -15,6 +17,7 @@ export default function DoctorLogin() {
   const [idProofPreview, setIdProofPreview] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +25,7 @@ export default function DoctorLogin() {
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    setAuthError('');
   };
 
   const handleFileChange = (e) => {
@@ -45,10 +49,12 @@ export default function DoctorLogin() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.doctorId.trim()) newErrors.doctorId = 'Registry ID required';
     if (!formData.email.trim()) newErrors.email = 'Secure email required';
     if (!formData.password) newErrors.password = 'Secure password required';
+    // Registry ID and ID proof might be required by the frontend logic even if backend login doesn't use them yet
+    if (!formData.doctorId.trim()) newErrors.doctorId = 'Registry ID required';
     if (!formData.idProofFile) newErrors.idProofFile = 'Identity proof mandatory';
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,18 +63,23 @@ export default function DoctorLogin() {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
-    setTimeout(() => {
+    setAuthError('');
+    
+    try {
+      const result = await login(formData.email, formData.password, 'doctor');
+      if (result.success) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          navigate('/doctor-dashboard');
+        }, 2000);
+      } else {
+        setAuthError(result.message || 'Clinical authentication failed.');
+      }
+    } catch (err) {
+      setAuthError('Connection to medical core lost.');
+    } finally {
       setLoading(false);
-      setIsSubmitted(true);
-      setTimeout(() => {
-        sessionStorage.setItem('doctorLogged', JSON.stringify({
-          doctorId: formData.doctorId,
-          email: formData.email,
-          verified: true
-        }));
-        navigate('/doctor-dashboard');
-      }, 2500);
-    }, 2000);
+    }
   };
 
   if (isSubmitted) {
@@ -115,6 +126,13 @@ export default function DoctorLogin() {
             <h1 className="text-[42px] font-black tracking-tighter leading-tight mb-2 italic">Specialist Login</h1>
             <p className="text-[14px] font-bold text-gray-400 uppercase tracking-widest">Biometric & Clinical Credentials Required</p>
           </div>
+
+          {authError && (
+            <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 mb-8 flex items-center gap-3 animate-shake">
+              <AlertCircle className="text-rose-500 shrink-0" size={20} />
+              <p className="text-rose-600 text-[13px] font-bold leading-tight">{authError}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-8">
