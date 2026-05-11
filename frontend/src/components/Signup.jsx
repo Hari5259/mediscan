@@ -44,7 +44,14 @@ export default function Signup() {
     setError('');
 
     try {
-      const result = await register(formData);
+      // Sanitize payload: Joi forbids specialization for patients
+      const payload = { ...formData };
+      if (payload.userType === 'patient') {
+        delete payload.specialization;
+        delete payload.aadhaarNumber; // Backend model doesn't have this, Joi might forbid it if not in schema
+      }
+
+      const result = await register(payload);
       if (result.success) {
         navigate('/dashboard');
       } else {
